@@ -23,34 +23,55 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {% block navbar_home %}
             <li class="nav-item">
-              <a class="nav-link active" href="#">Home</a>
+              <a class="nav-link" href="./">Home</a>
             </li>
+            {% endblock %}
+            {% block navbar_about %}
+            <li class="nav-item">
+              <a class="nav-link" href="/about">About</a>
+            </li>
+            {% endblock %}
+            {% block navbar_browse %}
             <li class="nav-item">
               <a class="nav-link" href="/browse">Browse Collections</a>
             </li>
+            {% endblock %}
+            {% block navbar_search %}
             <li class="nav-item">
               <a class="nav-link" href="/search">Search Database</a>
             </li>
+            {% endblock %}
+            {% block navbar_documentation %}
             <li class="nav-item">
               <a class="nav-link" href="/documentation">Documentation</a>
             </li>
+            {% endblock %}
+            {% block navbar_help %}
             <li class="nav-item">
               <a class="nav-link" href="/help">Help</a>
             </li>
+            {% endblock %}
           </ul>
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="margin-right: 20px;">
             {% if user.is_authenticated %}
+            {% block navbar_dashboard %}
             <li class="nav-item">
               <a class="nav-link" href="/dashboard">Dashboard</span></a>
             </li>
+            {% endblock %}
             {% else %}
+            {% block navbar_login %}
             <li class="nav-item">
               <a class="nav-link" href="/login">Log In</span></a>
             </li>
+            {% endblock %}
+            {% block navbar_signup %}
             <li class="nav-item">
               <a class="nav-link" href="/signup">Sign Up</a>
             </li>
+            {% endblock %}
             {% endif %}
           </ul>
           <form method="POST" class="d-flex" role="search">
