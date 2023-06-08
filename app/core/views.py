@@ -17,14 +17,14 @@ def about(request):
 
 def browse(request):
     context = {
-        "title": "Browse Collections",
+        "title": "Browse Datasets",
     }
     return render(request, "browse.html", context)
 
 
 def create(request):
     context = {
-        "title": "Create a Collection",
+        "title": "Create a Dataset",
     }
     return render(request, "create.html", context)
 
@@ -57,11 +57,11 @@ def login(request):
     return render(request, "login.html", context)
 
 
-def search(request):
+def retrieve(request):
     context = {
-        "title": "Search",
+        "title": "Retrieve Data",
     }
-    return render(request, "search.html", context)
+    return render(request, "retrieve.html", context)
 
 
 def signup(request):
