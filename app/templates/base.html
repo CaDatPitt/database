@@ -13,7 +13,7 @@
   <body>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">CaD@PittDB</a>
+        <a class="navbar-brand" href="/">CaD@PittDB</a>
         <button 
           class="navbar-toggler" type="button"
           data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -23,10 +23,6 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a {% block navbar_home %}class="nav-link"{% endblock %} 
-                href="/">Home</a>
-            </li>
             <li class="nav-item">
               <a {% block navbar_about %}class="nav-link"{% endblock %}
                 href="/about">About</a>
@@ -65,12 +61,14 @@
             </li>
             {% endif %}
           </ul>
+          <img style="width: 2em;"
+            src="https://upload.wikimedia.org/wikipedia/commons/b/bd/VisualEditor_-_Icon_-_Search-big_-_white.svg">
           <form method="POST" class="d-flex" role="search">
             <input 
               class="form-control me-2" 
               type="search" 
               name="search_content"
-              placeholder="Search" 
+              placeholder="Search the site" 
               aria-label="Search">
             <button class="btn btn-outline-light" type="submit">Search</button>
           </form>
