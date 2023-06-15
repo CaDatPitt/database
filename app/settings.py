@@ -9,8 +9,12 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-import os
+from os import environ, getenv, path
 from pathlib import Path
+from dotenv import load_dotenv
+
+basedir = path.abspath(path.dirname(__file__))
+load_dotenv(path.join(basedir, '.env'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,9 +31,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-if 'CODESPACE_NAME' in os.environ:
-    codespace_name = os.getenv("CODESPACE_NAME")
-    codespace_domain = os.getenv("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN")
+if 'CODESPACE_NAME' in environ:
+    codespace_name = getenv("CODESPACE_NAME")
+    codespace_domain = getenv("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN")
     CSRF_TRUSTED_ORIGINS = [f'https://{codespace_name}-8000.{codespace_domain}']
 
 # Application definition
@@ -78,14 +82,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "app.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': getenv('NAME'),
+        'USER': getenv('USER'),
+        'PASSWORD': getenv('PASSWORD'),
+        'HOST': getenv('HOST'),
     }
 }
 
