@@ -22,6 +22,13 @@ def browse(request):
     return render(request, "browse.html", context)
 
 
+def contact(request):
+    context = {
+        "title": "Contact Us",
+    }
+    return render(request, "contact.html", context)
+
+
 def create(request):
     context = {
         "title": "Create a Dataset",

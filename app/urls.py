@@ -22,6 +22,7 @@ urlpatterns = [
     path("", core_views.index),
     path("about/", core_views.about),
     path("browse/", core_views.browse),
+    path("contact/", core_views.contact),
     path("create/", core_views.create),
     path("dashboard/", core_views.dashboard),
     path("documentation/", core_views.documentation),

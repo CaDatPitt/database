@@ -1,3 +1,17 @@
 Django==4.1.9
 django-browser-reload==1.6.0
 django-bootstrap-v5==1.0.11
+beautifulsoup4>=4.9.3
+colorama>=0.4.4
+lxml>=4.5.2
+numpy>=1.19.5
+pandas>=1.1.5
+pymarc>=4.0.0
+python-dateutil>=2.8.1
+pytz>=2020.5
+six>=1.15.0
+soupsieve>=2.0.1
+tqdm>=4.54.1
+xlrd>=1.2.0
+pyoai>=2.5.0
+Sickle>=0.7.0

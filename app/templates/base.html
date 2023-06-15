@@ -7,6 +7,11 @@
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    <!-- <style>
+      .navbar-custom {
+        background-color: #343A40;
+    }
+    </style> -->
     {% block head %}
     {% endblock %}
   </head>
@@ -75,5 +80,11 @@
         </div>
       </div>
     </nav>
+    {% block jumbotron %}{% endblock%}
+    <div class="container" style="margin: 5em 0 0 2em">
+      <br/>
+      {% block content %}
+      {% endblock %}
+    </div>
   </body>
 </html>
