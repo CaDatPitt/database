@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from .controlled_vocab import *
 
 def index(request):
     context = {
@@ -25,6 +25,7 @@ def browse(request):
 def contact(request):
     context = {
         "title": "Contact Us",
+        "vocab": vocab,
     }
     return render(request, "contact.html", context)
 
