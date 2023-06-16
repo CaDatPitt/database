@@ -25,7 +25,7 @@
     {% endblock %}
   </head>
   <body>
-    <nav class="navbar navbar-expand-md navbar-dark pitt-royal">
+    <nav class="navbar navbar-expand-xl navbar-dark pitt-royal">
       <div class="container-fluid">
         <a class="navbar-brand text-pitt-gold" href="/">CaD@PittDB</a>
         <button 
@@ -36,7 +36,7 @@
         <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <ul class="navbar-nav me-auto mb-2 mb-xl-0">
             <li class="nav-item">
               <a {% block navbar_about %}class="nav-link"{% endblock %}
                 href="/about">About</a>
@@ -58,7 +58,7 @@
                 href="/help">Help</a>
             </li>
           </ul>
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="margin-right: 20px;">
+          <ul class="navbar-nav ms-auto mb-2 mb-xl-0 me-xl-4">
             {% if user.is_authenticated %}
             <li class="nav-item">
               <a {% block navbar_dashboard %}class="nav-link"{% endblock %}
@@ -70,14 +70,14 @@
                 href="/login">Log In</span></a>
             </li>
             <li class="nav-item">
-              <a {% block navbar_signup %}class="nav-link"{% endblock %}
-                href="/signup">Sign Up</a>
+              <a {% block navbar_signup %}class="btn btn-outline-warning ms-xl-2 mt-3 mb-4 my-xl-0"{% endblock %}
+                role="button" href="/signup">Sign Up</a>
             </li>
             {% endif %}
           </ul>
+          <form method="POST" class="d-flex" role="search">
           <img style="width: 2em;"
             src="https://upload.wikimedia.org/wikipedia/commons/b/bd/VisualEditor_-_Icon_-_Search-big_-_white.svg">
-          <form method="POST" class="d-flex" role="search">
             <input 
               class="form-control me-2" 
               type="search" 
@@ -90,7 +90,7 @@
       </div>
     </nav>
     {% block jumbotron %}{% endblock%}
-    <div class="container">
+    <div class="container mt-4">
       <br/>
       {% block content %}
       {% endblock %}
