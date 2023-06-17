@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block head %}
+{% endblock %}
+{% block navbar_signup %}class="nav-link active"{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="mx-auto col-sm-10 col-md-8 col-lg-6 col-xxl-4">
+    <form method="POST">
+      {% csrf_token %}
+      <h3 align="center">Sign Up</h3>
+      <br/>
+      {% include 'auth/user-form.html' %}
+    </form>
+  </div>
+</div>
+{% endblock %}

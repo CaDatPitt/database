@@ -1,0 +1,33 @@
+{% extends "core/base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block head %}
+{% endblock %}
+{% block navbar_home %}class="nav-link active"{% endblock %}
+{% block jumbotron %}
+<div class="p-5 pitt-gold">
+    <div class="container py-5">
+        <h1>Welcome to the CaD@Pitt Database!</h1>
+        <br/>
+        <h4>Explore library and archives metadata, create your own datasets from 
+            your searches, and share them with our community of researchers! 
+        </h4>
+        <br/>
+        <h4>Sign up to begin creating your datasets or browse published datasets!
+        </h4>
+        <div class="row mt-5">
+            <div class="col-sm d-grid gap-2 d-md-flex  justify-content-md-end">
+                <a class="btn btn-primary btn-lg pitt-royal" 
+                    href="signup" role="button">Create an Account</a>
+            </div>
+            <div class="col-sm d-grid gap-2 d-md-flex justify-content-md-center">
+                <a class="btn btn-primary btn-lg pitt-royal" href="retrieve" role="button">Create a Dataset</a>
+            </div>
+            <div class="col-sm d-grid gap-2 d-md-flex justify-content-md-start">
+                <a class="btn btn-primary btn-lg pitt-royal" href="browse" role="button">Browse Datasets</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock%}
+{% block content %}
+{% endblock %}
