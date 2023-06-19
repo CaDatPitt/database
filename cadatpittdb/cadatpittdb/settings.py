@@ -147,7 +147,7 @@ LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
 
 
-""" MESSAGES CONSTANTS """
+""" MESSAGE CONSTANTS """
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
     messages.INFO: 'alert-info',
