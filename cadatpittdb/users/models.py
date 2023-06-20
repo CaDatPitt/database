@@ -70,7 +70,6 @@ class Item(models.Model):
     title = models.CharField(_('title'), max_length=200)
     type = models.CharField(_('type'), max_length=25, blank=True, default='')
     collections = models.ManyToManyField(Collection)
-    
     date_added = models.DateTimeField(_('date added'), default=timezone.now)
 
     class Meta:
@@ -92,10 +91,10 @@ class Dataset(models.Model):
     search_paremeters = models.CharField(_('search parameters'), max_length=500)
     items = models.ManyToManyField(Item)
     number_items = models.IntegerField(_('number of items'))
-    
     created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     date_created = models.DateTimeField(_('date created'), default=timezone.now)
-    last_modified = models.DateTimeField(blank=True, null=True)
+    last_modified = models.DateTimeField(_('last modified'), blank=True, null=True)
+    public = models.BooleanField(_('public'), default=False)
     
 
     class Meta:
@@ -112,6 +111,7 @@ class Dataset(models.Model):
 class PinnedDataset(models.Model):
     fk_dataset_id = models.ForeignKey(Dataset, on_delete=models.CASCADE)
     fk_user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    date_pinned = models.DateTimeField(_('date pinned'), default=timezone.now)
 
     class Meta:
         verbose_name = 'pinned dataset'
@@ -121,6 +121,7 @@ class PinnedDataset(models.Model):
 class PinnedItem(models.Model):
     fk_dataset_id = models.ForeignKey(Item, on_delete=models.CASCADE)
     fk_user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    date_pinned = models.DateTimeField(_('date pinned'), default=timezone.now)
 
     class Meta:
         verbose_name = 'pinned item'
