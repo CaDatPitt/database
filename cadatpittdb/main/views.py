@@ -90,7 +90,7 @@ def login_vw(request):
 @login_required
 def logout_vw(request):
     logout(request)
-    return redirect("/index/")
+    return redirect("/")
 
 
 @login_required

@@ -30,8 +30,6 @@ def check_password(request, password, password_conf):
     
     return valid
 
-    
-
 
 def check_user_exists(request, User, username, email):
     if User.objects.filter(username=username).exists():

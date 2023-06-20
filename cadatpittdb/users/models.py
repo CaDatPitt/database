@@ -95,7 +95,6 @@ class Dataset(models.Model):
     date_created = models.DateTimeField(_('date created'), default=timezone.now)
     last_modified = models.DateTimeField(_('last modified'), blank=True, null=True)
     public = models.BooleanField(_('public'), default=False)
-    
 
     class Meta:
         verbose_name = 'dataset'
