@@ -10,8 +10,8 @@
       name="first_name"
       {% if user.is_authenticated %}
       value="{{ user.first_name }}"
-      {% else %}
-      value="{{ request.form.first_name }}"
+      {% elif form %}
+      value="{{ form.first_name }}"
       {% endif %}
       required>
     </div>
@@ -26,26 +26,26 @@
       name="last_name"
       {% if user.is_authenticated %}
       value="{{ user.last_name }}"
-      {% else %}
-      value="{{ request.form.last_name }}"
+      {% elif form %}
+      value="{{ form.last_name }}"
       {% endif %}
       required>
     </div>
   </div>
   <br/>
   <div class="form-group">
-    <label for="user_name" class="bold">Username
+    <label for="username" class="bold">Username
       <span class="required-field">*</span>
     </label>
     <input 
     type="text" 
     class="form-control" 
-    id="user_name" 
-    name="user_name"
+    id="username" 
+    name="username"
     {% if user.is_authenticated %}
-    value="{{ user.user_name }}"
-    {% else %}
-    value="{{ request.form.user_name }}"
+    value="{{ user.username }}"
+    {% elif form %}
+    value="{{ form.username }}"
     {% endif %}
     >
   </div>
@@ -61,8 +61,8 @@
     name="email"
     {% if user.is_authenticated and user.email %}
     value="{{ user.email }}"
-    {% else %}
-    value="{{ request.form.email }}"
+    {% elif form %}
+    value="{{ form.email }}"
     {% endif %}>
   </div>
   <br/>
@@ -76,8 +76,8 @@
     name="pronouns"
     {% if user.is_authenticated and user.pronouns %}
     value="{{ user.pronouns }}"
-    {% else %}
-    value="{{ request.form.pronouns }}"
+    {% elif form %}
+    value="{{ form.pronouns }}"
     {% endif %}
     >
   </div>
@@ -91,8 +91,8 @@
     name="title"
     {% if user.is_authenticated and user.title %}
     value="{{ user.title }}"
-    {% else %}
-    value="{{ request.form.title }}"
+    {% elif form %}
+    value="{{ form.title }}"
     {% endif %}
     >
   </div>
@@ -100,14 +100,14 @@
   <div class="form-group">
     <label for="affiliation" class="bold">Affiliation</label>
     <select class="form-control"
-      id="affiliation"
-      name="affiliation" 
+      id="affiliations"
+      name="affiliations" 
       multiple
       required>
       <option value="" disabled>Select one or more affiliations</option>
       {% for affiliation in vocab.affiliation_type %}
       <option value="{{ affiliation }}"
-      {% if affiliations and affiliation in affiliations %}
+      {% if form.affiliations and affiliation in form.affiliations %}
       selected
       {% endif %}>{{ affiliation }}</option>
       {% endfor %}
@@ -115,16 +115,31 @@
   </div>
   <br/>
   <div class="form-group">
-    <label for="web_address" class="bold">Website</label>
+    <label for="other_affiliation" class="bold">Other Affiliation</label>
+    <input 
+    type="text" 
+    class="form-control" 
+    id="other_affiliation" 
+    name="other_affiliation"
+    {% if user.is_authenticated and user.website %}
+    value="{{ other_affiliation }}"
+    {% elif form %}
+    value="{{ form.other_affiliation }}"
+    {% endif %}
+    >
+  </div>
+  <br/>
+  <div class="form-group">
+    <label for="website" class="bold">Website</label>
     <input 
     type="url" 
     class="form-control" 
-    id="web_address" 
-    name="web_address"
-    {% if user.is_authenticated and user.web_address %}
-    value="{{ user.web_address }}"
-    {% else %}
-    value="{{ request.form.web_address }}"
+    id="website" 
+    name="website"
+    {% if user.is_authenticated and user.website %}
+    value="{{ user.website }}"
+    {% elif form %}
+    value="{{ form.website }}"
     {% endif %}
     >
   </div>
@@ -136,7 +151,13 @@
       name="bio"
       rows="3"
       placeholder="Markdown-enabled field"
-      >{% if user.is_authenticated and user.bio %}{{ user.bio }}{% endif %}</textarea>
+      {% if user.is_authenticated and user.bio %}
+      >{{ user.bio }}</textarea>
+      {% elif form.bio %}
+      >{{ form.bio }}</textarea>
+      {% else%}
+      ></textarea>
+      {% endif %}
   </div>
   <br/>
   <div class="form-group">
@@ -148,8 +169,8 @@
     name="photo_url"
     {% if user.is_authenticated and user.photo_url %}
     value="{{ user.photo_url }}"
-    {% else %}
-    value="{{ request.form.photo_url }}"
+    {% elif form.photo_url %}
+    value="{{ form.photo_url }}"
     {% endif %}>
   </div>
   <br/>

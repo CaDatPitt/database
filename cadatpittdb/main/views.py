@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .controlled_vocab import vocab
+from .utilities import *
+from django.contrib.auth import get_user_model
 
 
 def index_vw(request):
@@ -92,6 +94,14 @@ def logout_vw(request):
 
 
 @login_required
+def profile_vw(request):
+    context = {
+        "title": "View Profile",
+    }
+    return render(request, "auth/profile.html", context)
+
+
+@login_required
 def retrieve_vw(request):
     context = {
         "title": "Retrieve Data",
@@ -104,4 +114,60 @@ def signup_vw(request):
         "title": "Sign Up",
         "vocab": vocab,
     }
+
+    if request.user.is_authenticated:
+        messages.error(request, "You are already registered!")
+        return redirect("/dashboard/") 
+
+    if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        username = request.POST['username']
+        email = request.POST['email']
+        pronouns = request.POST['pronouns']
+        title = request.POST['title']
+        affiliations = request.POST.getlist('affiliations')
+        other_affiliation = request.POST['other_affiliation']
+        email = request.POST['email']
+        website = request.POST['website']
+        bio = request.POST['bio']
+        photo_url = request.POST['photo_url']
+        password = request.POST['password']
+        password_conf = request.POST['password_conf']
+
+        password_valid = check_password(request, password, password_conf)
+
+        User = get_user_model()
+        user_exists = check_user_exists(request, User, username, email)
+        user = None
+
+        if not user_exists and password_valid:
+            affiliation = format_affiliation(affiliations, other_affiliation)
+            try:
+                user = User.objects.create_user(first_name=first_name,
+                                                last_name=last_name,
+                                                username=username, email=email, 
+                                                pronouns=pronouns, title=title, 
+                                                affiliation=affiliation, 
+                                                website=website, bio=bio, 
+                                                profile_photo_url=photo_url, 
+                                                password=password)
+            except:
+                messages.error(request, "User could not be created. Please try \
+                               or submit a help request.")
+                
+            if user is not None:
+                login(request, user)
+                messages.success(request, "Account created! Thanks for joining!")
+                return redirect("/dashboard/")
+        
+        if user_exists or user is None or not password_valid:
+            context['form'] = {'first_name': first_name, 'last_name': last_name,
+                               'username': username, 'email': email, 
+                               'pronouns': pronouns, 'title': title, 
+                               'affiliations': affiliations, 
+                               'other_affiliation': other_affiliation,
+                               'website': website, 'bio': bio, 
+                               'photo_url': photo_url, 'password': password}            
+        
     return render(request, "auth/signup.html", context)
