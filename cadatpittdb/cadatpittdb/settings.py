@@ -50,8 +50,6 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'users',
     'bootstrap5',
-    'crispy_forms',
-    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
