@@ -20,9 +20,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     profile_photo_url = models.URLField(_('profile photo URL'), max_length=500, blank=True, default='')
     profile_public = models.BooleanField(_('profile_public'), default=False)
     
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    email_confirmed = models.BooleanField(default=False)
     
     date_joined = models.DateTimeField(default=timezone.now)
     last_login = models.DateTimeField(blank=True, null=True)
