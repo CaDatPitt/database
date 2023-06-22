@@ -14,6 +14,7 @@ from os import environ, getenv, path
 from pathlib import Path
 from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
+from .config import *
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -91,11 +92,11 @@ WSGI_APPLICATION = "cadatpittdb.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': getenv('NAME'),
-        'USER': getenv('USER'),
-        'PASSWORD': getenv('PASSWORD'),
-        'HOST': getenv('HOST'),
-        'PORT': getenv('PORT')
+        'NAME': NAME,
+        'USER': USER,
+        'PASSWORD': PASSWORD,
+        'HOST': HOST,
+        'PORT': PORT
     }
 }
 
