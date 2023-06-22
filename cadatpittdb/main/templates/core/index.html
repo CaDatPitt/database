@@ -1,42 +1,59 @@
-{% extends "base.html" %}
+{% extends "core/base.html" %}
 {% block title %}{{ title }}{% endblock %}
 {% block head %}
 {% endblock %}
 {% block navbar_home %}class="nav-link active"{% endblock %}
-{% block content %}
-{% endblock %}
-<!--Landing section-->
-<div class = "jumbotron">
-    <h1>Welcome to the CaD@Pitt Datasets!</h1>
-    <p>Explore library and archives metadata, create your own datasets from your searches, and share them with our community of researchers! </p>
-    <p>Sign up to begin creating your datasets or browse published datasets!</p>
+{% block jumbotron %}
+<div class="p-5 pitt-gold jumbotron">
+    <div class="container py-5">
+        <!--landing area-->
+        <h1>Welcome to the CaD@Pitt Database!</h1>
+        <br/>
+        <h4>Explore library and archives metadata, create your own datasets from 
+            your searches, and share them with our community of researchers! 
+        </h4>
+        <br/>
+        <h4>Sign up to begin creating your datasets or browse published datasets!
+        </h4>
+        <!--landing area buttons-->
+        <div class="row mt-5">
+            <div class="col-sm d-grid gap-2 d-md-flex  justify-content-md-end">
+                <a class="btn btn-primary btn-lg pitt-royal" 
+                    href="signup" role="button">Create an Account</a>
+            </div>
+            <div class="col-sm d-grid gap-2 d-md-flex justify-content-md-center">
+                <a class="btn btn-primary btn-lg pitt-royal" href="retrieve" role="button">Create a Dataset</a>
+            </div>
+            <div class="col-sm d-grid gap-2 d-md-flex justify-content-md-start">
+                <a class="btn btn-primary btn-lg pitt-royal" href="browse" role="button">Browse Datasets</a>
+            </div>
+        </div>
+    </div>
 </div>
-<!-- landing area buttons -->
-<div class="btn-group btn-group-lg ">
-  <button type="button" class="btn-default">Create an Account</button>
-  <button type="button" class="btn-default">Create a Dataset</button>
-  <button type="button" class="btn=default">Explore Datasets</button>
-</div>
-<!-- featured section on 1 row 4 col grid-->
+<!--featured datasets section-->
 <h2>Featured Datasets</h2>
 <div class="container">
   <!-- using cards for each featured dataset -->
-  <div class="row">
+  <!--dataset 1-->
+  <div class="col">
     <div class="col-*-*">
       <div class="card">
         <div class="card-body">Dataset 1</div>
       </div>
     </div>
+    <!--dataset 2-->
     <div class="col-*-*">
       <div class="card">
         <div class="card-body">Dataset 2</div>
       </div>
     </div>
+    <!--dataset 3-->
     <div class="col-*-*">
       <div class="card">
         <div class="card-body">Dataset 3</div>
       </div>
     </div>
+    <!--dataset 4-->
     <div class="col-*-*">
       <div class="card">
         <div class="card-body">Dataset 4</div>
@@ -44,3 +61,6 @@
     </div>
   </div>
 </div>
+{% endblock%}
+{% block content %}
+{% endblock %}
