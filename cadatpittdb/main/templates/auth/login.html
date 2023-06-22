@@ -4,50 +4,52 @@
 {% endblock %}
 {% block navbar_login %}class="nav-link active"{% endblock %}
 {% block content %}
-<div class="row">
-  <div class="mx-auto col-sm-10 col-md-8 col-lg-6 col-xxl-4">
-    <form method="POST">
-      {% csrf_token %}
-      <h3 align="center">Log In</h3>
-      <div class="form-group">
-        <label for="username" class="bold">Username
-          <span class="required-field">*
-        </label>
-        <input 
-        type="username" 
-        class="form-control" 
-        id="username" 
-        name="username">
-      </div>
-      <br/>
-      <div class="form-group">
-        <label for="password" class="bold">Password
-          <span class="required-field">*
-        </label>
-        <input 
-        type="password" 
-        class="form-control" 
-        id="password" 
-        name="password" 
-        placeholder="">
-      </div>
-      <br/>
-      <div class="form-check">
-        <label class="form-check-label" for="remember">
-          Remember me
-        </label>
-        <input 
-        type="checkbox" 
-        class="form-check-input" 
-        id="remember"
-        name="remember"
-        value=True>
-      </div>
-      <br/>
-      <div class="col-md-12 text-center">
-        <button type="submit" class="btn btn-primary">Login</button>
-      </div>
-    </form>
+<div class="bg-secondary">
+  <div class="row">
+    <div class="mx-auto col-sm-10 col-md-8 col-lg-6 col-xxl-4">
+      <form method="POST">
+        {% csrf_token %}
+        <h3 align="center">Log In</h3>
+        <div class="form-group">
+          <label for="username" class="bold">Username
+            <span class="required-field">*
+          </label>
+          <input 
+          type="username" 
+          class="form-control" 
+          id="username" 
+          name="username">
+        </div>
+        <br/>
+        <div class="form-group">
+          <label for="password" class="bold">Password
+            <span class="required-field">*
+          </label>
+          <input 
+          type="password" 
+          class="form-control" 
+          id="password" 
+          name="password" 
+          placeholder="">
+        </div>
+        <br/>
+        <div class="form-check">
+          <label class="form-check-label" for="remember">
+            Remember me
+          </label>
+          <input 
+          type="checkbox" 
+          class="form-check-input" 
+          id="remember"
+          name="remember"
+          value=True>
+        </div>
+        <br/>
+        <div class="col-md-12 text-center">
+          <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 {% endblock %}
