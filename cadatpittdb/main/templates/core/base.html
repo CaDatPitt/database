@@ -7,6 +7,7 @@
     {% load bootstrap5 %}
     <!-- {% bootstrap_css %}
     {% bootstrap_javascript %} -->
+    <link rel="stylesheet" href="{% static 'main/main.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <style>
       .navbar-custom {
@@ -76,7 +77,7 @@
                   {% if user.profile_photo_url %}
                   src="{{ user.profile_photo_url }}"
                   {% else %}
-                  src="cadatpittdb\main\static\profile_icon.png"
+                  src="{% static 'profile_icon.png' %}"
                   {% endif %}
                   class="rounded-circle border border-2 border-warning" 
                   style="width: 2em; height: 2em; object-fit: cover;"

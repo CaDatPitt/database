@@ -156,6 +156,7 @@ def signup_vw(request):
                 messages.error(request, "User could not be created. Please try \
                                or submit a help request.")
                 
+            user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
                 messages.success(request, "Account created! Thanks for joining!")
