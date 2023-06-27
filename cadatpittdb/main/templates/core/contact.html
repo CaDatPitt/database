@@ -1,8 +1,9 @@
 {% extends "core/base.html" %}
+{% load static %}
 {% block title %}{{ title }}{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="{% static 'main.css' %}">
-{% endblock %}
+{% endblock%}
 {% block navbar_signup %}class="nav-link active"{% endblock %}
 {% block content %}
 <div class="mx-auto col-sm-10 col-md-8 col-lg-6 col-xxl-4">

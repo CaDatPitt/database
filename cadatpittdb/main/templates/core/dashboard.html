@@ -1,19 +1,15 @@
 {% extends "core/base.html" %}
-{% block title %}{{ title }}{% endblock %}
 {% load static %}
+{% block title %}{{ title }}{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="{% static 'main.css' %}">
-{% endblock %}
+{% endblock%}
 {% block navbar_dashboard %}class="nav-link active"{% endblock %}
 {% block content %}
 <div class="row">
-    <!-- Dashboard Pieces -->
     <div class="col-md col-lg-8">
         <h3 align="center">Dashboard</h3>
-        <!-- My Datasets -->
-        <!-- My Saved Searches -->
     </div>
-    <!-- Account Information -->
     <div class="col-md col-lg-4">
         <form method="POST">
             {% csrf_token %}
