@@ -109,3 +109,12 @@ label.bold {
 span.required-field {
   color: #D93025;
 }
+
+p.contact {
+  display: block;
+  margin-top: .5em;
+  margin-bottom: .5em;
+  margin-left: 0;
+  margin-right: 0;
+  line-height: 1.3em;
+}

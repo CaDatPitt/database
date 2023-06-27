@@ -2,6 +2,9 @@
 {% block title %}{{ title }}{% endblock %}
 {% block navbar_home %}class="nav-link active"{% endblock %}
 {% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'main.css' %}">
+{% endblock%}
 {% block jumbotron %}
 <div class="p-5 pitt-gold">
     <div class="container py-5">
@@ -34,8 +37,8 @@
     <h2 class="mb-4">Featured Datasets</h2>
   <!-- using cards for each featured dataset -->
   <!--dataset 1-->
-    <div class="row">
-      <div class="col-sm-3"> 
+    <div class="row gy-4">
+      <div class="col-md-6 col-xl-3"> 
         <div class="card h-100 shadow-sm light-gray">
           <div class="card-body">
             <h5 class="card-title">Dataset 1</h5>
@@ -43,7 +46,7 @@
         </div>
       </div>
       <!--dataset 2-->
-      <div class="col-sm-3">
+      <div class="col-md-6 col-xl-3">
         <div class="card h-100 shadow-sm light-gray">
           <div class="card-body">
             <h5 class="card-title">Dataset 2</h5>
@@ -51,24 +54,47 @@
         </div>
       </div>
       <!--dataset 3-->
-      <div class="col-sm-3">
+      <div class="col-md-6 col-xl-3">
         <div class="card h-100 shadow-sm light-gray">
           <div class="card-body">
             <h5 class="card-title">Dataset 3</h5>
-            <h* class="card-subtitle">Created by:</h*>
-            <h* class="card-subtitle">Created on:</h*>
-            <p class="card-text">text description</p>
-            <p class="card-text">x items</p>
-            <a class="btn btn-primary">Pin</a>
-            <a class="btn btn-primary">Download</a>
           </div>
         </div>
       </div>
       <!--dataset 4-->
-      <div class="col-sm-3">
+      <div class="col-md-6 col-xl-3">
         <div class="card h-100 shadow-sm light-gray">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-8">
+                <strong>Created by</strong>: username
+              </div>
+              <div class="col-4 text-end">
+                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
+                    data-bs-title="Pin dataset"><img 
+                    src="{% static 'push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"
+                    style="max-height: 1.25em;"></a>
+                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
+                data-bs-title="Edit dataset"><img 
+                    src="{% static 'edit_FILL0_wght400_GRAD0_opsz48.svg' %}"
+                    style="max-height: 1.25em;"></a>
+                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
+                data-bs-title="Delete dataset"><img 
+                  src="{% static 'delete_FILL0_wght400_GRAD0_opsz48.svg' %}"
+                  style="max-height: 1.25em;"></a>
+              </div>
+            </div>
+          </div>
           <div class="card-body">
             <h5 class="card-title">Dataset 4</h5>
+            <h* class="card-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque 
+              aliquet sapien eget pulvinar venenatis. Quisque imperdiet dolor at 
+              cursus hendrerit. In consectetur porttitor ultrices.</h*>
+            <p class="card-text mt-2"><strong># of items</strong>: 2,023<br/>
+              <strong>Last modified</strong>: June 27, 2023
+            </p>
+            <a class="btn btn-primary">View</a>
+            <a class="btn btn-primary">Download</a>
           </div>
         </div>
       </div>
@@ -77,4 +103,11 @@
 </div>
 {% endblock%}
 {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<script>
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+  </script>
 {% endblock %}
