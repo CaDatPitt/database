@@ -63,6 +63,7 @@ body {
   --pitt-charcoal: #75787B;
   --pitt-gray: #97999B;
   --pitt-light-gray: #C8C9C7;
+  --light-gray: #F4F4F4;
 }
 
 .pitt-royal {
@@ -97,3 +98,14 @@ body {
   background-color: #C8C9C7;
 }
 
+.light-gray {
+  background-color: #F4F4F4;
+}
+
+label.bold {
+  font-weight: 500;
+}
+
+span.required-field {
+  color: #D93025;
+}

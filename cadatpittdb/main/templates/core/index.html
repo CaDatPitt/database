@@ -1,16 +1,15 @@
 {% extends "core/base.html" %}
 {% block title %}{{ title }}{% endblock %}
-{% block head %}
-{% endblock %}
 {% block navbar_home %}class="nav-link active"{% endblock %}
+{% load static %}
 {% block jumbotron %}
 <div class="p-5 pitt-gold jumbotron">
     <div class="container py-5">
         <!--landing area-->
         <h1>Welcome to the CaD@Pitt Database!</h1>
         <br/>
-        <h4>Explore library and archives metadata, create your own datasets from 
-            your searches, and share them with our community of researchers! 
+        <h4>Explore library and archives metadata, create your own datasets from
+            your searches, and share them with our community of researchers!
         </h4>
         <br/>
         <h4>Sign up to begin creating your datasets or browse published datasets!
@@ -18,7 +17,7 @@
         <!--landing area buttons-->
         <div class="row mt-5">
             <div class="col-sm d-grid gap-2 d-md-flex justify-content-md-end">
-                <a class="btn btn-primary btn-lg pitt-royal" 
+                <a class="btn btn-primary btn-lg pitt-royal"
                     href="signup" role="button">Create an Account</a>
             </div>
             <div class="col-sm d-grid gap-2 d-md-flex justify-content-md-center">
@@ -32,14 +31,14 @@
 </div>
 
 <!--featured datasets section-->
-<div class="p-5 pitt-light-gray jumbotron">
+<div class="p-5 jumbotron">
   <div class="container py-5 ">
     <h2 class="mb-4">Featured Datasets</h2>
   <!-- using cards for each featured dataset -->
   <!--dataset 1-->
     <div class="row">
-      <div class="col-sm-3"> 
-        <div class="card h-100 shadow">
+      <div class="col-sm-3">
+        <div class="card h-100 shadow-sm light-gray">
           <div class="card-body">
             <h5 class="card-title">Dataset 1</h5>
           </div>
@@ -47,7 +46,7 @@
       </div>
       <!--dataset 2-->
       <div class="col-sm-3">
-        <div class="card h-100 shadow ">
+        <div class="card h-100 shadow-sm light-gray">
           <div class="card-body">
             <h5 class="card-title">Dataset 2</h5>
           </div>
@@ -55,7 +54,7 @@
       </div>
       <!--dataset 3-->
       <div class="col-sm-3">
-        <div class="card h-100 shadow">
+        <div class="card h-100 shadow-sm light-gray">
           <div class="card-body">
             <h5 class="card-title">Dataset 3</h5>
             <h* class="card-subtitle">Created by:</h*>
@@ -69,7 +68,7 @@
       </div>
       <!--dataset 4-->
       <div class="col-sm-3">
-        <div class="card h-100 shadow">
+        <div class="card h-100 shadow-sm light-gray">
           <div class="card-body">
             <h5 class="card-title">Dataset 4</h5>
           </div>
