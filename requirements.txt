@@ -17,3 +17,4 @@ pyoai>=2.5.0
 Sickle>=0.7.0
 python-dotenv>=1.0.0
 mysqlclient>=2.1.1
+markdown-3.4.3
