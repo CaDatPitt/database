@@ -1,4 +1,5 @@
 from django.contrib import messages
+from markdown import markdown
 import re
 
 
@@ -50,3 +51,30 @@ def format_affiliation(affiliations=[], other_affiliation=''):
     affiliation_str = '|'.join(affiliations)
     
     return affiliation_str
+
+
+def get_markdown(input=str) -> str:
+    if input:
+        text = input
+        # Ensure hyperlink prefix
+        # pattern for Markdown hyperlink
+        pattern = r'\[[^!?\s]*\]\([^!?\s]*\)'
+        
+        for match in re.finditer(pattern, text):
+            hyperlink = match[0]
+            # Check if hyperlink is not prefixed
+            if re.match(r'\[[^!?\s]*\]\([^http][^!?\s]*', hyperlink) or \
+                re.match(r'\[[^!?\s]*\]\([^www.][^!?\s]*', hyperlink) or \
+                re.match(r'\[[^!?\s]*\]\([^\\][^!?\s]*', hyperlink):
+                prefixed_hyperlink = hyperlink.replace("(", "(//")
+                text = text.replace(hyperlink, prefixed_hyperlink)
+
+        # Strip enclosing paragraph marks, <p> ... </p>, which markdown() forces
+        text = re.sub("(^<P>|</P>$)", "", markdown(text), flags=re.IGNORECASE)
+
+        # Add target
+        text = text.replace("<a href", "<a target='_blank' href")
+
+        return text
+    return input
+

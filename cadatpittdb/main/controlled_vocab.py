@@ -4,10 +4,10 @@ vocab = {
         'Doctoral',
         'Faculty',
         'Masters',
+        'Other University',
         'Postdoctoral',
         'Staff',
         'Undergraduate',
-        'Other University',
         'Other'
         ],
     'inquiry_type': [

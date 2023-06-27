@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .controlled_vocab import vocab
 from .utilities import *
-from django.contrib.auth import get_user_model
 
 
 def index_vw(request):
@@ -49,7 +49,7 @@ def dashboard_vw(request):
     context = {
         "title": "About",
     }
-    return render(request, "core/dashboard.html", context)
+    return render(request, "auth/dashboard.html", context)
 
 
 def documentation_vw(request):
@@ -97,8 +97,28 @@ def logout_vw(request):
 def profile_vw(request):
     context = {
         "title": "View Profile",
+        "vocab": vocab,
     }
-    return render(request, "auth/profile.html", context)
+    
+    username = request.GET['user']
+    User = get_user_model()
+    user = User.objects.get(username=username)
+
+    if user:
+        # Get formatted user affiliaitions
+        affiliations = user.get_affiliations
+        bio = get_markdown(user.bio)
+
+        # Add user information to context
+        context['person'] = user
+        context['affiliations'] = affiliations
+        context['bio'] = bio
+
+        return render(request, "core/profile.html", context)
+    
+    else:
+        messages.error(request, "That user does not exist!")
+        return redirect(request.META['HTTP_REFERER'])
 
 
 @login_required
