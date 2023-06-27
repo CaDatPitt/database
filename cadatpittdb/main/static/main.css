@@ -118,3 +118,7 @@ p.contact {
   margin-right: 0;
   line-height: 1.3em;
 }
+
+img.card-header-icons {
+  max-height: 1.25em;
+}

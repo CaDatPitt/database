@@ -4,6 +4,11 @@
 {% load static %}
 {% block head %}
 <link rel="stylesheet" href="{% static 'main.css' %}">
+<style>
+  img.card-header-icons {
+    max-height: 1.25em;
+  }  
+</style>
 {% endblock%}
 {% block jumbotron %}
 <div class="p-5 pitt-gold">
@@ -71,17 +76,14 @@
               </div>
               <div class="col-4 text-end">
                 <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
-                    data-bs-title="Pin dataset"><img 
-                    src="{% static 'push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"
-                    style="max-height: 1.25em;"></a>
+                    data-bs-title="Pin dataset"><img class="card-header-icons"
+                    src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
                 <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
-                data-bs-title="Edit dataset"><img 
-                    src="{% static 'edit_FILL0_wght400_GRAD0_opsz48.svg' %}"
-                    style="max-height: 1.25em;"></a>
+                data-bs-title="Edit dataset"><img class="card-header-icons"
+                    src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
                 <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
-                data-bs-title="Delete dataset"><img 
-                  src="{% static 'delete_FILL0_wght400_GRAD0_opsz48.svg' %}"
-                  style="max-height: 1.25em;"></a>
+                data-bs-title="Delete dataset"><img class="card-header-icons"
+                  src="{% static 'images/delete_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
               </div>
             </div>
           </div>
@@ -93,8 +95,8 @@
             <p class="card-text mt-2"><strong># of items</strong>: 2,023<br/>
               <strong>Last modified</strong>: June 27, 2023
             </p>
-            <a class="btn btn-primary">View</a>
-            <a class="btn btn-primary">Download</a>
+            <a class="btn btn-warning">View</a>
+            <a class="btn btn-warning">Download</a>
           </div>
         </div>
       </div>
