@@ -4,3 +4,4 @@ __pycache__/
 test.py
 transformation-scripts/
 cadatpittdb/cadatpittdb/config.py
+.DS_Store
