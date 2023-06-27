@@ -77,7 +77,6 @@ body {
   background-color: #F4F4F4;
 }
 
-
 /* Borders */
 
 .border-pitt-royal {
@@ -114,4 +113,42 @@ body {
 
 .border-light-gray {
   border-color: #F4F4F4;
+}
+
+/* Text */
+
+.text-pitt-royal {
+  color: #003594;
+}
+
+.text-pitt-gold {
+  color: #FFB81C;
+}
+
+.text-pitt-dark-blue {
+  color: #141B4D;
+}
+
+.text-pitt-medium-blue {
+  color: #00205B;
+}
+
+.text-pitt-dark-gold {
+  color: #B58500;
+}
+
+.text-pitt-charcoal {
+  color: #75787B;
+}
+
+.text-pitt-gray {
+  color: #97999B;
+}
+
+.text-pitt-light-gray {
+  color: #C8C9C7;
+}
+
+.text-light-gray {
+  color: #F4F4F4;
 }
