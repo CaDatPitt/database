@@ -102,7 +102,10 @@ def profile_vw(request):
     
     username = request.GET['user']
     User = get_user_model()
-    user = User.objects.get(username=username)
+    try:
+        user = User.objects.get(username=username)
+    except:
+        user = None
 
     if user:
         # Get formatted user affiliaitions
@@ -118,7 +121,7 @@ def profile_vw(request):
     
     else:
         messages.error(request, "That user does not exist!")
-        return redirect(request.META['HTTP_REFERER'])
+        return redirect("/")
 
 
 @login_required

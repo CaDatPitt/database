@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "django_browser_reload",
     'main.apps.MainConfig',
     'users',
+    'django_bootstrap5',
     'bootstrap5',
 ]
 

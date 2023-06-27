@@ -37,7 +37,9 @@
       <option value="" disabled>Select one or more affiliations</option>
       {% for affiliation in vocab.affiliation_type %}
       <option value="{{ affiliation }}"
-      {% if form.affiliations and affiliation in form.affiliations %}
+      {% if user.is_authenticated and affiliation in affiliations %}
+      selected
+      {% elif form and affiliation in form.affiliations %}
       selected
       {% endif %}>{{ affiliation }}</option>
       {% endfor %}
