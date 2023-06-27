@@ -1,6 +1,8 @@
 {% extends "core/base.html" %}
 {% block title %}{{ title }}{% endblock %}
+{% load static %}
 {% block head %}
+<link rel="stylesheet" href="{% static 'main.css' %}">
 {% endblock %}
 {% block navbar_dashboard %}class="nav-link active"{% endblock %}
 {% block content %}
