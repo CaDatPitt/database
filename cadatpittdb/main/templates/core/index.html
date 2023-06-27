@@ -6,19 +6,21 @@
 <link rel="stylesheet" href="{% static 'main.css' %}">
 {% endblock%}
 {% block jumbotron %}
-<div class="p-5 pitt-gold">
+<div class="p-5 pitt-gold jumbotron">
     <div class="container py-5">
+        <!--landing area-->
         <h1>Welcome to the CaD@Pitt Database!</h1>
         <br/>
-        <h4>Explore library and archives metadata, create your own datasets from 
-            your searches, and share them with our community of researchers! 
+        <h4>Explore library and archives metadata, create your own datasets from
+            your searches, and share them with our community of researchers!
         </h4>
         <br/>
         <h4>Sign up to begin creating your datasets or browse published datasets!
         </h4>
+        <!--landing area buttons-->
         <div class="row mt-5">
             <div class="col-sm d-grid gap-2 d-md-flex justify-content-md-end">
-                <a class="btn btn-primary btn-lg pitt-royal" 
+                <a class="btn btn-primary btn-lg pitt-royal"
                     href="signup" role="button">Create an Account</a>
             </div>
             <div class="col-sm d-grid gap-2 d-md-flex justify-content-md-center">
@@ -38,7 +40,7 @@
   <!-- using cards for each featured dataset -->
   <!--dataset 1-->
     <div class="row gy-4">
-      <div class="col-md-6 col-xl-3"> 
+      <div class="col-md-6 col-xl-3">
         <div class="card h-100 shadow-sm light-gray">
           <div class="card-body">
             <h5 class="card-title">Dataset 1</h5>
@@ -70,13 +72,13 @@
                 <strong>Created by</strong>: username
               </div>
               <div class="col-4 text-end">
-                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
+                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-title="Pin dataset"><img class="card-header-icons"
                   src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
+                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-title="Edit dataset"><img class="card-header-icons"
                   src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
+                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-title="Delete dataset"><img class="card-header-icons"
                   src="{% static 'images/delete_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
               </div>
@@ -84,8 +86,8 @@
           </div>
           <div class="card-body">
             <h5 class="card-title">Dataset 4</h5>
-            <h* class="card-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque 
-              aliquet sapien eget pulvinar venenatis. Quisque imperdiet dolor at 
+            <h* class="card-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+              aliquet sapien eget pulvinar venenatis. Quisque imperdiet dolor at
               cursus hendrerit. In consectetur porttitor ultrices.</h*>
             <p class="card-text mt-2"><strong># of items</strong>: 2,023<br/>
               <strong>Last modified</strong>: June 27, 2023
