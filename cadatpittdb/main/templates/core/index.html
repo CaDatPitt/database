@@ -6,31 +6,33 @@
 {% endblock%}
 {% block navbar_home %}class="nav-link active"{% endblock %}
 {% block jumbotron %}
-<div class="p-5 pitt-gold jumbotron">
-    <div class="container py-5">
-        <!--landing area-->
-        <h1>Welcome to the CaD@Pitt Database!</h1>
-        <br/>
-        <h4>Explore library and archives metadata, create your own datasets from
-            your searches, and share them with our community of researchers!
-        </h4>
-        <br/>
-        <h4>Sign up to begin creating your datasets or browse published datasets!
-        </h4>
-        <!--landing area buttons-->
-        <div class="row mt-5">
-            <div class="col-sm d-grid gap-2 d-md-flex justify-content-md-end">
-                <a class="btn btn-primary btn-lg pitt-royal"
-                    href="signup" role="button">Create an Account</a>
-            </div>
-            <div class="col-sm d-grid gap-2 d-md-flex justify-content-md-center">
-                <a class="btn btn-primary btn-lg pitt-royal" href="retrieve" role="button">Create a Dataset</a>
-            </div>
-            <div class="col-sm d-grid gap-2 d-md-flex justify-content-md-start">
-                <a class="btn btn-primary btn-lg pitt-royal" href="browse" role="button">Browse Datasets</a>
-            </div>
-        </div>
-    </div>
+<div class="p-5 bg-pitt-gold jumbotron">
+  <div class="container py-5">
+      <!--landing area-->
+      <h1>Welcome to the CaD@Pitt Database!</h1>
+      <br/>
+      <h4>Explore library and archives metadata, create your own datasets from
+          your searches, and share them with our community of researchers!
+      </h4>
+      <br/>
+      <h4>Sign up to begin creating your datasets or browse published datasets!
+      </h4>
+      <!--landing area buttons-->
+      <div class="row mt-5">
+          <div class="col-sm d-grid gap-2 d-md-flex justify-content-md-end">
+              <a class="btn btn-primary btn-lg bg-pitt-royal border-pitt-royal"
+                  href="signup" role="button">Create an Account</a>
+          </div>
+          <div class="col-sm d-grid gap-2 d-md-flex justify-content-md-center">
+              <a class="btn btn-primary btn-lg bg-pitt-royal border-pitt-royal"
+                href="retrieve" role="button">Create a Dataset</a>
+          </div>
+          <div class="col-sm d-grid gap-2 d-md-flex justify-content-md-start">
+              <a class="btn btn-primary btn-lg bg-pitt-royal border-pitt-royal"
+                href="browse" role="button">Browse Datasets</a>
+          </div>
+      </div>
+  </div>
 </div>
 
 <!--featured datasets section-->
@@ -65,7 +67,7 @@
       </div>
       <!--dataset 4-->
       <div class="col-md-6 col-xl-3">
-        <div class="card h-100 shadow-sm light-gray">
+        <div class="card h-100 shadow-sm bg-light-gray">
           <div class="card-header">
             <div class="row">
               <div class="col-8">
@@ -102,7 +104,6 @@
 </div>
 {% endblock%}
 {% block content %}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script>
   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {

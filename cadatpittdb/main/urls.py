@@ -15,5 +15,4 @@ urlpatterns = [
     path("profile/", views.profile_vw),
     path("retrieve/", views.retrieve_vw),
     path("signup/", views.signup_vw),
-    path("about/", views.about_vw),
 ]

@@ -11,114 +11,107 @@ body {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
       monospace;
   }
-  
-  .App {
-    text-align: center;
-  }
-  
-  .App-logo {
-    height: 40vmin;
-    pointer-events: none;
-  }
-  
-  .App-header {
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-  }
-  
-  .App-link {
-    color: #61dafb;
-  }
-  
-.heart {
-  color: #ff0000;
-}
 
+  label.bold {
+    font-weight: 500;
+  }
+  
+  span.required-field {
+    color: #D93025;
+  }
+  
+  p.contact {
+    display: block;
+    margin-top: .5em;
+    margin-bottom: .5em;
+    margin-left: 0;
+    margin-right: 0;
+    line-height: 1.3em;
+  }
+  
+  img.card-header-icons {
+    max-height: 1.25em;
+  }
+  
 .small {
   font-size: 0.75rem;
 }
 
-
 /* Pitt Branding Palettes */
 
-:root {
-  /* Primary  Palette */
-  
-  /* Contemporary Colors */
-  --pitt-royal: #003594;
-  --pitt-gold: #FFB81C;
+/* Backgrounds */
 
-  /* Legacy Colors */
-  --pitt-dark-blue: #141B4D;
-  --pitt-medium-blue: #00205B;
-  --pitt-dark-gold: #B58500;
-
-  /* Neutral Palette */
-  --pitt-charcoal: #75787B;
-  --pitt-gray: #97999B;
-  --pitt-light-gray: #C8C9C7;
-  --light-gray: #F4F4F4;
-}
-
-.pitt-royal {
+.bg-pitt-royal {
   background-color: #003594;
 }
 
-.pitt-gold {
+.bg-pitt-gold {
   background-color: #FFB81C;
 }
 
-.pitt-dark-blue {
+.bg-pitt-dark-blue {
   background-color: #141B4D;
 }
 
-.pitt-medium-blue {
+.bg-pitt-medium-blue {
   background-color: #00205B;
 }
 
-.pitt-dark-gold {
+.bg-pitt-dark-gold {
   background-color: #B58500;
 }
 
-.pitt-charcoal {
+.bg-pitt-charcoal {
   background-color: #75787B;
 }
 
-.pitt-gray {
+.bg-pitt-gray {
   background-color: #97999B;
 }
 
-.pitt-light-gray {
+.bg-pitt-light-gray {
   background-color: #C8C9C7;
 }
 
-.light-gray {
+.bg-light-gray {
   background-color: #F4F4F4;
 }
 
-label.bold {
-  font-weight: 500;
+
+/* Borders */
+
+.border-pitt-royal {
+  border-color: #003594;
 }
 
-span.required-field {
-  color: #D93025;
+.border-pitt-gold {
+  border-color: #FFB81C;
 }
 
-p.contact {
-  display: block;
-  margin-top: .5em;
-  margin-bottom: .5em;
-  margin-left: 0;
-  margin-right: 0;
-  line-height: 1.3em;
+.border-pitt-dark-blue {
+  border-color: #141B4D;
 }
 
-img.card-header-icons {
-  max-height: 1.25em;
+.border-pitt-medium-blue {
+  border-color: #00205B;
+}
+
+.border-pitt-dark-gold {
+  border-color: #B58500;
+}
+
+.border-pitt-charcoal {
+  border-color: #75787B;
+}
+
+.border-pitt-gray {
+  border-color: #97999B;
+}
+
+.border-pitt-light-gray {
+  border-color: #C8C9C7;
+}
+
+.border-light-gray {
+  border-color: #F4F4F4;
 }

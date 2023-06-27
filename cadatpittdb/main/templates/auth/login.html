@@ -1,7 +1,9 @@
 {% extends "core/base.html" %}
+{% load static %}
 {% block title %}{{ title }}{% endblock %}
 {% block head %}
-{% endblock %}
+<link rel="stylesheet" href="{% static 'main.css' %}">
+{% endblock%}
 {% block navbar_login %}class="nav-link active"{% endblock %}
 {% block content %}
 <div class="row">
@@ -45,7 +47,7 @@
       </div>
       <br/>
       <div class="col-md-12 text-center">
-        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="submit" class="btn btn-warning pitt-gold">Login</button>
       </div>
     </form>
   </div>
