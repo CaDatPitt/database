@@ -76,15 +76,27 @@ def help_vw(request):
 def login_vw(request):
     context = {
         "title": "Log In",
+        'use_email': False
     }
+    
     if request.user.is_authenticated:
         messages.error(request, "You're already logged in!")
         return redirect("/dashboard/") 
     
+    if request.GET.get('email'):
+        context['use_email'] = True
+    
     if request.method == 'POST':
         username = request.POST["username"]
         password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
+        email = request.POST["email"]
+        user = None
+
+        if context['use_email']:
+            user = authenticate(request, email=email, password=password)
+        else:
+            user = authenticate(request, username=username, password=password)
+       
         if user is not None:
             login(request, user)
             return redirect("/dashboard/")

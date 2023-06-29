@@ -11,6 +11,19 @@
     <form method="POST">
       {% csrf_token %}
       <h3 align="center">Log In</h3>
+      {% if use_email %}
+      <div class="form-group">
+        <label for="username" class="bold">Email
+          <span class="required-field">*
+        </label>
+        <input 
+        type="email" 
+        class="form-control" 
+        id="email" 
+        name="email"
+        required>
+      </div>
+      {% else %}
       <div class="form-group">
         <label for="username" class="bold">Username
           <span class="required-field">*
@@ -19,8 +32,10 @@
         type="username"
         class="form-control"
         id="username"
-        name="username">
+        name="username"
+        required>
       </div>
+      {% endif %}
       <br/>
       <div class="form-group">
         <label for="password" class="bold">Password
@@ -31,7 +46,7 @@
         class="form-control"
         id="password"
         name="password"
-        placeholder="">
+        required>
       </div>
       <br/>
       <div class="form-check">
@@ -50,6 +65,20 @@
         <button type="submit" class="btn btn-warning pitt-gold">Login</button>
       </div>
     </form>
+    <div class="row gy-4 mt-4">
+      <div class="col">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <a class="btn btn-outline-primary border-pitt-royal text-pitt-royal"
+          role="button" href="/password_reset/">Forgot password?</a>
+        </div>
+      </div>
+      <div class="col">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+          <a class="btn btn-outline-primary border-pitt-royal text-pitt-royal"
+          role="button" href="/login/?email=true">Log in with email</a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
