@@ -59,6 +59,13 @@ def documentation_vw(request):
     return render(request, "core/documentation.html", context)
 
 
+def faq_vw(request):
+    context = {
+        "title": "FAQs",
+    }
+    return render(request, "core/faq.html", context)
+
+
 def help_vw(request):
     context = {
         "title": "Help",

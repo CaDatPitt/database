@@ -39,9 +39,13 @@
               <a {% block navbar_documentation %}class="nav-link"{% endblock %}
               href="/documentation">Documentation</a>
             </li>
-            <li class="nav-item">
-              <a {% block navbar_help %}class="nav-link"{% endblock %}
-              href="/help">Help</a>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                href="/help" role="button" aria-expanded="false">Help</a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="/faq/">FAQs</a></li>
+                  <li><a class="dropdown-item" href="/contact/">Contact Us</a></li>
+                </ul>
             </li>
           </ul>
           <ul class="navbar-nav ms-auto mb-2 mb-xl-0 me-xl-4">
