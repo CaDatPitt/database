@@ -74,8 +74,13 @@
       </div>
       <div class="col">
         <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-          <a class="btn btn-outline-primary border-pitt-royal text-pitt-royal"
-          role="button" href="/login/?email=true">Log in with email</a>
+          <a class="btn btn-outline-primary border-pitt-royal text-pitt-royal"          
+            {% if use_email %}
+            role="button" href="/login/">Log in with password
+            {% else %}
+            role="button" href="/login/?email=true">Log in with email
+            {% endif %}
+          </a>
         </div>
       </div>
     </div>

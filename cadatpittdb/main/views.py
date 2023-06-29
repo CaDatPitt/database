@@ -87,12 +87,13 @@ def login_vw(request):
         context['use_email'] = True
     
     if request.method == 'POST':
-        username = request.POST["username"]
-        password = request.POST["password"]
-        email = request.POST["email"]
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        email = request.POST.get("email")
         user = None
 
         if context['use_email']:
+            print(email)
             user = authenticate(request, email=email, password=password)
         else:
             user = authenticate(request, username=username, password=password)
