@@ -92,13 +92,17 @@ def login_vw(request):
         email = request.POST.get("email")
         user = None
 
+        # Get user's username if using email
         if context['use_email']:
-            print(email)
-            user = authenticate(request, email=email, password=password)
-        else:
-            user = authenticate(request, username=username, password=password)
+            User = get_user_model()
+            user = User.objects.filter(email=email).first()
+            username = user.username
+
+        # Try to authenticate user    
+        user = authenticate(request, username=username, password=password)
        
         if user is not None:
+            # Log in user
             login(request, user)
             return redirect("/dashboard/")
         else:
