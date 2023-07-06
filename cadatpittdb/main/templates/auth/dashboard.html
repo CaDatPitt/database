@@ -6,92 +6,92 @@
 {% endblock%}
 {% block navbar_dashboard %}class="nav-link active"{% endblock %}
 {% block content %}
-<div class="row">
-  <div class="col-md col-lg-8">
-    <h3 align="center">Dashboard</h3>
-    <!--My Datasets, Pinned Datasets, Saved Searches section-->
-    <div class="card h-50 shadow-sm bg-light-gray">
-      <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" role="tab">My Datasets</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link"  href="#history" role="tab">Pinned Datasets</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#deals" role="tab">My Saved Searches</a>
-          </li>
-        </ul>
-      </div>
-      <div class="card-body">
-        <div class="tab-content mt-3">
-          <div class="tab-pane active" id="description" role="tabpanel">
-            <!--My Datasets-->
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">August Wilson plays
-                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
+<div class="container py-5">
+  <div class="row">
+    <div class="col-md col-lg-8">
+      <h3 align="center">Dashboard</h3>
+      <!--My Datasets, Pinned Datasets, Saved Searches section-->
+      <div class="card h-50 shadow-sm bg-light-gray">
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" role="tab">My Datasets</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link"  href="#history" role="tab">Pinned Datasets</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#deals" role="tab">My Saved Searches</a>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body">
+          <div class="tab-content mt-3">
+            <div class="tab-pane active" id="description" role="tabpanel">
+              <!--My Datasets-->
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">August Wilson plays
+                  <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
+                          data-bs-title="Pin dataset"><img class="card-header-icons"
+                          src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+                  <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
+                    data-bs-title="Edit dataset"><img class="card-header-icons"
+                    src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+                </li>
+                <li class="list-group-item">Pittsburgh major league sports
+                  <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
+                    data-bs-title="Pin dataset"><img class="card-header-icons"
+                    src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+                  <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
+                    data-bs-title="Edit dataset"><img class="card-header-icons"
+                    src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+                </li>
+                <li class="list-group-item">Pittsburgh Northside 1990s
+                  <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
                         data-bs-title="Pin dataset"><img class="card-header-icons"
                         src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                  data-bs-title="Edit dataset"><img class="card-header-icons"
-                  src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-              </li>
-              <li class="list-group-item">Pittsburgh major league sports
-                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                  data-bs-title="Pin dataset"><img class="card-header-icons"
-                  src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                  data-bs-title="Edit dataset"><img class="card-header-icons"
-                  src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-              </li>
-              <li class="list-group-item">Pittsburgh Northside 1990s
-                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                      data-bs-title="Pin dataset"><img class="card-header-icons"
-                      src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                  data-bs-title="Edit dataset"><img class="card-header-icons"
-                  src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-              </li>
-              <li class="list-group-item">Pittsburgh Northside 1990s
-                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                      data-bs-title="Pin dataset"><img class="card-header-icons"
-                      src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                  data-bs-title="Edit dataset"><img class="card-header-icons"
-                  src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-              </li>
-            </ul>
-            <div class="card-footer">
-              <a href="#" class="btn btn-warning pitt-gold">Create New Dataset</a>
+                  <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
+                    data-bs-title="Edit dataset"><img class="card-header-icons"
+                    src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+                </li>
+                <li class="list-group-item">Pittsburgh Northside 1990s
+                  <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-bs-title="Pin dataset"><img class="card-header-icons"
+                        src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+                  <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
+                    data-bs-title="Edit dataset"><img class="card-header-icons"
+                    src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+                </li>
+              </ul>
+              <div class="card-footer">
+                <a href="#" class="btn btn-warning pitt-gold">Create New Dataset</a>
+              </div>
             </div>
-          </div>
-           
-          <div class="tab-pane" id="history" role="tabpanel" aria-labelledby="history-tab"> 
-            <!--Pinned Datasets--> 
-          </div>
-          
-          <div class="tab-pane" id="deals" role="tabpanel" aria-labelledby="deals-tab">
-            <!--Saved Searches-->
+            
+            <div class="tab-pane" id="history" role="tabpanel" aria-labelledby="history-tab"> 
+              <!--Pinned Datasets--> 
+            </div>
+            
+            <div class="tab-pane" id="deals" role="tabpanel" aria-labelledby="deals-tab">
+              <!--Saved Searches-->
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <!--Account and Profile section-->
+    <div class=" col-lg-4">
+      <form method="POST">
+        {% csrf_token %}
+        <h3 align="center">Account</h3>
+        <br/>
+        {% include 'auth/account-form.html' %}
+        <div class="col-md-12 text-center">
+          <button type="submit" class="btn btn-warning pitt-gold">Update</button>
+        </div>
+      </form>
+      <h3 align="center">Profile</h3>
+    </div>
   </div>
 </div>
-  <!--Account and Profile section-->
-  <div class="col-md col-lg-4">
-    <form method="POST">
-      {% csrf_token %}
-      <h3 align="center">Account</h3>
-      <br/>
-      {% include 'auth/account-form.html' %}
-      <div class="col-md-12 text-center">
-        <button type="submit" class="btn btn-warning pitt-gold">Update</button>
-      </div>
-    </form>
-    <h3 align="center">Profile</h3>
-  </div>
-</div>
-<div class="row">
 {% endblock %}
