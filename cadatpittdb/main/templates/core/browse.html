@@ -11,7 +11,7 @@
 <hr/>
 <div class="row">
     <!--Filters-->
-    <div class="col-md col-lg-4">
+    <div class="col-md col-lg-4 sticky-top">
         <h5 align="left">Filters</h5>
         <div class="card shadow-sm bg-light-gray">
             <div class="card-body">
@@ -48,6 +48,18 @@
                         </div>
                     <br/>
                     <div class="form-group">
+                        <label for="tags" class="bold">Tags</label>
+                        <select 
+                            class="form-control"
+                            id="tags"
+                            name="tags" 
+                            multiple
+                            required>
+                            <option value="" disabled>Select an area</option>
+                        </select>
+                    </div>
+                    <br/>
+                    <div class="form-group">
                         <label for="end_year" class="bold"># of Items</label>
                         <input 
                             type="number" 
@@ -57,6 +69,16 @@
                             min="1" max="500000" step="1"
                             required>
                     </div>
+                    <br/>
+                    <div class="form-group">
+                        <label for="date" class="bold">Last Modified</label>
+                        <input 
+                        type="date" 
+                        class="form-control" 
+                        id="date" 
+                        name="date"
+                        required>
+                      </div>
                     <br />
                     <div class="col-md-12 text-center">
                         <button type="submit" class="btn btn-warning pitt-gold">
