@@ -11,10 +11,6 @@ body {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
       monospace;
   }
-
-  label.bold {
-    font-weight: 500;
-  }
   
   span.required-field {
     color: #D93025;
@@ -32,6 +28,10 @@ body {
   img.card-header-icons {
     max-height: 1.25em;
   }
+
+.bold {
+  font-weight: 500;
+}
   
 .small {
   font-size: 0.75rem;
@@ -152,3 +152,6 @@ body {
 .text-light-gray {
   color: #F4F4F4;
 }
+
+#accordionCollapse {transition: none;}
+.accordionCollapse {transition: none;}

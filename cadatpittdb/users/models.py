@@ -17,6 +17,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     affiliation = models.CharField(_('affiliation'), max_length=100, blank=True, default='')
     bio = models.CharField(_('bio'), max_length=5000, blank=True, default='')
     website = models.URLField(_('website'), max_length=500, blank=True, default='')
+    # Enable ImageField option for profile photo?
     profile_photo_url = models.URLField(_('profile photo URL'), max_length=500, blank=True, default='')
     profile_public = models.BooleanField(_('profile_public'), default=False)
     
@@ -54,6 +55,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 class Collection(models.Model):
     collection_id = models.CharField(_('collection ID'), max_length=200, primary_key=True)
     title = models.CharField(_('title'), max_length=200)
+    url = models.CharField(_('url'), max_length=500, blank=True, default='')
+    sites = models.CharField(_('title'), max_length=100, blank=True, default='')
+    date_added = models.DateTimeField(_('date added'), default=timezone.now)
 
     class Meta:
         verbose_name = 'collection'
@@ -64,24 +68,22 @@ class Collection(models.Model):
     
     def get_title(self):
         return self.title
+    
 
-
-class Item(models.Model):
-    item_id = models.CharField(_('item ID'), max_length=200, primary_key=True)
-    title = models.CharField(_('title'), max_length=200)
-    type = models.CharField(_('type'), max_length=25, blank=True, default='')
-    collections = models.ManyToManyField(Collection)
-    date_added = models.DateTimeField(_('date added'), default=timezone.now)
+class Tag(models.Model):
+    tag_id = models.BigAutoField(_('tag ID'), auto_created=True, primary_key=True)
+    text = models.CharField(_('tag'), max_length=50, blank=True, default='')
+    date_created = models.DateTimeField(_('date created'), default=timezone.now)
 
     class Meta:
-        verbose_name = 'item'
-        verbose_name_plural = 'items'
+        verbose_name = 'tag'
+        verbose_name_plural = 'tags'
 
     def __str__(self):
-        return self.item_id
-    
-    def get_title(self):
-        return self.title
+        return self.tag_id
+        
+    def get_text(self):
+        return self.text
     
 
 class Dataset(models.Model):
@@ -89,13 +91,15 @@ class Dataset(models.Model):
     public_id = models.UUIDField(default=uuid.uuid4, editable=False)
     title = models.CharField(_('title'), max_length=200, blank=True, default='')
     description = models.CharField(_('description'), max_length=5000, blank=True, default='')
-    search_paremeters = models.CharField(_('search parameters'), max_length=500)
-    items = models.ManyToManyField(Item)
+    tags = models.CharField(_('tags'), max_length=500, blank=True, default='')
+    search_paremeters = models.JSONField(_('search parameters'), blank=True, default=dict)
     number_items = models.IntegerField(_('number of items'))
-    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    tags = models.ManyToManyField(Tag)
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='creator')
     date_created = models.DateTimeField(_('date created'), default=timezone.now)
-    last_modified = models.DateTimeField(_('last modified'), blank=True, null=True)
+    last_modified = models.DateTimeField(_('last modified'), blank=True, default=timezone.now)
     public = models.BooleanField(_('public'), default=False)
+    pinned_by = models.ManyToManyField(CustomUser, related_name='pinner')
 
     class Meta:
         verbose_name = 'dataset'
@@ -108,22 +112,45 @@ class Dataset(models.Model):
         return self.title
 
 
-class PinnedDataset(models.Model):
-    fk_dataset_id = models.ForeignKey(Dataset, on_delete=models.CASCADE)
-    fk_user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    date_pinned = models.DateTimeField(_('date pinned'), default=timezone.now)
+class Item(models.Model):
+    item_id = models.CharField(_('item ID'), max_length=200, primary_key=True)
+    title = models.CharField(_('title'), max_length=200)
+    date = models.CharField(_('date'), max_length=50, blank=True, default='')
+    type = models.CharField(_('type'), max_length=25, blank=True, default='')
+    thumbnail = models.URLField(_('thumbnail'), blank=True, default='')
+    collections = models.ManyToManyField(Collection)
+    datasets = models.ManyToManyField(Dataset)
+    tags = models.ManyToManyField(Tag)
+    date_added = models.DateTimeField(_('date added'), default=timezone.now)
+    pinned_by = models.ManyToManyField(CustomUser)
 
     class Meta:
-        verbose_name = 'pinned dataset'
-        verbose_name_plural = 'pinned datasets'
+        verbose_name = 'item'
+        verbose_name_plural = 'items'
+
+    def __str__(self):
+        return self.item_id
+    
+    def get_title(self):
+        return self.title
 
 
-class PinnedItem(models.Model):
-    fk_dataset_id = models.ForeignKey(Item, on_delete=models.CASCADE)
-    fk_user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    date_pinned = models.DateTimeField(_('date pinned'), default=timezone.now)
+# class PinnedDataset(models.Model):
+#     fk_dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE)
+#     fk_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+#     date_pinned = models.DateTimeField(_('date pinned'), default=timezone.now)
 
-    class Meta:
-        verbose_name = 'pinned item'
-        verbose_name_plural = 'pinned items'
+#     class Meta:
+#         verbose_name = 'pinned dataset'
+#         verbose_name_plural = 'pinned datasets'
+
+
+# class PinnedItem(models.Model):
+#     fk_dataset = models.ForeignKey(Item, on_delete=models.CASCADE)
+#     fk_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+#     date_pinned = models.DateTimeField(_('date pinned'), default=timezone.now)
+
+#     class Meta:
+#         verbose_name = 'pinned item'
+#         verbose_name_plural = 'pinned items'
     

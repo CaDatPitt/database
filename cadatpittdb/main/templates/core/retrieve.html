@@ -176,87 +176,116 @@
     <div class="col-md col-lg-8">
         <h5 align="left">Retrieval Method</h5>
         <p class="my-2 bold">Select the method for retrieving data.</p>
-        <div class="form-group">
-            <div class="form-check">
-                <input 
-                    class="form-check-input" 
-                    type="radio" 
-                    name="flexRadioDefault" 
-                    id="flexRadioDefault1" 
-                    checked>
-                <label class="form-check-label" for="flexRadioDefault1">
-                    By Collection 
-                </label>
+        <div id="retrievalMethod">
+            <div class="form-group">
+                <div class="form-check">
+                    <input 
+                        data-bs-toggle="collapse" 
+                        data-bs-target="#collectionCollapse"
+                        class="form-check-input" 
+                        type="radio" 
+                        name="collectionCollapseToggle" 
+                        id="collectionCollapseToggle" 
+                        checked>
+                    <label class="form-check-label" for="collectionCollapseToggle">
+                        By Collection 
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input 
+                        data-bs-toggle="collapse" 
+                        data-bs-target="#identifiersCollapse"
+                        class="form-check-input" 
+                        type="radio" 
+                        name="identifiersCollapseToggle" 
+                        id="identifiersCollapseToggle">
+                    <label class="form-check-label" for="identifiersCollapseToggle">
+                        List of Identifiers
+                    </label>
+                </div>  
+                <div class="form-check">
+                    <input 
+                        data-bs-toggle="collapse" 
+                        data-bs-target="#fileUploadCollapse"
+                        class="form-check-input" 
+                        type="radio" 
+                        name="fileUploadCollapseToggle" 
+                        id="fileUploadCollapseToggle">
+                    <label class="form-check-label" for="fileUploadCollapseToggle">
+                        CSV Upload
+                    </label>
+                </div>
             </div>
-            <div class="form-check">
-                <input 
-                class="form-check-input" 
-                type="radio" 
-                name="flexRadioDefault" 
-                id="flexRadioDefault1">
-                <label class="form-check-label" for="flexRadioDefault2">
-                    List of Identifiers
-                </label>
-            </div>  
-            <div class="form-check">
-                <input 
-                    class="form-check-input" 
-                    type="radio" 
-                    name="flexRadioDefault" 
-                    id="flexRadioDefault1">
-                <label class="form-check-label" for="flexRadioDefault2">
-                    CSV Upload
-                </label>
-            </div>
-        </div>
-        <div class="card shadow-sm bg-light-gray mt-2 sticky-bottom">
-            <div class="card-body">
-                <form method="POST" >
-                    <div class="form-group">
-                        <label for="parent_unit" class="bold">Collection(s)</label>
-                        <select 
-                        class="form-control" 
-                        name="parent_unit" 
-                        id="parent_unit"
-                        size="10"
-                        multiple>
-                        <option value="" disabled>Select collection(s)</option>
-                        </select>
-                    </div>
-                    <br/>
-                    <div class="col-md-12 text-center">
-                        <button type="submit" class="btn btn-warning pitt-gold">
-                            Submit
-                        </button>
-                    </div>
-                </form>
-                <!-- <form method="POST" >  
-                    <div class="form-group">
-                        <label for="item_ids" class="bold">Identifiers</label>
-                        <textarea class="form-control"
-                            id="item_ids"
-                            name="item_ids"
-                            rows="10"
-                            placeholder=""
-                            ></textarea>
-                    </div>
-                </form>
-                <br/>
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <label for="item_ids" class="bold">File Upload</label>
-                    <div class="row">
-                        <div class="col-10">
-                            <input class="form-control" type="file" id="formFile">
+            <div class="accordion-group">
+                <div class="card shadow-sm bg-light-gray mt-2">
+                    <div class="card-body">
+                        <div 
+                            class="collapse accordionCollapse show" 
+                            data-bs-parent="#retrievalMethod"
+                            id="collectionCollapse">
+                            <form method="POST">
+                                <div class="form-group">
+                                    <label for="parent_unit" class="bold">Collection(s)</label>
+                                    <select 
+                                    class="form-control" 
+                                    name="collections" 
+                                    id="collections"
+                                    size="10"
+                                    multiple>
+                                    <option value="" disabled>Select collection(s)</option>
+                                    </select>
+                                </div>
+                                <br/>
+                                <div class="col-md-12 text-center">
+                                    <button type="submit" class="btn btn-warning pitt-gold">
+                                        Submit
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="col-2">
-                            <button type="submit" class="btn btn-warning pitt-gold">
-                                Upload
-                            </button>
+                        <div 
+                            class="collapse accordionCollapse" 
+                            data-bs-parent="#retrievalMethod"
+                            id="identifiersCollapse">
+                            <form method="POST" >  
+                                <div class="form-group">
+                                    <label for="item_ids" class="bold">Identifiers</label>
+                                    <textarea class="form-control"
+                                        id="item_ids"
+                                        name="item_ids"
+                                        rows="10"
+                                        placeholder=""
+                                        ></textarea>
+                                </div>
+                                <br/>
+                                <div class="col-md-12 text-center">
+                                    <button type="submit" class="btn btn-warning pitt-gold">
+                                        Submit
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div 
+                            class="collapse accordionCollapse" 
+                            data-bs-parent="#retrievalMethod"
+                            id="fileUploadCollapse">
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <label for="item_ids" class="bold">File Upload</label>
+                                <div class="row">
+                                    <div class="col-10">
+                                        <input class="form-control" type="file" id="formFile">
+                                    </div>
+                                    <div class="col-2">
+                                        <button type="submit" class="btn btn-warning pitt-gold">
+                                            Upload
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                </form>
-                <br/> -->
+                </div>
             </div>
         </div>
     </div>
