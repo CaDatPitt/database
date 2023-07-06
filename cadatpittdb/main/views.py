@@ -1,11 +1,17 @@
+
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
+from django.core.files.temp import NamedTemporaryFile
+from wsgiref.util import FileWrapper
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 from django.contrib import messages
+import mimetypes
 from .controlled_vocab import vocab
 from .utilities import *
-
+from .datasets import *
 
 def index_vw(request):
     context = {
@@ -41,6 +47,20 @@ def create_vw(request):
     context = {
         "title": "Create a Dataset",
     }
+
+    if request.method == 'POST':
+        dataset = request.POST.get("dataset")
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        tags = request.POST.get("tags")
+        public = request.POST.get("public")
+
+        dataset = create_dataset(dataset=dataset, title=title, 
+                                 description=description, tags=tags, 
+                                 created_by=request.user, public=public)
+        
+        return redirect(f"/dataset/?id={dataset.public_id}") 
+        
     return render(request, "core/create.html", context)
 
 
@@ -52,11 +72,38 @@ def dashboard_vw(request):
     return render(request, "auth/dashboard.html", context)
 
 
+def dataset_vw(request):
+    context = {
+        "title": "View Dataset",
+    }
+    if request.method == 'GET':
+        id = request.GET['id']
+        dataset = Dataset.objects.filter(dataset_id=id).first()
+        context['dataset'] = dataset
+
+    return render(request, "core/dataset.html", context)
+
+
 def documentation_vw(request):
     context = {
         "title": "Documentation",
     }
     return render(request, "core/documentation.html", context)
+
+
+def download_vw(request):
+    context = {
+        "title": "Download Dataset",
+    }
+    newfile = NamedTemporaryFile(suffix='.txt') # change suffix depending on option
+    # save your data to newfile.name
+    wrapper = FileWrapper(newfile)
+    content_type = mimetypes.guess_type(newfile.file.name)
+    response = HttpResponse(wrapper, content_type=content_type)
+    response['Content-Disposition'] = 'attachment; filename=%s' % os.path.basename(newfile.name)
+    response['Content-Length'] = os.path.getsize(newfile.name)
+    context['file'] = response
+    return render(request, "core/download.html", context, response)
 
 
 def faq_vw(request):
@@ -71,6 +118,18 @@ def help_vw(request):
         "title": "Help",
     }
     return render(request, "core/help.html", context)
+
+
+def item_vw(request):
+    context = {
+        "title": "View Item",
+    }
+    if request.method == 'GET':
+        id = request.GET['id']
+        item = Item.objects.filter(item_id=id).first()
+        context['item'] = item
+
+    return render(request, "core/item.html", context)
 
 
 def login_vw(request):
@@ -152,7 +211,81 @@ def profile_vw(request):
 def retrieve_vw(request):
     context = {
         "title": "Retrieve Data",
+        "show_results": False,
+        "collection": None,
+        "dataset": None,
     }
+
+    if request.method == 'GET':
+        context['collections'] = get_collections()
+
+    if request.method == 'POST':
+        # Toggle to display results
+        context['show_results'] = True
+        
+        if request.POST.get("filter"):
+            dataset = request.POST.get("dataset")
+
+            # Get parameters from form input
+            # request, dataset=pd.DataFrame, keywords=str, title=str, 
+            keywords = request.POST.get("keywords")
+            title = request.POST.get("title")
+            creator = request.POST.get("creator")
+            contributor = request.POST.get("contributor")
+            publisher = request.POST.get("publisher")
+            depositor = request.POST.get("depositor")
+            start_year = request.POST.get("start_year") # type="number" min="1900" max="2099" step="1" value="2016"
+            end_year = request.POST.get("end_year")
+            language = request.POST.get("language")
+            description = request.POST.get("description")
+            item_type = request.POST.getlist("item_type")
+            subject = request.POST.get("subject")
+            coverage = request.POST.get("coverage")
+            copyright = request.POST.getlist("copyright")
+
+            dataset = filter_dataset(keywords=keywords, title=title, 
+                                     creator=creator, contributor=contributor,
+                                     publisher=publisher, depositor=depositor,
+                                     start_year=start_year, end_year=end_year, 
+                                     language=language, description=description,
+                                     item_type=item_type, subject=subject, 
+                                     coverage=coverage, copyright=copyright)
+        else:
+            # Get form input
+            retrieval_method = request.POST.get("retrieval_method")
+            item_ids = request.POST.getlist("item_id")
+            csv_file = request.FILES.get('csv_file')
+            collections = request.POST.getlist("collection")
+
+            # Get dataset
+            if retrieval_method == 'by_id':
+                if item_ids:
+                    item_ids = iter(item_ids.splitlines())
+                    dataset = get_dataset(item_ids=item_ids)
+                elif csv_file:
+                    if not csv_file.name.endswith('.csv'):
+                        messages.error(request,'File is not CSV type.')
+                        return redirect("/retrieve/") 
+                    else:
+                        try:
+                            df = pd.read_csv(csv_file)
+                            item_ids = df.iloc[:, 0].values.tolist()
+                            dataset = get_dataset(item_ids=item_ids)
+                        except:
+                            messages.error(request, f'The file could not be \
+                                           uploaded. Please try again.')
+                else:
+                    messages.error(request, "You must either paste a list of \
+                                   item identifiers (each on a separate line) \
+                                   or upload a CSV file with a list of item \
+                                   identifiers.")
+                dataset = get_dataset(item_ids=item_ids)
+            else:
+                dataset = get_dataset(collections=collections)
+
+        # Add dataset to context
+        context['dataset'] = dataset
+
     return render(request, "core/retrieve.html", context)
 
 

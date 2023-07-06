@@ -1,6 +1,8 @@
 from django.contrib import messages
 from markdown import markdown
+from datetime import datetime
 import re
+from .controlled_vocab import vocab
 
 
 def check_password(request, password, password_conf):
@@ -78,3 +80,16 @@ def get_markdown(input=str) -> str:
         return text
     return input
 
+
+def get_rights(rights_input=list) -> list:
+    rights = []
+
+    for statement, url in vocab['rights'].items():
+        if statement in rights_input:
+            rights.append(url)
+
+    return rights
+
+
+def now():
+    return datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
