@@ -3,7 +3,70 @@
 {% block title %}{{ title }}{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="{% static 'main.css' %}">
+<link rel="stylesheet" href="{% static 'tagin/dist/tagin.min.css' %}" />
 {% endblock%}
 {% block navbar_build %}class="nav-link active"{% endblock %}
 {% block content %}
+<div class="mx-auto col-sm-10 col-md-8 col-lg-6 col-xxl-4">
+  <form method="POST">
+    {% csrf_token %}
+    <h3 align="center">Create Dataset</h3>
+    <br/>
+    <div class="form-group">
+      <label for="title" class="bold">Title
+      <span class="required-field">*</span>
+      </label>
+      <input 
+        type="text" 
+        class="form-control" 
+        id="title" 
+        name="title"
+        required>
+    </div>
+    <br/>
+    <div class="form-group">
+      <label for="description" class="bold">Description
+      <span class="required-field">*</span>
+      </label>
+      <textarea class="form-control"
+        id="description"
+        name="description"
+        rows="3"
+        placeholder="Markdown-enabled field"
+        ></textarea>
+    </div>
+    <br/>
+    <div class="form-group">
+      <label for="title" class="bold">Tags</span>
+      </label>
+      <input type="text" name="tags" class="form-control tagin" />
+    </div>
+    <br/>
+    <div class="form-check">
+        <label class="form-check-label" for="public">
+          Make dataset public
+        </label>
+        <input 
+          type="checkbox" 
+          class="form-check-input" 
+          id="public"
+          name="public"
+          value=True>
+      </div>
+      <br/>
+    <div class="col-md-12 text-center">
+      <button type="submit" class="btn btn-warning pitt-gold">Submit</button>
+    </div>
+  </form>
+</div>
+<script src="{% static 'tagin/dist/tagin.js' %}"></script>
+<script>
+  const tagin = new Tagin(document.querySelector('.tagin'), {
+  separator: '|||',
+  duplicate: false,
+  enter: true,
+  transform: 'input => input',
+  placeholder: 'Type tag name and press Enter/Return too add'
+  })
+</script>
 {% endblock %}
