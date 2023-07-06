@@ -8,6 +8,7 @@
 {% block content %}
 <div class="mx-auto col-sm-10 col-md-8 col-lg-6 col-xxl-4">
     <form method="POST">
+      {% csrf_token %}
       <h3 align="center">Contact Us</h3>
       <div class="form-group">
         <label for="full_name" class="bold">Full Name
@@ -76,7 +77,7 @@
       </div>
       <br/>
       <div class="col-md-12 text-center">
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-warning pitt-gold">Submit</button>
       </div>
     </form>
   </div>
