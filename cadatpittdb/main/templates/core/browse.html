@@ -28,7 +28,7 @@
                     </div>
                     <br />
                     <div class="form-group">
-                        <label for="creator" class="bold">Creator</label>
+                        <label for="creator" class="bold">Created By</label>
                         <input 
                             type="text" 
                             class="form-control" 
@@ -38,133 +38,28 @@
                     </div>
                     <br />
                     <div class="form-group">
-                        <label for="contributor" class="bold">Contributor</label>
+                        <label for="description" class="bold">Description</label>
                         <input 
                             type="text" 
                             class="form-control" 
-                            id="contributor" 
-                            name="contributor"
+                            id="description" 
+                            name="description"
                             required>
-                    </div>
-                    <br />
+                        </div>
+                    <br/>
                     <div class="form-group">
-                        <label for="publisher" class="bold">Publisher</label>
+                        <label for="end_year" class="bold"># of Items</label>
                         <input 
-                            type="text" 
+                            type="number" 
                             class="form-control" 
-                            id="publisher" 
-                            name="publisher"
+                            id="num_items" 
+                            name="num_items"
+                            min="1" max="500000" step="1"
                             required>
-                    </div>
-                    <br />
-                    <div class="form-group">
-                        <label for="depositor" class="bold">Depositor</label>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="depositor" 
-                            name="depositor"
-                            required>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="col">   
-                            <div class="form-group">
-                                <label for="start_year" class="bold">Start Year</label>
-                                <input 
-                                    type="number" 
-                                    class="form-control" 
-                                    id="start_year" 
-                                    name="start_year"
-                                    min="1900" max="2099" step="1"
-                                    required>
-                            </div>
-                        </div>
-                        <div class="col">   
-                            <div class="form-group">
-                                <label for="end_year" class="bold">End Year</label>
-                                <input 
-                                    type="number" 
-                                    class="form-control" 
-                                    id="end_year" 
-                                    name="end_year"
-                                    min="1900" max="2099" step="1"
-                                    required>
-                            </div>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-group">
-                        <label for="language" class="bold">Language</label>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="language" 
-                            name="language"
-                            required>
-                    </div>
-                    <br/>
-                    <div class="form-group">
-                    <label for="description" class="bold">Description</label>
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        id="description" 
-                        name="description"
-                        required>
-                    </div>
-                    <br/>
-                    <div class="form-group">
-                        <label for="language" class="bold">Item Type</label>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="language" 
-                            name="language"
-                            required>
-                    </div>
-                    <br/>
-                    <div class="form-group">
-                    <label for="subject" class="bold">Subject</label>
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        id="subject" 
-                        name="subject"
-                        required>
-                    </div>
-                    <br/>
-                    <div class="form-group">
-                    <label for="coverage" class="bold">Coverage</label>
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        id="coverage" 
-                        name="coverage"
-                        required>
-                    </div>
-                    <br/>
-                    <div class="form-group">
-                        <label for="copyright" class="bold">Copyright Status</label>
-                        <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" value="">Option 1
-                        </label>
-                        </div>
-                        <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" value="">Option 2
-                        </label>
-                        </div>
-                        <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" value="" disabled>Option 3
-                        </label>
-                        </div>
                     </div>
                     <br />
                     <div class="col-md-12 text-center">
-                        <button type="submit" class="btn btn-warning pitt-gold" disabled>
+                        <button type="submit" class="btn btn-warning pitt-gold">
                             Apply Filters
                         </button>
                     </div>
@@ -175,24 +70,22 @@
     <!--Dataset Cards-->
     <div class="col-md col-lg-8">
         <h5 align="left">Datasets</h5>
-        <!--row 1-->
-        <div class="container py-5">
-            <div class="row gy-4">
-                <div class="col-md col-lg-4">
-                    <div class="card h-100 shadow-sm bg-light-gray">
+        <div class="row gy-4">
+            <div class="col-sm-12 col-lg-6">
+                <div class="card h-100 shadow-sm bg-light-gray">
                     <div class="card-header">
                         <div class="row">
-                        <div class="col-9">
-                            <strong>Created by</strong>: Username
-                        </div>
-                        <div class="col-3 text-end">
-                            <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-title="Pin dataset"><img class="card-header-icons"
-                            src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                            <!-- <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-title="Delete dataset"><img class="card-header-icons"
-                            src="{% static 'images/delete_FILL0_wght400_GRAD0_opsz48.svg' %}"></a> -->
-                        </div>
+                            <div class="col-9">
+                                <strong>Created by</strong>: Username
+                            </div>
+                            <div class="col-3 text-end">
+                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-title="Pin dataset"><img class="card-header-icons"
+                                src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+                                <!-- <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-title="Delete dataset"><img class="card-header-icons"
+                                src="{% static 'images/delete_FILL0_wght400_GRAD0_opsz48.svg' %}"></a> -->
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -204,44 +97,39 @@
                         <strong>Last modified</strong>: June 27, 2023
                         </p>
                         <a class="btn btn-warning bg-pitt-gold border-pitt-gold">View</a>
-                    </div>
-                    </div>
-                </div>
-                <!--dataset 2 -->
-                <div class="col-md col-lg-4">
-                    <div class="card h-100 shadow-sm bg-light-gray">
-                    <div class="card-body">
-                        <h5 class="card-title">Dataset 2</h5>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-md col-lg-4">
-                    <div class="card h-100 shadow-sm bg-light-gray">
-                    <div class="card-body">
-                        <h5 class="card-title">Dataset 3</h5>
-                    </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!--row 2-->
-        <div class="container py-5">
-            <div class="row gy-4">
-                <div class="col-md col-lg-4">
-                    <div class="card h-100 shadow-sm bg-light-gray">
+            <!--dataset 2 -->
+            <div class="col-sm-12 col-lg-6">
+                <div class="card h-100 shadow-sm bg-light-gray">
+                    <div class="card-body">
+                        <h5 class="card-title">Dataset 2</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-6">
+                <div class="card h-100 shadow-sm bg-light-gray">
+                    <div class="card-body">
+                        <h5 class="card-title">Dataset 3</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-6">
+                <div class="card h-100 shadow-sm bg-light-gray">
                     <div class="card-header">
                         <div class="row">
-                        <div class="col-9">
-                            <strong>Created by</strong>: Username
-                        </div>
-                        <div class="col-3 text-end">
-                            <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-title="Pin dataset"><img class="card-header-icons"
-                            src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                            <!-- <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-title="Delete dataset"><img class="card-header-icons"
-                            src="{% static 'images/delete_FILL0_wght400_GRAD0_opsz48.svg' %}"></a> -->
-                        </div>
+                            <div class="col-9">
+                                <strong>Created by</strong>: Username
+                            </div>
+                            <div class="col-3 text-end">
+                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-title="Pin dataset"><img class="card-header-icons"
+                                src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+                                <!-- <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-title="Delete dataset"><img class="card-header-icons"
+                                src="{% static 'images/delete_FILL0_wght400_GRAD0_opsz48.svg' %}"></a> -->
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -254,21 +142,20 @@
                         </p>
                         <a class="btn btn-warning bg-pitt-gold border-pitt-gold">View</a>
                     </div>
-                    </div>
                 </div>
-                <!--dataset 2 -->
-                <div class="col-md col-lg-4">
-                    <div class="card h-100 shadow-sm bg-light-gray">
+            </div>
+            <!--dataset 2 -->
+            <div class="col-sm-12 col-lg-6">
+                <div class="card h-100 shadow-sm bg-light-gray">
                     <div class="card-body">
                         <h5 class="card-title">Dataset 2</h5>
                     </div>
-                    </div>
                 </div>
-                <div class="col-md col-lg-4">
-                    <div class="card h-100 shadow-sm bg-light-gray">
+            </div>
+            <div class="col-sm-12 col-lg-6">
+                <div class="card h-100 shadow-sm bg-light-gray">
                     <div class="card-body">
                         <h5 class="card-title">Dataset 3</h5>
-                    </div>
                     </div>
                 </div>
             </div>
