@@ -32,6 +32,10 @@ body {
 .bold {
   font-weight: 500;
 }
+
+.light {
+  font-weight: 350;
+}
   
 .small {
   font-size: 0.75rem;
