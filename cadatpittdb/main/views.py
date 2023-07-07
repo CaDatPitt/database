@@ -31,6 +31,8 @@ def browse_vw(request):
     context = {
         "title": "Browse Datasets",
     }
+    context['tags'] = Tag.objects.all()
+
     return render(request, "core/browse.html", context)
 
 
