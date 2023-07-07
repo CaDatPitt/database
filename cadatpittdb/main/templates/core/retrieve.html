@@ -164,7 +164,7 @@
                     </div>
                     <br />
                     <div class="col-md-12 text-center">
-                        <button type="submit" class="btn btn-warning pitt-gold" disabled>
+                        <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal" disabled>
                             Apply Filters
                         </button>
                     </div>
@@ -237,7 +237,7 @@
                                 </div>
                                 <br/>
                                 <div class="col-md-12 text-center">
-                                    <button type="submit" class="btn btn-warning pitt-gold">
+                                    <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal">
                                         Submit
                                     </button>
                                 </div>
@@ -259,7 +259,7 @@
                                 </div>
                                 <br/>
                                 <div class="col-md-12 text-center">
-                                    <button type="submit" class="btn btn-warning pitt-gold">
+                                    <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal">
                                         Submit
                                     </button>
                                 </div>
@@ -271,13 +271,11 @@
                             id="fileUploadCollapse">
                             <form method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
-                                <label for="item_ids" class="bold">File Upload</label>
-                                <div class="row">
-                                    <div class="col-10">
-                                        <input class="form-control" type="file" id="formFile">
-                                    </div>
-                                    <div class="col-2">
-                                        <button type="submit" class="btn btn-warning pitt-gold">
+                                    <label for="csv_file" class="bold">File Upload</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="file" id="csv_file">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal">
                                             Upload
                                         </button>
                                     </div>
