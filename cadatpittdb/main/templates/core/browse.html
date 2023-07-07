@@ -38,6 +38,21 @@
                     </div>
                     <br />
                     <div class="form-group">
+                        <label for="title" class="bold">Title
+                            <span 
+                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                data-bs-title='Enter help text here'>&#x1F6C8;
+                            </span>
+                        </label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          id="title" 
+                          name="title"
+                          required>
+                      </div>
+                    <br />
+                    <div class="form-group">
                         <label for="creator" class="bold">
                             Created By
                             <span 
@@ -94,21 +109,41 @@
                         </select>
                     </div>
                     <br/>
-                    <div class="form-group">
-                        <label for="end_year" class="bold">
-                            # of Items
-                            <span 
-                                data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                data-bs-title='Enter help text here'>&#x1F6C8;
-                            </span>
-                        </label>
-                        <input 
-                            type="number" 
-                            class="form-control" 
-                            id="num_items" 
-                            name="num_items"
-                            min="1" max="500000" step="1"
-                            required>
+                    <div class="row">
+                        <div class="col">   
+                            <div class="form-group">
+                                <label for="min_num_items" class="bold">Min # of Items
+                                    <span 
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                        data-bs-title='Enter help text here'>&#x1F6C8;
+                                    </span>
+                                </label>
+                                <input 
+                                    type="number" 
+                                    class="form-control" 
+                                    id="min_num_items" 
+                                    name="min_num_items"
+                                    min="1" max="500000" 
+                                    step="1">
+                            </div>
+                        </div>
+                        <div class="col">   
+                            <div class="form-group">
+                                <label for="min_num_items" class="bold">Max # of Items
+                                    <span 
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                        data-bs-title='Enter help text here'>&#x1F6C8;
+                                    </span>
+                                </label>
+                                <input 
+                                    type="number" 
+                                    class="form-control" 
+                                    id="min_num_items" 
+                                    name="min_num_items"
+                                    min="1" max="500000" 
+                                    step="1">
+                            </div>
+                        </div>
                     </div>
                     <br/>
                     <div class="form-group">
