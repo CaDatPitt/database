@@ -29,6 +29,20 @@ body {
     max-height: 1.25em;
   }
 
+.btn-contact {
+  border-bottom-left-radius: 0px; 
+  border-bottom-right-radius: 0px;
+  box-shadow: 0 .5rem 1rem rgba(0,0,0, 0.75);
+}
+
+#accordionCollapse {
+  transition: none;
+}
+
+.accordionCollapse {
+  transition: none;
+}
+
 .bold {
   font-weight: 500;
 }
@@ -157,5 +171,3 @@ body {
   color: #F4F4F4;
 }
 
-#accordionCollapse {transition: none;}
-.accordionCollapse {transition: none;}
