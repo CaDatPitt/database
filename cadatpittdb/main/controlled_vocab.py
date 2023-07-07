@@ -15,29 +15,29 @@ vocab = {
         'Other'
     ],
     'rights': {
-        'IN COPYRIGHT': 
+        'In Copyright': 
         'http://rightsstatements.org/vocab/InC/1.0/',
-        'IN COPYRIGHT - EU ORPHAN WORK': 
+        'In Copyright - EU Orphan Work': 
         'http://rightsstatements.org/vocab/InC-OW-EU/1.0/',
-        'IN COPYRIGHT - EDUCATIONAL USE PERMITTED': 
+        'In Copyright - Educational Use Permitted': 
         'http://rightsstatements.org/vocab/InC-EDU/1.0/',
-        'IN COPYRIGHT - NON-COMMERCIAL USE PERMITTED': 
+        'In Copyright - Non-Commercial Use Permitted': 
         'http://rightsstatements.org/vocab/InC-NC/1.0/',
-        'IN COPYRIGHT - RIGHTS-HOLDER(S) UNLOCATABLE OR UNIDENTIFIABLE': 
+        'In Copyright - Rights-Holder(s) Unlocatable or Unidentifiable': 
         'http://rightsstatements.org/vocab/UND/1.0/',
-        'NO COPYRIGHT - CONTRACTUAL RESTRICTIONS': 
+        'No Copyright - Contractual Restrictions': 
         'http://rightsstatements.org/vocab/NoC-CR/1.0/',
-        'NO COPYRIGHT - NON-COMMERCIAL USE ONLY': 
+        'No Copyright - Non-Commercial Use Only': 
         'http://rightsstatements.org/vocab/NoC-NC/1.0/',
-        'NO COPYRIGHT - OTHER KNOWN LEGAL RESTRICTIONS': 
+        'No Copyright - Other Known Legal Restrictions': 
         'http://rightsstatements.org/vocab/NoC-OKLR/1.0/',
-        'NO COPYRIGHT - UNITED STATES': 
+        'No Copyright - United States': 
         'http://rightsstatements.org/vocab/NoC-US/1.0/',
-        'COPYRIGHT NOT EVALUATED': 
+        'Copyright Not Evaluated': 
         'http://rightsstatements.org/vocab/CNE/1.0/',
-        'COPYRIGHT UNDETERMINED': 
+        'Copyright Undetermined': 
         'http://rightsstatements.org/vocab/UND/1.0/',
-        'NO KNOWN COPYRIGHT': 
+        'No Known Copyright': 
         'http://rightsstatements.org/vocab/NKC/1.0/'
     }
 }

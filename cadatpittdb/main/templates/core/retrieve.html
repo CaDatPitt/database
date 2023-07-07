@@ -146,21 +146,16 @@
                     <br/>
                     <div class="form-group">
                         <label for="copyright" class="bold">Copyright Status</label>
+                        {% for statement in rights %}
                         <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" value="">Option 1
-                        </label>
+                            <label class="form-check-label">
+                                <input 
+                                    type="checkbox" 
+                                    class="form-check-input" 
+                                    value="{{ statement }}">{{ statement }}
+                            </label>
                         </div>
-                        <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" value="">Option 2
-                        </label>
-                        </div>
-                        <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" value="" disabled>Option 3
-                        </label>
-                        </div>
+                        {% endfor %}
                     </div>
                     <br />
                     <div class="col-md-12 text-center">
@@ -176,6 +171,7 @@
     <div class="col-md col-lg-8">
         <h5 align="left">Retrieval Method</h5>
         <p class="my-2 bold">Select the method for retrieving data.</p>
+        <!-- Option Toggles -->
         <div id="retrievalMethod">
             <div class="form-group">
                 <div class="form-check">
@@ -216,7 +212,9 @@
                     </label>
                 </div>
             </div>
+            <!-- Input Methods -->
             <div class="accordion-group">
+                <!-- Collections -->
                 <div class="card shadow-sm bg-light-gray mt-2">
                     <div class="card-body">
                         <div 
@@ -227,12 +225,17 @@
                                 <div class="form-group">
                                     <label for="parent_unit" class="bold">Collection(s)</label>
                                     <select 
-                                    class="form-control" 
-                                    name="collections" 
-                                    id="collections"
-                                    size="10"
-                                    multiple>
-                                    <option value="" disabled>Select collection(s)</option>
+                                        class="form-control" 
+                                        name="collections" 
+                                        id="collections"
+                                        size="10"
+                                        multiple>
+                                        <option value="" disabled>Select collection(s)</option>
+                                        {% for collection in collections %}
+                                        <option value="{{ collection.collection_id }}">
+                                            {{ collection.title }} ({{ collection.collection_id }})
+                                        </option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                                 <br/>
@@ -243,6 +246,7 @@
                                 </div>
                             </form>
                         </div>
+                        <!-- List of Identifiers -->
                         <div 
                             class="collapse accordionCollapse" 
                             data-bs-parent="#retrievalMethod"
@@ -254,8 +258,10 @@
                                         id="item_ids"
                                         name="item_ids"
                                         rows="10"
-                                        placeholder=""
+                                        placeholder="Enter one identifier per line"
                                         ></textarea>
+                                    <small>Not sure how to enter your list of identifiers? 
+                                        <a href="#">Check out the FAQ!</a></small>
                                 </div>
                                 <br/>
                                 <div class="col-md-12 text-center">
@@ -265,6 +271,7 @@
                                 </div>
                             </form>
                         </div>
+                        <!-- CSV File Upload -->
                         <div 
                             class="collapse accordionCollapse" 
                             data-bs-parent="#retrievalMethod"
@@ -273,7 +280,11 @@
                                 {% csrf_token %}
                                     <label for="csv_file" class="bold">File Upload</label>
                                 <div class="input-group">
-                                    <input class="form-control" type="file" id="csv_file">
+                                    <input class="form-control" 
+                                        type="file" 
+                                        accept=".csv"
+                                        id="csv_file"
+                                        name="csv_file">
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal">
                                             Upload

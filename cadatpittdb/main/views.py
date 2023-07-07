@@ -212,12 +212,13 @@ def retrieve_vw(request):
     context = {
         "title": "Retrieve Data",
         "show_results": False,
-        "collection": None,
+        "collections": None,
         "dataset": None,
+        "rights": vocab['rights']
     }
 
     if request.method == 'GET':
-        context['collections'] = get_collections()
+        context['collections'] = Collection.objects.all()
 
     if request.method == 'POST':
         # Toggle to display results
