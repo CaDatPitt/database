@@ -1,8 +1,10 @@
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from markdown import markdown
 from datetime import datetime
 import re
 from .controlled_vocab import vocab
+from users.models import *
 
 
 def check_password(request, password, password_conf):
@@ -89,6 +91,18 @@ def get_rights(rights_input=list) -> list:
             rights.append(url)
 
     return rights
+
+
+def get_creators():
+    User = get_user_model()
+    users = Dataset.objects.all().values_list('created_by', flat=True)
+    user_list = []
+    
+    for user in users:
+        user_list.append(user)
+    creators = User.objects.filter(user_id__in=user_list).all()
+    
+    return creators
 
 
 def now():

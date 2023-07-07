@@ -92,7 +92,7 @@ class Dataset(models.Model):
     title = models.CharField(_('title'), max_length=200, blank=True, default='')
     description = models.CharField(_('description'), max_length=5000, blank=True, default='')
     tags = models.CharField(_('tags'), max_length=500, blank=True, default='')
-    search_paremeters = models.JSONField(_('search parameters'), blank=True, default=dict)
+    search_parameters = models.JSONField(_('search parameters'), blank=True, default=dict)
     number_items = models.IntegerField(_('number of items'))
     tags = models.ManyToManyField(Tag)
     created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='creator')

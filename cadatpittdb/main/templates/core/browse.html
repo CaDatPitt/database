@@ -33,8 +33,7 @@
                             type="text" 
                             class="form-control" 
                             id="keywords" 
-                            name="keywords"
-                            required>
+                            name="keywords">
                     </div>
                     <br />
                     <div class="form-group">
@@ -48,8 +47,7 @@
                           type="text" 
                           class="form-control" 
                           id="title" 
-                          name="title"
-                          required>
+                          name="title">
                       </div>
                     <br />
                     <div class="form-group">
@@ -62,12 +60,19 @@
                                 users by using the AND and OR operators'>&#x1F6C8;
                             </span>
                         </label>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="creator" 
-                            name="creator"
-                            required>
+                        <select 
+                            class="form-control"
+                            id="creator"
+                            name="creator" 
+                            multiple>
+                            <option value="" disabled>Select user(s)</option>
+                            {% for creator in creators %}
+                            <option value="{{ creator.user_id }}">
+                                {{ creator.first_name }} {{ creator.last_name}} 
+                                ({{ creator.username}})
+                            </option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <br />
                     <div class="form-group">
@@ -82,8 +87,7 @@
                             type="text" 
                             class="form-control" 
                             id="description" 
-                            name="description"
-                            required>
+                            name="description">
                         </div>
                     <br/>
                     <div class="form-group">
@@ -98,8 +102,7 @@
                             class="form-control"
                             id="tags"
                             name="tags" 
-                            multiple
-                            required>
+                            multiple>
                             <option value="" disabled>Select tag(s)</option>
                             {% for tag in tags %}
                             <option value="{{ tag.tag_id }}">

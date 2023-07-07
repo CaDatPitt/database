@@ -31,7 +31,7 @@ def browse_vw(request):
     context = {
         "title": "Browse Datasets",
     }
-    context['tags'] = Tag.objects.all()
+    context['creators'] = get_creators()
 
     return render(request, "core/browse.html", context)
 
