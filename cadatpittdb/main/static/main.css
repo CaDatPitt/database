@@ -6,6 +6,24 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  .item-card {
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .item-card-title {
+    font-weight: bold;
+  }
+
+  img.item-thumbnail {
+    width: 9em;
+    min-width: 9em;
+    max-width: 9em;
+    object-fit: cover;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: calc(0.25rem - 1px);
+  }
   
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
@@ -28,6 +46,8 @@ body {
   img.card-header-icons {
     max-height: 1.25em;
   }
+
+  
 
 .btn-contact {
   border-bottom-left-radius: 0px; 
