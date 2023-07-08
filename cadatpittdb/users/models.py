@@ -40,7 +40,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'users'
 
     def __str__(self):
-        return self.email
+        return f"{self.first_name} {self.last_name}"
 
     def get_full_name(self):
         return self.first_name + ' ' + self.last_name
@@ -64,10 +64,13 @@ class Collection(models.Model):
         verbose_name_plural = 'collections'
 
     def __str__(self):
+        return self.title
+    
+    def get_id(self):
         return self.collection_id
     
-    def get_title(self):
-        return self.title
+    def get_urls(self):
+        return self.url.split('|||')
     
 
 class Tag(models.Model):
@@ -80,10 +83,10 @@ class Tag(models.Model):
         verbose_name_plural = 'tags'
 
     def __str__(self):
-        return self.tag_id
-        
-    def get_text(self):
         return self.text
+        
+    def get_id(self):
+        return self.tag_id
     
 
 class Dataset(models.Model):
@@ -106,10 +109,10 @@ class Dataset(models.Model):
         verbose_name_plural = 'datasets'
 
     def __str__(self):
-        return self.item_id
+        return self.title
         
     def get_title(self):
-        return self.title
+        return self.dataset_id
 
 
 class Item(models.Model):
@@ -129,28 +132,12 @@ class Item(models.Model):
         verbose_name_plural = 'items'
 
     def __str__(self):
+        return self.title_
+    
+    def get_id(self):
         return self.item_id
     
-    def get_title(self):
-        return self.title
+    def get_types(self):
+        return self.type.split('|||')
 
-
-# class PinnedDataset(models.Model):
-#     fk_dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE)
-#     fk_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-#     date_pinned = models.DateTimeField(_('date pinned'), default=timezone.now)
-
-#     class Meta:
-#         verbose_name = 'pinned dataset'
-#         verbose_name_plural = 'pinned datasets'
-
-
-# class PinnedItem(models.Model):
-#     fk_dataset = models.ForeignKey(Item, on_delete=models.CASCADE)
-#     fk_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-#     date_pinned = models.DateTimeField(_('date pinned'), default=timezone.now)
-
-#     class Meta:
-#         verbose_name = 'pinned item'
-#         verbose_name_plural = 'pinned items'
     

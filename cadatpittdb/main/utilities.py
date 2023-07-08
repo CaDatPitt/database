@@ -6,6 +6,8 @@ import re
 from .controlled_vocab import vocab
 from users.models import *
 
+User = get_user_model()
+
 
 def check_password(request, password, password_conf):
     valid = True
@@ -57,6 +59,16 @@ def format_affiliation(affiliations=[], other_affiliation=''):
     return affiliation_str
 
 
+def get_datasets(user=User):
+    datasets = Dataset.objects.filter(created_by=user).all()
+    return datasets
+
+
+def get_items(dataset=Dataset):
+    items = Item.objects.filter(datasets=dataset).all()
+    return items
+
+
 def get_markdown(input=str) -> str:
     if input:
         text = input
@@ -101,7 +113,7 @@ def get_creators():
     for user in users:
         user_list.append(user)
     creators = User.objects.filter(user_id__in=user_list).all()
-    
+
     return creators
 
 
