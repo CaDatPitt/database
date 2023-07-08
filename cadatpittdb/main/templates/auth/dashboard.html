@@ -8,7 +8,7 @@
 {% block content %}
 <div class="row gy-4">
   <div class="col-md col-lg-8">
-    <h3 align="center">Dashboard</h3>
+    <h2 align="center" class="mb-4">Dashboard</h2>
     <form method="POST" action="#">
       {% csrf_token %}
       <div class="input-group">
@@ -58,7 +58,7 @@
           <div class="tab-pane active" id="description" role="tabpanel">
             <!--My Datasets-->
             <ul class="list-group">
-              <li class="list-group-item bg-light-gray">
+              <li class="list-group-item bg-light-gray ">
                 <div class="row">
                   <div class="col-auto">
                     <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -126,7 +126,7 @@
   </div>
   <!--Account and Profile section-->
   <div class="col-md col-lg-4">
-    <h3 align="center">Account</h3>
+    <h2 align="center" class="mb-4">Account</h2>
     <div class="card shadow-sm bg-light-gray">
       <div class="card-body">
         <form method="POST">

@@ -6,352 +6,360 @@
 {% endblock%}
 {% block navbar_retrieve %}class="nav-link active"{% endblock %}
 {% block content %}
-<h3>Retrieve Data</h1>
+<h2>Retrieve Data</h2>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque aliquet sapien eget pulvinar venenatis. Quisque imperdiet dolor at cursus hendrerit. In consectetur porttitor ultrices.</p>
 <hr/>
-<div class="row mt-4">
-    <!-- Filters -->
-    <div class="col-md col-lg-4">
-        <h5 align="left">Filters</h5>
-        <div class="card shadow-sm bg-light-gray">
-            <div class="card-body">
-                <form method="POST">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="keywords" class="bold">Keywords</label>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="keywords" 
-                            name="keywords">
-                    </div>
-                    <br />
-                    <div class="form-group">
-                        <label for="title" class="bold">Title</label>
-                        <input 
-                          type="text" 
-                          class="form-control" 
-                          id="title" 
-                          name="title">
-                      </div>
-                    <br />
-                    <div class="form-group">
-                        <label for="creator" class="bold">Creator</label>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="creator" 
-                            name="creator">
-                    </div>
-                    <br />
-                    <div class="form-group">
-                        <label for="contributor" class="bold">Contributor</label>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="contributor" 
-                            name="contributor">
-                    </div>
-                    <br />
-                    <div class="form-group">
-                        <label for="publisher" class="bold">Publisher</label>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="publisher" 
-                            name="publisher">
-                    </div>
-                    <br />
-                    <div class="form-group">
-                        <label for="depositor" class="bold">Depositor</label>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="depositor" 
-                            name="depositor">
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="col">   
-                            <div class="form-group">
-                                <label for="start_year" class="bold">Start Year</label>
-                                <input 
-                                    type="number" 
-                                    class="form-control" 
-                                    id="start_year" 
-                                    name="start_year"
-                                    min="1900" max="2099" step="1">
-                            </div>
-                        </div>
-                        <div class="col">   
-                            <div class="form-group">
-                                <label for="end_year" class="bold">End Year</label>
-                                <input 
-                                    type="number" 
-                                    class="form-control" 
-                                    id="end_year" 
-                                    name="end_year"
-                                    min="1900" max="2099" step="1">
-                            </div>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-group">
-                        <label for="language" class="bold">Language</label>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="language" 
-                            name="language">
-                    </div>
-                    <br/>
-                    <div class="form-group">
-                      <label for="description" class="bold">Description</label>
-                      <input 
-                        type="text" 
-                        class="form-control" 
-                        id="description" 
-                        name="description">
-                    </div>
-                    <br/>
-                    <div class="form-group">
-                        <label for="language" class="bold">Item Type</label>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="language" 
-                            name="language">
-                    </div>
-                    <br/>
-                    <div class="form-group">
-                      <label for="subject" class="bold">Subject</label>
-                      <input 
-                        type="text" 
-                        class="form-control" 
-                        id="subject" 
-                        name="subject">
-                    </div>
-                    <br/>
-                    <div class="form-group">
-                      <label for="coverage" class="bold">Coverage</label>
-                      <input 
-                        type="text" 
-                        class="form-control" 
-                        id="coverage" 
-                        name="coverage">
-                    </div>
-                    <br/>
-                    <div class="form-group">
-                        <label for="copyright" class="bold">Copyright Status</label>
-                        {% for statement in rights %}
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input 
-                                    type="checkbox" 
-                                    class="form-check-input" 
-                                    value="{{ statement }}">{{ statement }}
-                            </label>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <br />
-                    <div class="col-md-12 text-center">
-                        <button 
-                            type="submit" 
-                            class="btn btn-primary bg-pitt-royal border-pitt-royal"
-                            {% if not dataset %} 
-                            disabled
-                            {% endif %}
-                            >
-                            Apply Filters
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div> 
-    </div>
-    <div class="col-md col-lg-8">
-        {% if not dataset %}
-        <!-- Retrieval Methods -->
-        <h5 align="left">Retrieval Method</h5>
-        <p class="my-2 bold">Select the method for retrieving data.</p>
-        <!-- Option Toggles -->
-        <div id="retrievalMethod">
-            <div class="form-group">
-                <div class="form-check">
-                    <input 
-                        data-bs-toggle="collapse" 
-                        data-bs-target="#collectionCollapse"
-                        class="form-check-input" 
-                        type="radio" 
-                        name="retrieval_method"
-                        id="collectionCollapseToggle" 
-                        value="collection"
-                        checked>
-                    <label class="form-check-label" for="collectionCollapseToggle">
-                        By Collection 
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input 
-                        data-bs-toggle="collapse" 
-                        data-bs-target="#identifiersCollapse"
-                        class="form-check-input" 
-                        type="radio" 
-                        name="retrieval_method"
-                        id="identifiersCollapseToggle"
-                        value="ids"
-                        >
-                    <label class="form-check-label" for="identifiersCollapseToggle">
-                        List of Identifiers
-                    </label>
-                </div>  
-                <div class="form-check">
-                    <input 
-                        data-bs-toggle="collapse" 
-                        data-bs-target="#fileUploadCollapse"
-                        class="form-check-input" 
-                        type="radio" 
-                        name="retrieval_method" 
-                        id="fileUploadCollapseToggle"
-                        value="file"
-                        >
-                    <label class="form-check-label" for="fileUploadCollapseToggle">
-                        CSV Upload
-                    </label>
-                </div>
-            </div>
-            <!-- Input Methods -->
-            <div class="accordion-group">
-                <!-- Collections -->
-                <div class="card shadow-sm bg-light-gray mt-2">
-                    <div class="card-body">
-                        <div 
-                            class="collapse accordionCollapse show" 
-                            data-bs-parent="#retrievalMethod"
-                            id="collectionCollapse">
-                            <form method="POST" 
-                                action="/retrieve/?retrieval_method=collections">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <label for="parent_unit" class="bold">Collection(s)</label>
-                                    <select 
-                                        class="form-control" 
-                                        name="collections" 
-                                        id="collections"
-                                        size="10"
-                                        multiple>
-                                        <option value="" disabled>Select collection(s)</option>
-                                        {% for collection in collections %}
-                                        <option value="{{ collection.collection_id }}">
-                                            {{ collection.title }} ({{ collection.collection_id }})
-                                        </option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <br/>
-                                <div class="col-md-12 text-center">
-                                    <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal">
-                                        Submit
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                        <!-- List of Identifiers -->
-                        <div 
-                            class="collapse accordionCollapse" 
-                            data-bs-parent="#retrievalMethod"
-                            id="identifiersCollapse">
-                            <form method="POST" 
-                                action="/retrieve/?retrieval_method=identifiers">  
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <label for="item_ids" class="bold">Identifiers</label>
-                                    <textarea class="form-control"
-                                        id="item_ids"
-                                        name="item_ids"
-                                        rows="10"
-                                        placeholder="Enter one identifier per line"
-                                        ></textarea>
-                                    <small>Not sure how to enter your list of identifiers? 
-                                        <a href="#">Check out the FAQ!</a></small>
-                                </div>
-                                <br/>
-                                <div class="col-md-12 text-center">
-                                    <button 
-                                        type="submit" 
-                                        class="btn btn-primary bg-pitt-royal border-pitt-royal">
-                                        Submit
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                        <!-- CSV File Upload -->
-                        <div 
-                            class="collapse accordionCollapse" 
-                            data-bs-parent="#retrievalMethod"
-                            id="fileUploadCollapse">
-                            <form method="POST" 
-                                action="/retrieve/?retrieval_method=file"
-                                enctype="multipart/form-data">
-                                {% csrf_token %}
-                                    <label for="csv_file" class="bold">File Upload</label>
-                                <div class="input-group">
-                                    <input class="form-control" 
-                                        type="file" 
-                                        accept=".csv"
-                                        id="csv_file"
-                                        name="csv_file">
-                                    <div class="input-group-append">
-                                        <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal">
-                                            Upload
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="row gy-4 mt-1">
+<!-- Filters -->
+<div class="col-md col-lg-4">
+  <h5 align="left">Filters</h5>
+  <div class="card shadow-sm bg-light-gray">
+    <div class="card-body">
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="keywords" class="bold">Keywords</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="keywords" 
+            name="keywords">
         </div>
-        {% else %}
-        <!-- Results -->
-        <h5 align="left">Results</h5>
-            {% if num_results > 0 %}
-            <p><em>{{ num_results }} results</em></p>
-            <div class="row gy-4">
-                {% for index, result in dataset.iterrows %}
-                <div class="col-12">
-                    <div class="card shadow-sm bg-light-gray">
-                        <div class="card-header">
-                            <div class="row">
-                                <div class="col-11">
-                                    <a 
-                                        href="https://digital.library.pitt.edu/islandora/object/{{ result.identifier }}"
-                                        target="_blank"><h6 class="card-title">{{ result.title }}</h6></a> 
-                                </div>
-                                <div class="col-1 text-end">
-                                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                                    data-bs-title="Pin dataset"><img class="card-header-icons"
-                                    src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <p class="mb-0">
-                                <strong>Creator</strong>: {{ result.creator }}<br/>
-                                <strong>Date</strong>: {{ result.date }}<br/>
-                                <strong>Type</strong>: {{ result.type }}
-                            </p>
-                        </div>
-                    </div> 
-                </div>
-                {% endfor %}   
+        <br />
+        <div class="form-group">
+          <label for="title" class="bold">Title</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="title" 
+            name="title">
+        </div>
+        <br />
+        <div class="form-group">
+          <label for="creator" class="bold">Creator</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="creator" 
+            name="creator">
+        </div>
+        <br />
+        <div class="form-group">
+          <label for="contributor" class="bold">Contributor</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="contributor" 
+            name="contributor">
+        </div>
+        <br />
+        <div class="form-group">
+          <label for="publisher" class="bold">Publisher</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="publisher" 
+            name="publisher">
+        </div>
+        <br />
+        <div class="form-group">
+          <label for="depositor" class="bold">Depositor</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="depositor" 
+            name="depositor">
+        </div>
+        <br />
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="start_year" class="bold">Start Year</label>
+              <input 
+                type="number" 
+                class="form-control" 
+                id="start_year" 
+                name="start_year"
+                min="1900" max="2099" step="1">
             </div>
-            {% else %}
-            <p>No records were found.</p>
-            {% endif %}
-        {% endif %}
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="end_year" class="bold">End Year</label>
+              <input 
+                type="number" 
+                class="form-control" 
+                id="end_year" 
+                name="end_year"
+                min="1900" max="2099" step="1">
+            </div>
+          </div>
+        </div>
+        <br />
+        <div class="form-group">
+          <label for="language" class="bold">Language</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="language" 
+            name="language">
+        </div>
+        <br/>
+        <div class="form-group">
+          <label for="description" class="bold">Description</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="description" 
+            name="description">
+        </div>
+        <br/>
+        <div class="form-group">
+          <label for="language" class="bold">Item Type</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="language" 
+            name="language">
+        </div>
+        <br/>
+        <div class="form-group">
+          <label for="subject" class="bold">Subject</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="subject" 
+            name="subject">
+        </div>
+        <br/>
+        <div class="form-group">
+          <label for="coverage" class="bold">Coverage</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="coverage" 
+            name="coverage">
+        </div>
+        <br/>
+        <div class="form-group">
+          <label for="copyright" class="bold">Copyright Status</label>
+          {% for statement in rights %}
+          <div class="form-check">
+            <label class="form-check-label">
+            <input 
+              type="checkbox" 
+              class="form-check-input" 
+              value="{{ statement }}">{{ statement }}
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+        <br />
+        <div class="col-md-12 text-center">
+          <button 
+          type="submit" 
+          class="btn btn-primary bg-pitt-royal border-pitt-royal"
+          {% if not dataset %} 
+          disabled
+          {% endif %}
+          >
+          Apply Filters
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
+<div class="col-md col-lg-8">
+  {% if not dataset %}
+  <!-- Retrieval Methods -->
+  <h5 align="left">Retrieval Method</h5>
+  <p class="my-2 bold">Select the method for retrieving data.</p>
+  <!-- Option Toggles -->
+  <div id="retrievalMethod">
+    <div class="form-group">
+      <div class="form-check">
+        <input 
+          data-bs-toggle="collapse" 
+          data-bs-target="#collectionCollapse"
+          class="form-check-input" 
+          type="radio" 
+          name="retrieval_method"
+          id="collectionCollapseToggle" 
+          value="collection"
+          checked>
+        <label class="form-check-label" for="collectionCollapseToggle">
+        By Collection 
+        </label>
+      </div>
+      <div class="form-check">
+        <input 
+          data-bs-toggle="collapse" 
+          data-bs-target="#identifiersCollapse"
+          class="form-check-input" 
+          type="radio" 
+          name="retrieval_method"
+          id="identifiersCollapseToggle"
+          value="ids"
+          >
+        <label class="form-check-label" for="identifiersCollapseToggle">
+        List of Identifiers
+        </label>
+      </div>
+      <div class="form-check">
+        <input 
+          data-bs-toggle="collapse" 
+          data-bs-target="#fileUploadCollapse"
+          class="form-check-input" 
+          type="radio" 
+          name="retrieval_method" 
+          id="fileUploadCollapseToggle"
+          value="file"
+          >
+        <label class="form-check-label" for="fileUploadCollapseToggle">
+        CSV Upload
+        </label>
+      </div>
+    </div>
+    <!-- Input Methods -->
+    <div class="accordion-group">
+      <!-- Collections -->
+      <div class="card shadow-sm bg-light-gray mt-2">
+        <div class="card-body">
+          <div 
+            class="collapse accordionCollapse show" 
+            data-bs-parent="#retrievalMethod"
+            id="collectionCollapse">
+            <form method="POST" 
+              action="/retrieve/?retrieval_method=collections">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="parent_unit" class="bold">Collection(s)</label>
+                <select 
+                  class="form-control" 
+                  name="collections" 
+                  id="collections"
+                  size="10"
+                  multiple>
+                  <option value="" disabled>Select collection(s)</option>
+                  {% for collection in collections %}
+                  <option value="{{ collection.collection_id }}">
+                    {{ collection.title }} ({{ collection.collection_id }})
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+              <br/>
+              <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal">
+                Submit
+                </button>
+              </div>
+            </form>
+          </div>
+          <!-- List of Identifiers -->
+          <div 
+            class="collapse accordionCollapse" 
+            data-bs-parent="#retrievalMethod"
+            id="identifiersCollapse">
+            <form method="POST" 
+              action="/retrieve/?retrieval_method=identifiers">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="item_ids" class="bold">Identifiers</label>
+                <textarea class="form-control"
+                  id="item_ids"
+                  name="item_ids"
+                  rows="10"
+                  placeholder="Enter one identifier per line"
+                  ></textarea>
+                <small>Not sure how to enter your list of identifiers? 
+                <a href="#">Check out the FAQ!</a></small>
+              </div>
+              <br/>
+              <div class="col-md-12 text-center">
+                <button 
+                  type="submit" 
+                  class="btn btn-primary bg-pitt-royal border-pitt-royal">
+                Submit
+                </button>
+              </div>
+            </form>
+          </div>
+          <!-- CSV File Upload -->
+          <div 
+            class="collapse accordionCollapse" 
+            data-bs-parent="#retrievalMethod"
+            id="fileUploadCollapse">
+            <form method="POST" 
+              action="/retrieve/?retrieval_method=file"
+              enctype="multipart/form-data">
+              {% csrf_token %}
+              <label for="csv_file" class="bold">File Upload</label>
+              <div class="input-group">
+                <input class="form-control" 
+                  type="file" 
+                  accept=".csv"
+                  id="csv_file"
+                  name="csv_file">
+                <div class="input-group-append">
+                  <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal">
+                  Upload
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <!-- Results -->
+  <h5 align="left">Results</h5>
+  {% if num_results > 0 %}
+  <p><em>{{ num_results }} results</em></p>
+  <div class="row gy-4">
+    {% for index, result in dataset.iterrows %}
+    <div class="col-12">
+      <div class="card item-card shadow-sm bg-light-gray">
+        <img src="{{ result.thumbnail }}" class="card-img-top item-thumbnail" />
+        <div class="card-body">
+          <div class="row border-bottom mb-2 pb-2">
+            <div class="col text-end">
+              <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
+                data-bs-title="Pin dataset"><img class="card-header-icons"
+                src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+              <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
+                data-bs-title="Edit dataset"><img class="card-header-icons"
+                src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+            </div>
+          </div>
+          <a href="https://digital.library.pitt.edu/islandora/object/pitt%3A{{ result.identifier }}">
+            <h5 class="card-title">{{ result.title }}</h5>
+          </a>
+          <p class="mb-0">
+            <strong>Creator</strong>: {{ result.creator }}<br/>
+            <strong>Date</strong>: {{ result.date }}<br/>
+            <strong>Type</strong>: {{ result.type }}
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}   
+  </div>
+  {% else %}
+  <p>No records were found.</p>
+  {% endif %}
+  {% endif %}
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<script>
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+</script>
+{% endblock %}
+{% block bootstrapjs %}
 {% endblock %}

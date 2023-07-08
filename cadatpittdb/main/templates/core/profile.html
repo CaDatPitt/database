@@ -6,7 +6,7 @@
 {% endblock%}
 {% block content %}
 <!-- Contact Information -->
-<h1>{{ person.first_name }} {{ person.last_name }}</h1>
+<h2>{{ person.first_name }} {{ person.last_name }}</h2>
 {% if user.profile_photo_url %}
 <img style="margin: 10px 0 10px 0; max-width: 25%;" 
     src="{{ person.profile_photo_url }}">
@@ -42,7 +42,7 @@
 <!-- Datasets -->
 {% if datasets %}
 <hr style="margin-top: 1.75em;"/>
-<h4 class="mb-4">Datasets</h4>
+<h3 class="mb-4">Datasets</h3>
 <div class="row gy-4">
   {% for dataset in datasets %}
   <div class="col-md-6 col-xl-4">
@@ -88,7 +88,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="updateProfileModalLabel">Update Profile</h1>
+        <h2 class="modal-title fs-5" id="updateProfileModalLabel">Update Profile</h2>
         <button type="button" class="btn-close" data-bs-dismiss="modal" 
           aria-label="Close"></button>
       </div>

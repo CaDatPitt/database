@@ -8,55 +8,56 @@
 <!-- Dataset Information -->
 <h1>{{ dataset.title }}</h1>
 <p class="contact"><strong>Created By:</strong> 
-    <a href="/profile/?user={{ dataset.created_by.username }}">
-        {{ dataset.created_by }}
-    </a>
+  <a href="/profile/?user={{ dataset.created_by.username }}">
+  {{ dataset.created_by }}
+  </a>
 </p>
 <p class="contact"><strong>Description:</strong> {{ dataset.description }}</p>
 <p class="contact"><strong>Tags:</strong> 
-    {% for tag in dataset.tags.all %}
-        {{ tag }}{% if tag != dataset.tags.all.last %},{% endif %}
-    {% endfor %}
+  {% for tag in dataset.tags.all %}
+  {{ tag }}{% if tag != dataset.tags.all.last %},{% endif %}
+  {% endfor %}
 </p>
 <p class="contact"><strong>Last modified</strong>: {{ dataset.last_modified }}</p>
 <br/>
 <!-- Dataset Action Buttons -->
 <a class="btn btn-primary bg-pitt-royal border-pitt-royal"
-    data-bs-toggle="modal" data-bs-target="#editDatasetModal"
-    href="" role="button">Edit Dataset</a>
+  data-bs-toggle="modal" data-bs-target="#editDatasetModal"
+  href="" role="button">Edit Dataset</a>
 <a class="btn btn-primary bg-pitt-royal border-pitt-royal"
-    href="" role="button">Download Dataset</a>
+  href="" role="button">Download Dataset</a>
 <a class="btn btn-primary bg-pitt-royal border-pitt-royal"
-    href="" role="button">Pin Dataset</a>
-
+  href="" role="button">Pin Dataset</a>
 <hr style="margin-top: 1.75em;"/>
 <h4 class="mb-4">Items</h4>
 <div class="row gy-4">
-    {% for item in items %}
-    <div class="col-lg-6">
+  {% for item in items %}
+  <div class="col-lg-6">
     <div class="card item-card shadow-sm bg-light-gray">
-        <img src="{{ item.thumbnail }}" class="card-img-top item-thumbnail ms-3" />
-        <div class="card-header bg-light-gray">
-    <div class="row">
-        <div class="col text-end">
-        <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
-            data-bs-title="Pin dataset"><img class="card-header-icons"
-            src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-        <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
-            data-bs-title="Edit dataset"><img class="card-header-icons"
-            src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-        <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
-            data-bs-title="Delete dataset"><img class="card-header-icons"
-            src="{% static 'images/delete_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+      <img src="{{ item.thumbnail }}" class="card-img-top item-thumbnail ms-3" />
+      <div class="card-header bg-light-gray">
+        <div class="row">
+          <div class="col text-end">
+            <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
+              data-bs-title="Pin dataset"><img class="card-header-icons"
+              src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+            <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
+              data-bs-title="Edit dataset"><img class="card-header-icons"
+              src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+            <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
+              data-bs-title="Delete dataset"><img class="card-header-icons"
+              src="{% static 'images/delete_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+          </div>
         </div>
-    </div>
         <div class="card-body">
-        <a href="/item/?id={{ item.item_id }}"><h5 class="card-title">{{ item.title }}</h5></a>
-        <p>
+          <a href="/item/?id={{ item.item_id }}">
+            <h5 class="card-title">{{ item.title }}</h5>
+          </a>
+          <p>
             <strong>Date:</strong> {{ item.date }}<br/>
             <strong>Type:</strong> 
             {% for type in item.get_types %}
-                {{ type|title }}{% if type != item.get_types|last %},{% endif %}
+            {{ type|title }}{% if type != item.get_types|last %},{% endif %}
             {% endfor %}
             <br/>
             <strong>Collections:</strong> 
@@ -64,27 +65,27 @@
             <br/>    
             <a href="{{ collection.get_urls.0 }}" target="_blank">{{ collection }}</a>
             {% endfor %}
-        </p>
-        <!-- <a class="btn btn-warning pitt-gold" role="button"
-        href="/item?id={{ item.item_id }}">View</a> -->
-        <a role="button" class="btn btn-warning pitt-gold"
+          </p>
+          <!-- <a class="btn btn-warning pitt-gold" role="button"
+            href="/item?id={{ item.item_id }}">View</a> -->
+          <a role="button" class="btn btn-warning pitt-gold"
             href="https://digital.library.pitt.edu/islandora/object/pitt%3A{{ item.item_id}} " 
             target="_blank">
-            View Full Item Info
-        </a>
+          View Full Item Info
+          </a>
         </div>
+      </div>
     </div>
-    </div>
-    {% endfor %}
+  </div>
+  {% endfor %}
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
 </script>
-
 <!-- Update Profile Form Modal -->
 <div class="modal fade" id="editDatasetModal" name="editDatasetModal" 
   tabindex="-1" aria-labelledby="editDatasetModalLabel" aria-hidden="true">
@@ -98,7 +99,7 @@
       <div class="modal-body">
         <!-- User Form -->
         <div id="update_account_form">
-            {% include 'core/create.html' %}
+          {% include 'core/create.html' %}
         </div>
       </div>
     </div>

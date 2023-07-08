@@ -23,6 +23,12 @@ body {
     border-top-right-radius: 0;
     border-bottom-left-radius: calc(0.25rem - 1px);
   }
+
+  .card-list-item {
+    border-top-width : 0 ; 
+    border-right-width: 0; 
+    border-left: 0;
+  }
   
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
