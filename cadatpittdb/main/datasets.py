@@ -11,6 +11,7 @@ from .decode import decode_values
 from .controlled_vocab import vocab
 from .utilities import get_rights, now
 from users.models import *
+from .metadata_reader import *
 
 
 """ OAI Functions """
@@ -52,7 +53,7 @@ def get_collections():
 
 def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[]):
     registry = MetadataRegistry()
-    reader = oai_dc_reader
+    reader = pitt_oai_dc_reader
     if metadata_prefix == 'mods':
         pass
     registry.registerReader(metadata_prefix, reader)
@@ -73,7 +74,6 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[]):
         records = None
         if collections:
             sets = ":".join(collections).replace("pitt:", "pitt_")
-            print(sets)
             try:
                 records = client.listRecords(metadataPrefix=metadata_prefix,
                                     set=sets)
@@ -82,6 +82,7 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[]):
         else:
             records = client.listRecords(metadataPrefix=metadata_prefix)
 
+        i = 0
         for record in records:
             data = reformat_data(record[1].getMap())
             dataset.append(data)

@@ -17,10 +17,9 @@ body {
   }
 
   img.item-thumbnail {
-    width: 9em;
-    min-width: 9em;
     max-width: 9em;
-    object-fit: cover;
+    max-height: 9em;
+    object-fit: contain;
     border-top-right-radius: 0;
     border-bottom-left-radius: calc(0.25rem - 1px);
   }
