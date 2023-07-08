@@ -156,7 +156,13 @@
                     </div>
                     <br />
                     <div class="col-md-12 text-center">
-                        <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal" disabled>
+                        <button 
+                            type="submit" 
+                            class="btn btn-primary bg-pitt-royal border-pitt-royal"
+                            {% if not dataset %} 
+                            disabled
+                            {% endif %}
+                            >
                             Apply Filters
                         </button>
                     </div>
@@ -164,8 +170,9 @@
             </div>
         </div> 
     </div>
-    <!-- Retrieval Methods -->
     <div class="col-md col-lg-8">
+        {% if not dataset %}
+        <!-- Retrieval Methods -->
         <h5 align="left">Retrieval Method</h5>
         <p class="my-2 bold">Select the method for retrieving data.</p>
         <!-- Option Toggles -->
@@ -177,8 +184,9 @@
                         data-bs-target="#collectionCollapse"
                         class="form-check-input" 
                         type="radio" 
-                        name="retrievalMethodCollapseToggle" 
+                        name="retrieval_method"
                         id="collectionCollapseToggle" 
+                        value="collection"
                         checked>
                     <label class="form-check-label" for="collectionCollapseToggle">
                         By Collection 
@@ -190,8 +198,10 @@
                         data-bs-target="#identifiersCollapse"
                         class="form-check-input" 
                         type="radio" 
-                        name="retrievalMethodCollapseToggle" 
-                        id="identifiersCollapseToggle">
+                        name="retrieval_method"
+                        id="identifiersCollapseToggle"
+                        value="ids"
+                        >
                     <label class="form-check-label" for="identifiersCollapseToggle">
                         List of Identifiers
                     </label>
@@ -202,8 +212,10 @@
                         data-bs-target="#fileUploadCollapse"
                         class="form-check-input" 
                         type="radio" 
-                        name="retrievalMethodCollapseToggle" 
-                        id="fileUploadCollapseToggle">
+                        name="retrieval_method" 
+                        id="fileUploadCollapseToggle"
+                        value="file"
+                        >
                     <label class="form-check-label" for="fileUploadCollapseToggle">
                         CSV Upload
                     </label>
@@ -218,7 +230,9 @@
                             class="collapse accordionCollapse show" 
                             data-bs-parent="#retrievalMethod"
                             id="collectionCollapse">
-                            <form method="POST">
+                            <form method="POST" 
+                                action="/retrieve/?retrieval_method=collections">
+                                {% csrf_token %}
                                 <div class="form-group">
                                     <label for="parent_unit" class="bold">Collection(s)</label>
                                     <select 
@@ -248,7 +262,9 @@
                             class="collapse accordionCollapse" 
                             data-bs-parent="#retrievalMethod"
                             id="identifiersCollapse">
-                            <form method="POST" >  
+                            <form method="POST" 
+                                action="/retrieve/?retrieval_method=identifiers">  
+                                {% csrf_token %}
                                 <div class="form-group">
                                     <label for="item_ids" class="bold">Identifiers</label>
                                     <textarea class="form-control"
@@ -262,7 +278,9 @@
                                 </div>
                                 <br/>
                                 <div class="col-md-12 text-center">
-                                    <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal">
+                                    <button 
+                                        type="submit" 
+                                        class="btn btn-primary bg-pitt-royal border-pitt-royal">
                                         Submit
                                     </button>
                                 </div>
@@ -273,7 +291,9 @@
                             class="collapse accordionCollapse" 
                             data-bs-parent="#retrievalMethod"
                             id="fileUploadCollapse">
-                            <form method="POST" enctype="multipart/form-data">
+                            <form method="POST" 
+                                action="/retrieve/?retrieval_method=file"
+                                enctype="multipart/form-data">
                                 {% csrf_token %}
                                     <label for="csv_file" class="bold">File Upload</label>
                                 <div class="input-group">
@@ -294,6 +314,44 @@
                 </div>
             </div>
         </div>
+        {% else %}
+        <!-- Results -->
+        <h5 align="left">Results</h5>
+            {% if num_results > 0 %}
+            <p><em>{{ num_results }} results</em></p>
+            <div class="row gy-4">
+                {% for index, result in dataset.iterrows %}
+                <div class="col-12">
+                    <div class="card shadow-sm bg-light-gray">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-11">
+                                    <a 
+                                        href="https://digital.library.pitt.edu/islandora/object/{{ result.identifier }}"
+                                        target="_blank"><h6 class="card-title">{{ result.title }}</h6></a> 
+                                </div>
+                                <div class="col-1 text-end">
+                                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    data-bs-title="Pin dataset"><img class="card-header-icons"
+                                    src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-0">
+                                <strong>Creator</strong>: {{ result.creator }}<br/>
+                                <strong>Date</strong>: {{ result.date }}<br/>
+                                <strong>Type</strong>: {{ result.type }}
+                            </p>
+                        </div>
+                    </div> 
+                </div>
+                {% endfor %}   
+            </div>
+            {% else %}
+            <p>No records were found.</p>
+            {% endif %}
+        {% endif %}
     </div>
 </div>
 {% endblock %}

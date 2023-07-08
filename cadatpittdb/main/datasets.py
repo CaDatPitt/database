@@ -13,7 +13,6 @@ from .utilities import get_rights, now
 from users.models import *
 
 
-
 """ OAI Functions """
 
 # Set URL for OAI requests
@@ -73,9 +72,13 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[]):
     else:
         records = None
         if collections:
-            sets = ":".join(collections)
-            records = client.listRecords(metadataPrefix=metadata_prefix,
-                                 set=sets)
+            sets = ":".join(collections).replace("pitt:", "pitt_")
+            print(sets)
+            try:
+                records = client.listRecords(metadataPrefix=metadata_prefix,
+                                    set=sets)
+            except:
+                records = []
         else:
             records = client.listRecords(metadataPrefix=metadata_prefix)
 
@@ -88,7 +91,7 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[]):
     # decode encoded columns
     dataset_df = decode_values(dataset_df)
 
-    return dataset_df
+    return dataset_df, exceptions
 
 
 """ Other Functions """
@@ -134,7 +137,7 @@ def copy_dataset(user=User, dataset=Dataset):
 
 def create_item(item_id=str, title=str, item_type=str, thumbnail=str):
     # Distinguish identifier from thumbnail
-    cur_item = Item(item_id=item_id, title=title, item_type=item_type, 
+    cur_item = Item(item_id=item_id, title=title, type=item_type, 
                     thumbnail=thumbnail)
     cur_item.save()
 
@@ -144,11 +147,20 @@ def create_item(item_id=str, title=str, item_type=str, thumbnail=str):
 def create_dataset(dataset=pd.DataFrame, title=str, description=str, tags=list,
                    search_parameters=dict, created_by=str, public=bool):
     
-    new_dataset = Dataset(title=title, description=description, tags=tags,
+    new_dataset = Dataset(title=title, description=description,
                           search_parameters=search_parameters, 
                           number_items=len(dataset), created_by=created_by, 
                           public=public)
     new_dataset.save()
+
+    """
+    Traceback (most recent call last):
+    File test.py", line 15, in <module>
+        create_dataset(dataset=dataset, title="Test Dataset",
+    File "\main\datasets.py", line 154, in create_dataset
+        for index, item in dataset:
+    ValueError: too many values to unpack (expected 2)
+    """
     
     # Add items
     for index, item in dataset:
@@ -291,6 +303,74 @@ def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str,
                             Make sure that your expression is correct.")
 
     return filtered_dataset
+
+
+def filter_datasets(request, keywords=str, title=str, created_by=str, 
+                    description=str, tags=list, min_num_items=int, 
+                    max_num_items=int, start_date=str, end_date=str):
+    results = Dataset.objects.all()
+
+    # add search parameters to dictionary, then update dataset
+    if title:
+        try:
+            query = Query(title)
+        except:
+            messages.error(request, "'Title' filter could not be applied. \
+                           Make sure that your expression is correct.")
+    if created_by:
+        try:
+            query = Query(created_by)
+        except:
+            messages.error(request, "'Creator' filter could not be applied. \
+                           Make sure that your expression is correct.")
+    if description:
+        try:
+            query = Query(description)
+        except:
+            messages.error(request, "'Description' filter could not be applied.\
+                            Make sure that your expression is correct.")
+    if tags:
+        try:
+            query = Query(tags)
+        except:
+            messages.error(request, "'Type' filter could not be applied.\
+                            Make sure that your expression is correct.")
+    if min_num_items:
+        # TO DO: Update to use lamba expression and name function for try/except
+        try:
+            query = Query(min_num_items)
+        except:
+            messages.error(request, "'Start Date' filter could not be applied.\
+                           This is likely an issue with the data.")
+    if max_num_items:
+        # TO DO: Update to use lamba expression and name function for try/except
+        try:
+            query = Query(max_num_items)
+        except:
+            messages.error(request, "'End Date' filter could not be applied.\
+                           This is likely an issue with the data.")
+    if start_date:
+        # TO DO: Update to use lamba expression and name function for try/except
+        try:
+            query = Query(start_date)
+        except:
+            messages.error(request, "'Start Date' filter could not be applied.\
+                           This is likely an issue with the data.")
+    if end_date:
+        # TO DO: Update to use lamba expression and name function for try/except
+        try:
+            query = Query(end_date)
+        except:
+            messages.error(request, "'End Date' filter could not be applied.\
+                           This is likely an issue with the data.")
+    if keywords:
+        try:
+            query = Query(keywords)
+        except:
+            messages.error(request, "'Keywords' filter could not be applied.\
+                            Make sure that your expression is correct.")
+
+    return results
 
 
 def delete_dataset(dataset=Dataset):

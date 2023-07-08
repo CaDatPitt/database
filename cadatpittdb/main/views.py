@@ -30,8 +30,22 @@ def about_vw(request):
 def browse_vw(request):
     context = {
         "title": "Browse Datasets",
+        "datasets": Dataset.objects.all(),
+        'creators': get_creators()
     }
-    context['creators'] = get_creators()
+
+    if request.method == 'POST':
+        keywords = request.POST.get("keywords")
+        title = request.POST.get("title")
+        created_by = request.POST.get("created_by")
+        description = request.POST.get("description")
+        tags = request.POST.get("tags")
+        min_num_items = request.POST.get("min_num_items")   
+        max_num_items = request.POST.get("max_num_items")
+        start_date = request.POST.get("start_date")
+        end_date = request.POST.get("end_date")
+
+        context['datasets'] = filter_datasets(context['datasets'])
 
     return render(request, "core/browse.html", context)
 
@@ -79,9 +93,10 @@ def dataset_vw(request):
         "title": "View Dataset",
     }
     if request.method == 'GET':
-        id = request.GET['id']
-        dataset = Dataset.objects.filter(dataset_id=id).first()
+        id = request.GET.get('id')
+        dataset = Dataset.objects.filter(public_id=id).first()
         context['dataset'] = dataset
+        context['items'] = get_items(dataset)
 
     return render(request, "core/dataset.html", context)
 
@@ -129,6 +144,11 @@ def item_vw(request):
     if request.method == 'GET':
         id = request.GET['id']
         item = Item.objects.filter(item_id=id).first()
+
+        if not item:
+            messages.error(request, "That item does not exist!")
+            return redirect("/")
+            
         context['item'] = item
 
     return render(request, "core/item.html", context)
@@ -201,6 +221,7 @@ def profile_vw(request):
         context['person'] = user
         context['affiliations'] = affiliations
         context['bio'] = bio
+        context['datasets'] = get_datasets(user)
 
         return render(request, "core/profile.html", context)
     
@@ -214,20 +235,14 @@ def retrieve_vw(request):
     context = {
         "title": "Retrieve Data",
         "show_results": False,
-        "collections": None,
+        "collections": Collection.objects.all(),
         "dataset": None,
         "rights": vocab['rights']
     }
 
-    if request.method == 'GET':
-        context['collections'] = Collection.objects.all()
-
-    if request.method == 'POST':
-        # Toggle to display results
-        context['show_results'] = True
-        
+    if request.method == 'POST':      
         if request.POST.get("filter"):
-            dataset = request.POST.get("dataset")
+            # dataset = request.POST.get("dataset")
 
             # Get parameters from form input
             # request, dataset=pd.DataFrame, keywords=str, title=str, 
@@ -255,39 +270,50 @@ def retrieve_vw(request):
                                      coverage=coverage, copyright=copyright)
         else:
             # Get form input
-            retrieval_method = request.POST.get("retrieval_method")
-            item_ids = request.POST.getlist("item_id")
+            retrieval_method = request.GET.get("retrieval_method")
+            item_ids = request.POST.get("item_ids")
             csv_file = request.FILES.get('csv_file')
-            collections = request.POST.getlist("collection")
+            collections = request.POST.getlist("collections")
+            dataset = None
 
             # Get dataset
-            if retrieval_method == 'by_id':
-                if item_ids:
-                    item_ids = iter(item_ids.splitlines())
-                    dataset = get_dataset(item_ids=item_ids)
-                elif csv_file:
-                    if not csv_file.name.endswith('.csv'):
-                        messages.error(request,'File is not CSV type.')
-                        return redirect("/retrieve/") 
-                    else:
-                        try:
-                            df = pd.read_csv(csv_file)
-                            item_ids = df.iloc[:, 0].values.tolist()
-                            dataset = get_dataset(item_ids=item_ids)
-                        except:
-                            messages.error(request, f'The file could not be \
-                                           uploaded. Please try again.')
-                else:
-                    messages.error(request, "You must either paste a list of \
-                                   item identifiers (each on a separate line) \
-                                   or upload a CSV file with a list of item \
-                                   identifiers.")
+            if retrieval_method == 'identifiers':
+                item_ids = iter(item_ids.splitlines())
                 dataset = get_dataset(item_ids=item_ids)
-            else:
-                dataset = get_dataset(collections=collections)
+            elif retrieval_method == 'file':
+                if not csv_file.name.endswith('.csv'):
+                    messages.error(request,'File is not CSV type.')
+                else:
+                    try:
+                        df = pd.read_csv(csv_file)
+                        item_ids = df.iloc[:, 0].values.tolist()
+                        dataset, exceptions = get_dataset(item_ids=item_ids)
 
-        # Add dataset to context
-        context['dataset'] = dataset
+                        if exceptions:
+                            # Do something with them
+                            messages.error(request, "Values in the first column\
+                                            of the input file were not found in\
+                                            the database. Click here to view a \
+                                           list of the values.")
+                    except:
+                        # No error is being return when no results are returned
+                        messages.error(request, f'The file could not be \
+                                        uploaded. Please try again.')
+            elif retrieval_method == 'collections':
+                dataset = get_dataset(collections=collections)
+            else:
+                messages.error(request, "You must either paste a list of \
+                                item identifiers (each on a separate line) \
+                                or upload a CSV file with a list of item \
+                                identifiers.")
+                
+            if not dataset.empty:
+                # Add dataset to context
+                context['dataset'] = dataset
+                context['num_results'] = dataset.shape[0]
+
+                # Toggle to display results
+                context['show_results'] = True
 
     return render(request, "core/retrieve.html", context)
 
