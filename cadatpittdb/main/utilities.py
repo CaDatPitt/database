@@ -59,14 +59,13 @@ def format_affiliation(affiliations=[], other_affiliation=''):
     return affiliation_str
 
 
-def get_datasets(user=User):
+def get_user_datasets(user=User):
     datasets = Dataset.objects.filter(created_by=user).all()
     return datasets
 
-
-def get_items(dataset=Dataset):
-    items = Item.objects.filter(datasets=dataset).all()
-    return items
+def get_item_datasets(item=Item):
+    datasets = Dataset.objects.filter(items=item).all()
+    return datasets
 
 
 def get_markdown(input=str) -> str:

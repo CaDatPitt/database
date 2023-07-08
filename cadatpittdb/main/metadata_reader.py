@@ -3,6 +3,7 @@ from oaipmh.metadata import *
 
 pitt_oai_dc_reader = MetadataReader(
     fields={
+    'collection':  ('textList', 'setSpec/text()'),
     'title':       ('textList', 'oai_dc:dc/dc:title/text()'),
     'creator':     ('textList', 'oai_dc:dc/dc:creator/text()'),
     'subject':     ('textList', 'oai_dc:dc/dc:subject/text()'),

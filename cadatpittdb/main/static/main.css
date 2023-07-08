@@ -16,18 +16,8 @@ body {
     font-weight: bold;
   }
 
-  img.item-thumbnail {
-    max-width: 9em;
-    max-height: 9em;
-    object-fit: contain;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: calc(0.25rem - 1px);
-  }
-
-  .card-list-item {
-    border-top-width : 0 ; 
-    border-right-width: 0; 
-    border-left: 0;
+  a.jumbotron {
+    width: 10em;
   }
   
   code {
@@ -52,7 +42,20 @@ body {
     max-height: 1.25em;
   }
 
-  
+  img.item-thumbnail {
+    max-width: 9em;
+    max-height: 9em;
+    object-fit: contain;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: calc(0.25rem - 1px);
+  }
+
+.card-list-item {
+  border-top-width : 0 ; 
+  border-right-width: 0; 
+  border-left: 0;
+}
+
 
 .btn-contact {
   border-bottom-left-radius: 0px; 

@@ -16,6 +16,8 @@ from .datasets import *
 def index_vw(request):
     context = {
         "title": "Home",
+        "vocab": vocab,
+        "datasets": Dataset.objects.all().order_by('-last_modified')[:4],
     }
     return render(request, "core/index.html", context)
 
@@ -23,6 +25,7 @@ def index_vw(request):
 def about_vw(request):
     context = {
         "title": "About",
+        "vocab": vocab,
     }
     return render(request, "core/about.html", context)
 
@@ -30,6 +33,7 @@ def about_vw(request):
 def browse_vw(request):
     context = {
         "title": "Browse Datasets",
+        "vocab": vocab,
         "datasets": Dataset.objects.all(),
         'creators': get_creators()
     }
@@ -62,6 +66,7 @@ def contact_vw(request):
 def create_vw(request):
     context = {
         "title": "Create a Dataset",
+        "vocab": vocab,
     }
 
     if request.method == 'POST':
@@ -84,6 +89,7 @@ def create_vw(request):
 def dashboard_vw(request):
     context = {
         "title": "About",
+        "vocab": vocab,
     }
     return render(request, "auth/dashboard.html", context)
 
@@ -91,12 +97,12 @@ def dashboard_vw(request):
 def dataset_vw(request):
     context = {
         "title": "View Dataset",
+        "vocab": vocab,
     }
     if request.method == 'GET':
         id = request.GET.get('id')
         dataset = Dataset.objects.filter(public_id=id).first()
         context['dataset'] = dataset
-        context['items'] = get_items(dataset)
 
     return render(request, "core/dataset.html", context)
 
@@ -104,6 +110,7 @@ def dataset_vw(request):
 def documentation_vw(request):
     context = {
         "title": "Documentation",
+        "vocab": vocab,
     }
     return render(request, "core/documentation.html", context)
 
@@ -111,6 +118,7 @@ def documentation_vw(request):
 def download_vw(request):
     context = {
         "title": "Download Dataset",
+        "vocab": vocab,
     }
     newfile = NamedTemporaryFile(suffix='.txt') # change suffix depending on option
     # save your data to newfile.name
@@ -126,6 +134,7 @@ def download_vw(request):
 def faq_vw(request):
     context = {
         "title": "FAQs",
+        "vocab": vocab,
     }
     return render(request, "core/faq.html", context)
 
@@ -133,6 +142,7 @@ def faq_vw(request):
 def help_vw(request):
     context = {
         "title": "Help",
+        "vocab": vocab,
     }
     return render(request, "core/help.html", context)
 
@@ -140,6 +150,7 @@ def help_vw(request):
 def item_vw(request):
     context = {
         "title": "View Item",
+        "vocab": vocab,
     }
     if request.method == 'GET':
         id = request.GET['id']
@@ -150,6 +161,7 @@ def item_vw(request):
             return redirect("/")
             
         context['item'] = item
+        context['datasets'] = get_item_datasets(item=item)
 
     return render(request, "core/item.html", context)
 
@@ -157,6 +169,7 @@ def item_vw(request):
 def login_vw(request):
     context = {
         "title": "Log In",
+        "vocab": vocab,
         'use_email': False
     }
     
@@ -221,7 +234,7 @@ def profile_vw(request):
         context['person'] = user
         context['affiliations'] = affiliations
         context['bio'] = bio
-        context['datasets'] = get_datasets(user)
+        context['datasets'] = get_user_datasets(user)
 
         return render(request, "core/profile.html", context)
     
@@ -234,9 +247,10 @@ def profile_vw(request):
 def retrieve_vw(request):
     context = {
         "title": "Retrieve Data",
+        "vocab": vocab,
         "show_results": False,
         "collections": Collection.objects.all(),
-        "dataset": None,
+        "dataset": pd.DataFrame(),
         "rights": vocab['rights']
     }
 

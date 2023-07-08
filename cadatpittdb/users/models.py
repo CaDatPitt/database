@@ -87,12 +87,40 @@ class Tag(models.Model):
         
     def get_id(self):
         return self.tag_id
+
+
+class Item(models.Model):
+    item_id = models.CharField(_('item ID'), max_length=200, primary_key=True)
+    title = models.CharField(_('title'), max_length=200)
+    creator = models.CharField(_('creator'), max_length=200, blank=True, default='')
+    date = models.CharField(_('date'), max_length=50, blank=True, default='')
+    type = models.CharField(_('type'), max_length=25, blank=True, default='')
+    thumbnail = models.URLField(_('thumbnail'), blank=True, default='')
+    collections = models.ManyToManyField(Collection)
+    tags = models.ManyToManyField(Tag)
+    date_added = models.DateTimeField(_('date added'), default=timezone.now)
+    pinned_by = models.ManyToManyField(CustomUser)
+
+    class Meta:
+        verbose_name = 'item'
+        verbose_name_plural = 'items'
+
+    def __str__(self):
+        return self.title_
+    
+    def get_id(self):
+        return self.item_id
+    
+    def get_types(self):
+        return self.type.split('|||')
     
 
 class Dataset(models.Model):
     dataset_id = models.BigAutoField(_('dataset ID'), auto_created=True, primary_key=True)
     public_id = models.UUIDField(default=uuid.uuid4, editable=False)
     title = models.CharField(_('title'), max_length=200, blank=True, default='')
+    items = models.ManyToManyField(Item)
+    removed_items = models.ManyToManyField(Item, related_name='removed_items')
     description = models.CharField(_('description'), max_length=5000, blank=True, default='')
     tags = models.CharField(_('tags'), max_length=500, blank=True, default='')
     search_parameters = models.JSONField(_('search parameters'), blank=True, default=dict)
@@ -111,33 +139,7 @@ class Dataset(models.Model):
     def __str__(self):
         return self.title
         
-    def get_title(self):
-        return self.dataset_id
-
-
-class Item(models.Model):
-    item_id = models.CharField(_('item ID'), max_length=200, primary_key=True)
-    title = models.CharField(_('title'), max_length=200)
-    date = models.CharField(_('date'), max_length=50, blank=True, default='')
-    type = models.CharField(_('type'), max_length=25, blank=True, default='')
-    thumbnail = models.URLField(_('thumbnail'), blank=True, default='')
-    collections = models.ManyToManyField(Collection)
-    datasets = models.ManyToManyField(Dataset)
-    tags = models.ManyToManyField(Tag)
-    date_added = models.DateTimeField(_('date added'), default=timezone.now)
-    pinned_by = models.ManyToManyField(CustomUser)
-
-    class Meta:
-        verbose_name = 'item'
-        verbose_name_plural = 'items'
-
-    def __str__(self):
-        return self.title_
-    
     def get_id(self):
-        return self.item_id
-    
-    def get_types(self):
-        return self.type.split('|||')
+        return self.dataset_id
 
     
