@@ -279,7 +279,7 @@ def retrieve_vw(request):
             # Get dataset
             if retrieval_method == 'identifiers':
                 item_ids = iter(item_ids.splitlines())
-                dataset = get_dataset(item_ids=item_ids)
+                dataset, exceptions = get_dataset(item_ids=item_ids)
             elif retrieval_method == 'file':
                 if not csv_file.name.endswith('.csv'):
                     messages.error(request,'File is not CSV type.')
@@ -300,7 +300,7 @@ def retrieve_vw(request):
                         messages.error(request, f'The file could not be \
                                         uploaded. Please try again.')
             elif retrieval_method == 'collections':
-                dataset = get_dataset(collections=collections)
+                dataset, exceptions = get_dataset(collections=collections)
             else:
                 messages.error(request, "You must either paste a list of \
                                 item identifiers (each on a separate line) \
