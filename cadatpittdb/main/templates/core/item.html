@@ -31,14 +31,16 @@
 <br/>
 
 <!-- Item Action Buttons -->
-<a role="button" class="btn btn-primary bg-pitt-royal border-pitt-royal"
-  href="https://digital.library.pitt.edu/islandora/object/pitt%3A{{ item.item_id}} " 
-  target="_blank">View Full Item Info</a>
-<a class="btn btn-primary bg-pitt-royal border-pitt-royal"
-  href="" role="button">Pin Item</a>
-<a class="btn btn-primary bg-pitt-royal border-pitt-royal"
-  data-bs-toggle="modal" data-bs-target="#tagItemModal"
-  href="" role="button">Tag Item</a>
+<div class="d-grid gap-2 d-sm-flex justify-content-center justify-content-sm-start">
+  <a role="button" class="btn btn-primary bg-pitt-royal border-pitt-royal"
+    href="https://digital.library.pitt.edu/islandora/object/pitt%3A{{ item.item_id}} " 
+    target="_blank">View Full Item Info</a>
+  <a class="btn btn-primary bg-pitt-royal border-pitt-royal"
+    href="" role="button">Pin Item</a>
+  <a class="btn btn-primary bg-pitt-royal border-pitt-royal"
+    data-bs-toggle="modal" data-bs-target="#tagItemModal"
+    href="" role="button">Tag Item</a>
+</div>
 <hr style="margin-top: 1.75em;"/>
 
 <!-- Datasets -->
