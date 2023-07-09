@@ -11,6 +11,7 @@ from .decode import decode_values
 from .controlled_vocab import vocab
 from .utilities import get_rights, now
 from users.models import *
+from .metadata_reader import *
 
 
 """ OAI Functions """
@@ -52,7 +53,7 @@ def get_collections():
 
 def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[]):
     registry = MetadataRegistry()
-    reader = oai_dc_reader
+    reader = pitt_oai_dc_reader
     if metadata_prefix == 'mods':
         pass
     registry.registerReader(metadata_prefix, reader)
@@ -73,7 +74,6 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[]):
         records = None
         if collections:
             sets = ":".join(collections).replace("pitt:", "pitt_")
-            print(sets)
             try:
                 records = client.listRecords(metadataPrefix=metadata_prefix,
                                     set=sets)
@@ -82,6 +82,7 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[]):
         else:
             records = client.listRecords(metadataPrefix=metadata_prefix)
 
+        i = 0
         for record in records:
             data = reformat_data(record[1].getMap())
             dataset.append(data)
@@ -104,8 +105,8 @@ def add_item(dataset=Dataset, item=Item):
         return False
 
 
-def add_tag(tags=str, dataset=Dataset, item=Item):
-    tag_list = tags.split(",")
+def add_tag(tags=str, user=User, dataset=Dataset, item=Item):
+    tag_list = tags.split("|||")
 
     for tag in tag_list:
         cur_tag = Tag.objects.filter(text=tag).first()
@@ -114,6 +115,9 @@ def add_tag(tags=str, dataset=Dataset, item=Item):
         if not cur_tag:
             cur_tag = Tag(text=tag)
             cur_tag.save()
+
+        # Associate tag with user
+        cur_tag.created_by.add(user)
         
         # Associate tag with dataset or item
         if dataset:

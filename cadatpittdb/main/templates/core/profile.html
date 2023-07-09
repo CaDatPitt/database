@@ -5,8 +5,9 @@
 <link rel="stylesheet" href="{% static 'main.css' %}">
 {% endblock%}
 {% block content %}
+
 <!-- Contact Information -->
-<h1>{{ person.first_name }} {{ person.last_name }}</h1>
+<h2>{{ person.first_name }} {{ person.last_name }}</h2>
 {% if user.profile_photo_url %}
 <img style="margin: 10px 0 10px 0; max-width: 25%;" 
     src="{{ person.profile_photo_url }}">
@@ -34,15 +35,17 @@
 <p class="contact"><strong>Bio:</strong> {% autoescape on %}{{ bio }} {% endautoescape %}</p>
 {% endif %}
 <br/>
-<button type="button" class="btn btn-primary bg-pitt-royal border-pitt-royal"
-        data-bs-toggle="modal" data-bs-target="#updateProfileModal">
-        Update Profile
-</button>
+<div class="d-grid gap-2 d-md-flex justify-content-center justify-content-md-start">
+  <button type="button" class="btn btn-primary bg-pitt-royal border-pitt-royal"
+    data-bs-toggle="modal" data-bs-target="#updateProfileModal">
+    Update Profile
+  </button>
+</div>
 
 <!-- Datasets -->
 {% if datasets %}
 <hr style="margin-top: 1.75em;"/>
-<h4 class="mb-4">Datasets</h4>
+<h3 class="mb-4">Datasets</h3>
 <div class="row gy-4">
   {% for dataset in datasets %}
   <div class="col-md-6 col-xl-4">
@@ -63,9 +66,7 @@
         </div>
       </div>
       <div class="card-body">
-        <!-- <a href="/dataset?id={{ dataset.dataset_id }}"> -->
-            <h5 class="card-title">{{ dataset.title }}</h5>
-        <!-- </a> -->
+        <h5 class="card-title">{{ dataset.title }}</h5>
         <h* class="card-subtitle">{{ dataset.description }}</h*>
         <p class="card-text mt-2"><strong># of items</strong>: 
             {{ dataset.number_items }}<br/>
@@ -81,14 +82,13 @@
 </div>
 {% endif %}
 
-
 <!-- Update Profile Form Modal -->
 <div class="modal fade" id="updateProfileModal" name="updateProfileModal" 
   tabindex="-1" aria-labelledby="updateProfileModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="updateProfileModalLabel">Update Profile</h1>
+        <h2 class="modal-title fs-5" id="updateProfileModalLabel">Update Profile</h2>
         <button type="button" class="btn-close" data-bs-dismiss="modal" 
           aria-label="Close"></button>
       </div>
@@ -108,6 +108,8 @@
     </div>
   </div>
 </div>
+
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script>
   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))

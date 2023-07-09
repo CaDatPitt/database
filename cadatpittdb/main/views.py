@@ -2,6 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.core.files.temp import NamedTemporaryFile
+from django.http import HttpResponseRedirect
 from wsgiref.util import FileWrapper
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
@@ -16,6 +17,8 @@ from .datasets import *
 def index_vw(request):
     context = {
         "title": "Home",
+        "vocab": vocab,
+        "datasets": Dataset.objects.all().order_by('-last_modified')[:4],
     }
     return render(request, "core/index.html", context)
 
@@ -23,6 +26,7 @@ def index_vw(request):
 def about_vw(request):
     context = {
         "title": "About",
+        "vocab": vocab,
     }
     return render(request, "core/about.html", context)
 
@@ -30,6 +34,7 @@ def about_vw(request):
 def browse_vw(request):
     context = {
         "title": "Browse Datasets",
+        "vocab": vocab,
         "datasets": Dataset.objects.all(),
         'creators': get_creators()
     }
@@ -62,6 +67,7 @@ def contact_vw(request):
 def create_vw(request):
     context = {
         "title": "Create a Dataset",
+        "vocab": vocab,
     }
 
     if request.method == 'POST':
@@ -84,6 +90,7 @@ def create_vw(request):
 def dashboard_vw(request):
     context = {
         "title": "About",
+        "vocab": vocab,
     }
     return render(request, "auth/dashboard.html", context)
 
@@ -91,19 +98,29 @@ def dashboard_vw(request):
 def dataset_vw(request):
     context = {
         "title": "View Dataset",
+        "vocab": vocab,
     }
     if request.method == 'GET':
-        id = request.GET.get('id')
-        dataset = Dataset.objects.filter(public_id=id).first()
+        dataset_id = request.GET.get('id')
+        dataset = Dataset.objects.filter(public_id=dataset_id).first()
         context['dataset'] = dataset
-        context['items'] = get_items(dataset)
 
     return render(request, "core/dataset.html", context)
+
+
+def delete_dataset_vw(request):
+    dataset_id = request.GET.get('id')
+    dataset = Dataset.objects.filter(public_id=dataset_id).first()  
+
+    delete_dataset(dataset)
+
+    return redirect("/dashboard/")
 
 
 def documentation_vw(request):
     context = {
         "title": "Documentation",
+        "vocab": vocab,
     }
     return render(request, "core/documentation.html", context)
 
@@ -111,6 +128,7 @@ def documentation_vw(request):
 def download_vw(request):
     context = {
         "title": "Download Dataset",
+        "vocab": vocab,
     }
     newfile = NamedTemporaryFile(suffix='.txt') # change suffix depending on option
     # save your data to newfile.name
@@ -126,6 +144,7 @@ def download_vw(request):
 def faq_vw(request):
     context = {
         "title": "FAQs",
+        "vocab": vocab,
     }
     return render(request, "core/faq.html", context)
 
@@ -133,6 +152,7 @@ def faq_vw(request):
 def help_vw(request):
     context = {
         "title": "Help",
+        "vocab": vocab,
     }
     return render(request, "core/help.html", context)
 
@@ -140,16 +160,19 @@ def help_vw(request):
 def item_vw(request):
     context = {
         "title": "View Item",
+        "vocab": vocab,
+        "user": request.user
     }
     if request.method == 'GET':
-        id = request.GET['id']
-        item = Item.objects.filter(item_id=id).first()
+        item_id = request.GET.get('id')
+        item = Item.objects.filter(item_id=item_id).first()
 
         if not item:
             messages.error(request, "That item does not exist!")
             return redirect("/")
             
         context['item'] = item
+        context['datasets'] = get_item_datasets(item=item)
 
     return render(request, "core/item.html", context)
 
@@ -157,6 +180,7 @@ def item_vw(request):
 def login_vw(request):
     context = {
         "title": "Log In",
+        "vocab": vocab,
         'use_email': False
     }
     
@@ -198,6 +222,36 @@ def logout_vw(request):
     return redirect("/")
 
 
+def pin_dataset_vw(request):
+    user_id = request.GET.get('user')
+    user = User.objects.filter(user_id=user_id).first()
+    dataset_id = request.GET.get('dataset')
+    dataset = Dataset.objects.filter(public_id=dataset_id).first()
+
+    if dataset:
+        pin_item(user=user, dataset=dataset)
+    else:
+        messages.error(request, "That item does not exist!")
+        return redirect("/")
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def pin_item_vw(request):
+    user_id = request.GET.get('user')
+    user = User.objects.filter(user_id=user_id).first()
+    item_id = request.GET.get('item')
+    item = Item.objects.filter(item_id=item_id).first()
+
+    if item:
+        pin_item(user=user, item=item)
+    else:
+        messages.error(request, "That item does not exist!")
+        return redirect("/")
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
 @login_required
 def profile_vw(request):
     context = {
@@ -221,22 +275,34 @@ def profile_vw(request):
         context['person'] = user
         context['affiliations'] = affiliations
         context['bio'] = bio
-        context['datasets'] = get_datasets(user)
+        context['datasets'] = get_user_datasets(user)
 
         return render(request, "core/profile.html", context)
     
     else:
         messages.error(request, "That user does not exist!")
         return redirect("/")
+    
+
+def remove_item_vw(request):
+    item_id = request.GET.get('item')
+    dataset_id = request.GET.get('dataset')
+    item = Item.objects.filter(item_id=item_id).first()  
+    dataset = Dataset.objects.filter(public_id=dataset_id).first()
+
+    remove_item(dataset=dataset, item=item)
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
 def retrieve_vw(request):
     context = {
         "title": "Retrieve Data",
+        "vocab": vocab,
         "show_results": False,
         "collections": Collection.objects.all(),
-        "dataset": None,
+        "dataset": pd.DataFrame(),
         "rights": vocab['rights']
     }
 
@@ -279,7 +345,7 @@ def retrieve_vw(request):
             # Get dataset
             if retrieval_method == 'identifiers':
                 item_ids = iter(item_ids.splitlines())
-                dataset = get_dataset(item_ids=item_ids)
+                dataset, exceptions = get_dataset(item_ids=item_ids)
             elif retrieval_method == 'file':
                 if not csv_file.name.endswith('.csv'):
                     messages.error(request,'File is not CSV type.')
@@ -300,7 +366,7 @@ def retrieve_vw(request):
                         messages.error(request, f'The file could not be \
                                         uploaded. Please try again.')
             elif retrieval_method == 'collections':
-                dataset = get_dataset(collections=collections)
+                dataset, exceptions = get_dataset(collections=collections)
             else:
                 messages.error(request, "You must either paste a list of \
                                 item identifiers (each on a separate line) \
@@ -381,3 +447,19 @@ def signup_vw(request):
                                'photo_url': photo_url, 'password': password}            
         
     return render(request, "auth/signup.html", context)
+
+
+def tag_item_vw(request):
+    tags = request.POST.get("tags")
+    user_id = request.GET.get('user')
+    user = User.objects.filter(user_id=user_id).first()
+    item_id = request.GET.get('item')
+    item = Item.objects.filter(item_id=item_id).first()
+
+    if item:
+        add_tag(user=user, tags=tags, dataset=None, item=item)
+    else:
+        messages.error(request, "That item does not exist!")
+        return redirect("/")
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

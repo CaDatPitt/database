@@ -1,111 +1,111 @@
 <div class="row">
-    <div class="col">
-      <label for="first_name" class="bold">First Name 
-        <span class="required-field">*</span>
-      </label>
-      <input 
-      type="text" 
-      class="form-control" 
-      id="first_name" 
-      name="first_name"
-      {% if user.is_authenticated %}
-      value="{{ user.first_name }}"
-      {% elif form %}
-      value="{{ form.first_name }}"
-      {% endif %}
-      required>
-    </div>
-    <div class="col">
-    <label for="last_name" class="bold">Last Name
-      <span class="required-field">*</span>
-    </label>
-      <input 
-      type="text" 
-      class="form-control" 
-      id="last_name" 
-      name="last_name"
-      {% if user.is_authenticated %}
-      value="{{ user.last_name }}"
-      {% elif form %}
-      value="{{ form.last_name }}"
-      {% endif %}
-      required>
-    </div>
-  </div>
-  <br/>
-  <div class="form-group">
-    <label for="username" class="bold">Username
-      <span class="required-field">*</span>
+  <div class="col">
+    <label for="first_name" class="bold">First Name 
+    <span class="required-field">*</span>
     </label>
     <input 
     type="text" 
     class="form-control" 
-    id="username" 
-    name="username"
-    maxlength="10"
+    id="first_name" 
+    name="first_name"
     {% if user.is_authenticated %}
-    value="{{ user.username }}"
+    value="{{ user.first_name }}"
     {% elif form %}
-    value="{{ form.username }}"
+    value="{{ form.first_name }}"
     {% endif %}
-    >
+    required>
   </div>
-  <br/>
-  <div class="form-group">
-    <label for="email" class="bold">Email
-      <span class="required-field">*</span>
+  <div class="col">
+    <label for="last_name" class="bold">Last Name
+    <span class="required-field">*</span>
     </label>
     <input 
-    type="email" 
+    type="text" 
     class="form-control" 
-    id="email" 
-    name="email"
-    {% if user.is_authenticated and user.email %}
-    value="{{ user.email }}"
-    {% elif form %}
-    value="{{ form.email }}"
-    {% endif %}>
-  </div>
-  <br/>
-  <div class="form-group">
+    id="last_name" 
+    name="last_name"
     {% if user.is_authenticated %}
-    <label for="password" class="bold">Current Password</label>
-    {% else %}
-    <label for="password" class="bold">Password
-      <span class="required-field">*</span>
-    </label>
+    value="{{ user.last_name }}"
+    {% elif form %}
+    value="{{ form.last_name }}"
     {% endif %}
-    <input 
-    type="password" 
-    class="form-control" 
-    id="password" 
-    name="password" 
-    placeholder="">
+    required>
   </div>
-  <br/>
+</div>
+<br/>
+<div class="form-group">
+  <label for="username" class="bold">Username
+  <span class="required-field">*</span>
+  </label>
+  <input 
+  type="text" 
+  class="form-control" 
+  id="username" 
+  name="username"
+  maxlength="10"
   {% if user.is_authenticated %}
-  <div class="form-group">
-    <label for="password" class="bold">New Password</label>
-    <input 
+  value="{{ user.username }}"
+  {% elif form %}
+  value="{{ form.username }}"
+  {% endif %}
+  >
+</div>
+<br/>
+<div class="form-group">
+  <label for="email" class="bold">Email
+  <span class="required-field">*</span>
+  </label>
+  <input 
+  type="email" 
+  class="form-control" 
+  id="email" 
+  name="email"
+  {% if user.is_authenticated and user.email %}
+  value="{{ user.email }}"
+  {% elif form %}
+  value="{{ form.email }}"
+  {% endif %}>
+</div>
+<br/>
+<div class="form-group">
+  {% if user.is_authenticated %}
+  <label for="password" class="bold">Current Password</label>
+  {% else %}
+  <label for="password" class="bold">Password
+  <span class="required-field">*</span>
+  </label>
+  {% endif %}
+  <input 
     type="password" 
     class="form-control" 
     id="password" 
     name="password" 
     placeholder="">
-  </div>        
-  <br/>
+</div>
+<br/>
+{% if user.is_authenticated %}
+<div class="form-group">
+  <label for="password" class="bold">New Password</label>
+  <input 
+    type="password" 
+    class="form-control" 
+    id="password" 
+    name="password" 
+    placeholder="">
+</div>
+<br/>
+{% endif %}
+<div class="form-group">
+  <label for="password" class="bold">Confirm Password
+  {% if not user.is_authenticated %}
+  <span class="required-field">*</span>
   {% endif %}
-  <div class="form-group">
-    <label for="password" class="bold">Confirm Password
-        {% if not user.is_authenticated %}
-        <span class="required-field">*</span>
-        {% endif %}
-    </label>
-    <input 
+  </label>
+  <input 
     type="password" 
     class="form-control" 
     id="password_conf" 
     name="password_conf" 
     placeholder="">
-  </div>
-  <br/>
+</div>
+<br/>

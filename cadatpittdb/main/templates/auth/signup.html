@@ -12,10 +12,16 @@
       {% csrf_token %}
       <h3 align="center">Sign Up</h3>
       <br/>
+
+      <!-- Account Form -->
       {% include 'auth/account-form.html' %}
+
+      <!-- Profile Form -->
       <div class="collapse" id="profileFormCollapse">
         {% include 'auth/profile-form.html' %}
       </div>
+
+      <!-- Profile Fields Switch -->
       <div class="form-check form-switch">
         <input class="form-check-input" type="checkbox" role="switch" id="profileFormSwitch"
         data-bs-toggle="collapse" data-bs-target="#profileFormCollapse" 
@@ -23,6 +29,8 @@
         <label class="form-check-label bold" for="profileFormSwitch">Enter profile information</label>
       </div>
       <br/>
+
+      <!-- Submit Button -->
       <div class="col-md-12 text-center">
         <button type="submit" class="btn btn-warning bg-pitt-gold">Submit</button>
       </div>  
