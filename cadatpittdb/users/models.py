@@ -76,6 +76,7 @@ class Collection(models.Model):
 class Tag(models.Model):
     tag_id = models.BigAutoField(_('tag ID'), auto_created=True, primary_key=True)
     text = models.CharField(_('tag'), max_length=50, blank=True, default='')
+    created_by = models.ManyToManyField(CustomUser)
     date_created = models.DateTimeField(_('date created'), default=timezone.now)
 
     class Meta:
@@ -141,5 +142,3 @@ class Dataset(models.Model):
         
     def get_id(self):
         return self.dataset_id
-
-    

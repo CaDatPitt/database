@@ -3,6 +3,7 @@
 {% block title %}{{ title }}{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="{% static 'main.css' %}">
+<link rel="stylesheet" href="{% static 'tagin/dist/tagin.min.css' %}" />
 {% endblock%}
 {% block content %}
 
@@ -48,9 +49,12 @@
             <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
               data-bs-title="Pin item"><img class="card-header-icons"
               src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-            <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
-              data-bs-title="Tag item"><img class="card-header-icons"
+            <!-- <span data-bs-toggle="tooltip" data-bs-placement="top" 
+              data-bs-title="Tag item">
+              <a data-bs-toggle="modal" data-bs-target="#tagItemModal" 
+              href="" role="button"><img class="card-header-icons"
               src="{% static 'images/tag_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+            </span> -->
             <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
               data-bs-title="Add item to dataset"><img class="card-header-icons"
               src="{% static 'images/add_FILL0_wght400_GRAD0_opsz48.png' %}"></a>
@@ -114,6 +118,16 @@
   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
   return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+</script>
+<script src="{% static 'tagin/dist/tagin.js' %}"></script>
+<script>
+  const tagin = new Tagin(document.querySelector('.tagin'), {
+  separator: '|||',
+  duplicate: false,
+  enter: true,
+  transform: 'input => input',
+  placeholder: 'Type tag name and press Enter/Return too add'
   })
 </script>
 {% endblock %}

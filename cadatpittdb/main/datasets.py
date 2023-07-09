@@ -105,8 +105,8 @@ def add_item(dataset=Dataset, item=Item):
         return False
 
 
-def add_tag(tags=str, dataset=Dataset, item=Item):
-    tag_list = tags.split(",")
+def add_tag(tags=str, user=User, dataset=Dataset, item=Item):
+    tag_list = tags.split("|||")
 
     for tag in tag_list:
         cur_tag = Tag.objects.filter(text=tag).first()
@@ -115,6 +115,9 @@ def add_tag(tags=str, dataset=Dataset, item=Item):
         if not cur_tag:
             cur_tag = Tag(text=tag)
             cur_tag.save()
+
+        # Associate tag with user
+        cur_tag.created_by.add(user)
         
         # Associate tag with dataset or item
         if dataset:

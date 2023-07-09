@@ -2,6 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.core.files.temp import NamedTemporaryFile
+from django.http import HttpResponseRedirect
 from wsgiref.util import FileWrapper
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
@@ -100,11 +101,20 @@ def dataset_vw(request):
         "vocab": vocab,
     }
     if request.method == 'GET':
-        id = request.GET.get('id')
-        dataset = Dataset.objects.filter(public_id=id).first()
+        dataset_id = request.GET.get('id')
+        dataset = Dataset.objects.filter(public_id=dataset_id).first()
         context['dataset'] = dataset
 
     return render(request, "core/dataset.html", context)
+
+
+def delete_dataset_vw(request):
+    dataset_id = request.GET.get('id')
+    dataset = Dataset.objects.filter(public_id=dataset_id).first()  
+
+    delete_dataset(dataset)
+
+    return redirect("/dashboard/")
 
 
 def documentation_vw(request):
@@ -151,10 +161,11 @@ def item_vw(request):
     context = {
         "title": "View Item",
         "vocab": vocab,
+        "user": request.user
     }
     if request.method == 'GET':
-        id = request.GET['id']
-        item = Item.objects.filter(item_id=id).first()
+        item_id = request.GET.get('id')
+        item = Item.objects.filter(item_id=item_id).first()
 
         if not item:
             messages.error(request, "That item does not exist!")
@@ -211,6 +222,36 @@ def logout_vw(request):
     return redirect("/")
 
 
+def pin_dataset_vw(request):
+    user_id = request.GET.get('user')
+    user = User.objects.filter(user_id=user_id).first()
+    dataset_id = request.GET.get('dataset')
+    dataset = Dataset.objects.filter(public_id=dataset_id).first()
+
+    if dataset:
+        pin_item(user=user, dataset=dataset)
+    else:
+        messages.error(request, "That item does not exist!")
+        return redirect("/")
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def pin_item_vw(request):
+    user_id = request.GET.get('user')
+    user = User.objects.filter(user_id=user_id).first()
+    item_id = request.GET.get('item')
+    item = Item.objects.filter(item_id=item_id).first()
+
+    if item:
+        pin_item(user=user, item=item)
+    else:
+        messages.error(request, "That item does not exist!")
+        return redirect("/")
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
 @login_required
 def profile_vw(request):
     context = {
@@ -241,6 +282,17 @@ def profile_vw(request):
     else:
         messages.error(request, "That user does not exist!")
         return redirect("/")
+    
+
+def remove_item_vw(request):
+    item_id = request.GET.get('item')
+    dataset_id = request.GET.get('dataset')
+    item = Item.objects.filter(item_id=item_id).first()  
+    dataset = Dataset.objects.filter(public_id=dataset_id).first()
+
+    remove_item(dataset=dataset, item=item)
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
@@ -395,3 +447,19 @@ def signup_vw(request):
                                'photo_url': photo_url, 'password': password}            
         
     return render(request, "auth/signup.html", context)
+
+
+def tag_item_vw(request):
+    tags = request.POST.get("tags")
+    user_id = request.GET.get('user')
+    user = User.objects.filter(user_id=user_id).first()
+    item_id = request.GET.get('item')
+    item = Item.objects.filter(item_id=item_id).first()
+
+    if item:
+        add_tag(user=user, tags=tags, dataset=None, item=item)
+    else:
+        messages.error(request, "That item does not exist!")
+        return redirect("/")
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
