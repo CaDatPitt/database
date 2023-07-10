@@ -1,3 +1,4 @@
+{% csrf_token %}
 <div class="form-group">
   <label for="pronouns" class="bold">Pronouns</label>
   <input 
@@ -50,11 +51,11 @@
   <label for="other_affiliation" class="bold">Other Affiliation</label>
   <input 
     type="text" 
-    class="form-control" 
+    class="form-control tagin" 
     id="other_affiliation" 
     name="other_affiliation"
-    {% if user.is_authenticated and user.website %}
-    value="{{ other_affiliation }}"
+    {% if user.is_authenticated %}
+    value="{{ other_affiliations|join:'|' }}"
     {% elif form %}
     value="{{ form.other_affiliation }}"
     {% endif %}>

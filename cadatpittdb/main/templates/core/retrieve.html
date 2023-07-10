@@ -30,7 +30,7 @@
 <div class="row gy-4">
   <!-- Filters -->
   <div class="col-md col-lg-4">
-    {% include 'core/filters.html' %}
+    {% include 'snippets/filters-form.html' %}
   </div>
 
   <!-- Data Retrieval Forms -->
@@ -234,7 +234,7 @@
                 <!-- Create Dataset Form -->
                 <div id="create_dataset_form">
                     <form method="POST" action="/create/?user={{ user.username }}">
-                        {% include 'core/create.html' %}
+                        {% include 'snippets/create-form.html' %}
                     </form>
                 </div>
             </div>
@@ -248,7 +248,17 @@
 <script>
   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+</script>
+<script src="{% static 'tagin/dist/tagin.js' %}"></script>
+<script>
+  const tagin = new Tagin(document.querySelector('.tagin'), {
+  separator: '|||',
+  duplicate: false,
+  enter: true,
+  transform: 'input => input',
+  placeholder: 'Type tag name and press Enter/Return too add'
   })
 </script>
 {% endblock %}

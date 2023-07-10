@@ -3,6 +3,7 @@
 {% block title %}{{ title }}{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="{% static 'main.css' %}">
+<link rel="stylesheet" href="{% static 'tagin/dist/tagin.min.css' %}" />
 {% endblock%}
 {% block navbar_signup %}class="nav-link active"{% endblock %}
 {% block content %}
@@ -14,11 +15,11 @@
       <br/>
 
       <!-- Account Form -->
-      {% include 'auth/account-form.html' %}
+      {% include 'snippets/account-form.html' %}
 
       <!-- Profile Form -->
       <div class="collapse" id="profileFormCollapse">
-        {% include 'auth/profile-form.html' %}
+        {% include 'snippets/profile-form.html' %}
       </div>
 
       <!-- Profile Fields Switch -->
@@ -37,4 +38,26 @@
     </form>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<script>
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+</script>
+<script src="{% static 'tagin/dist/tagin.js' %}"></script>
+<script>
+const tagin = new Tagin(document.querySelector('.tagin'), {
+separator: '|',
+duplicate: false,
+enter: true,
+transform: 'input => input',
+placeholder: 'Type affiliation and press Enter/Return too add'
+})
+</script>
+{% endblock %}
+{% block bootstrapjs %}
 {% endblock %}

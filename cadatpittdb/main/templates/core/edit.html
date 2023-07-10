@@ -82,7 +82,7 @@
   <!-- Filters -->
   <div class="col-md col-lg-4">
     <h5 align="left">Filters</h5>
-    {% include 'core/filters.html' %}
+    {% include 'snippets/filters-form.html' %}
   </div>
 
   <!-- Item Cards -->
@@ -97,8 +97,8 @@
           <div class="card-body">
             <div class="row border-bottom mb-2 pb-2">
               <div class="col text-end">
-                {% include 'snippets/pin-item.html' %}
-                {% include 'snippets/remove-item.html' %}
+                {% include 'snippets/pin-item-icon.html' %}
+                {% include 'snippets/remove-item-icon.html' %}
               </div>
             </div>
             <a href="/item/?id={{ item.item_id }}">
