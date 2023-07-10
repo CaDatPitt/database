@@ -135,7 +135,7 @@
       <div class="card-body">
         <form method="POST">
           {% csrf_token %}
-          {% include 'auth/account-form.html' %}
+          {% include 'snippets/account-form.html' %}
           <div class="col-md-12 text-center">
             <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal">Update</button>
           </div>
