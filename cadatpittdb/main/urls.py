@@ -3,15 +3,18 @@ from . import views
 
 urlpatterns = [
     path("", views.index_vw),
+    path("add-item/", views.add_item_vw),
     path("about/", views.about_vw),
     path("browse/", views.browse_vw),
     path("contact/", views.contact_vw),
     path("create/", views.create_vw),
+    path("copy/", views.copy_vw),
     path("dashboard/", views.dashboard_vw),
     path("dataset/", views.dataset_vw),
     path("delete-dataset/", views.delete_dataset_vw),
     path("documentation/", views.documentation_vw),
     path("download/", views.download_vw),
+    path("edit/", views.edit_vw),
     path("faq/", views.faq_vw),
     path("help/", views.help_vw),
     path("item/", views.item_vw),
@@ -24,4 +27,6 @@ urlpatterns = [
     path("retrieve/", views.retrieve_vw),
     path("signup/", views.signup_vw),
     path("tag-item/", views.tag_item_vw),
+    path("unpin-dataset/", views.unpin_dataset_vw),
+    path("unpin-item/", views.unpin_item_vw),
 ]

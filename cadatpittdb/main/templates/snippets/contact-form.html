@@ -1,0 +1,72 @@
+<form method="POST" action="/contact/">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="full_name" class="bold">Full Name
+        <span class="required-field">*</span>
+        </label>
+        <input 
+        type="text" 
+        class="form-control" 
+        id="full_name" 
+        name="full_name"
+        required>
+    </div>
+    <br/>
+    <div class="form-group">
+        <label for="email" class="bold">Email
+        <span class="required-field">*</span>
+        </label>
+        <input 
+        type="email" 
+        class="form-control" 
+        id="email" 
+        name="email" 
+        required>
+    </div>
+    <br/>
+    <div class="form-group">
+        <label for="inquiry_type" class="bold">Type of Inquiry
+        <span class="required-field">*</span>
+        </label>
+        <select 
+            class="form-select form-select-md" aria-label=".form-select-md"
+            id="inquiry_type"
+            name="inquiry_type"
+            reqired>
+            <option value="">Select an inquiry type</option>
+            {% for type in vocab.inquiry_type %}
+            <option value="{{ type }}">{{ type }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <br/>
+    <div class="form-group">
+        <label for="subject" class="bold">Subject
+        <span class="required-field">*</span>
+        </label>
+        <input 
+        type="text" 
+        class="form-control" 
+        id="subject" 
+        name="subject" 
+        placeholder="CaD@PittDB Contact Form Inquiry"
+        required>
+    </div>
+    <br/>
+    <div class="form-group">
+        <label for="message" class="bold">Message
+        <span class="required-field">*</span>
+        </label>
+        <textarea 
+        type="text"
+        class="form-control" 
+        id="message" 
+        name="message" 
+        rows="3"
+        required></textarea>
+    </div>
+    <br/>
+    <div class="col-md-12 text-center">
+        <button type="submit" class="btn btn-warning pitt-gold">Submit</button>
+    </div>
+</form>

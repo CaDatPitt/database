@@ -4,14 +4,14 @@
 {% block head %}
 <link rel="stylesheet" href="{% static 'main.css' %}">
 <link rel="stylesheet" href="{% static 'tagin/dist/tagin.min.css' %}" />
-{% endblock%}
+{% endblock %}
 {% block content %}
 
 <!-- Dataset Information -->
 <h1>{{ dataset.title }}</h1>
 <p class="contact"><strong>Created By:</strong> 
   <a href="/profile/?user={{ dataset.created_by.username }}">
-  {{ dataset.created_by }}
+    {{ dataset.created_by }}
   </a>
 </p>
 <p class="contact"><strong>Description:</strong> {{ dataset.description }}</p>
@@ -25,9 +25,22 @@
 
 <!-- Dataset Action Buttons -->
 <div class="d-grid gap-2 d-sm-flex justify-content-center justify-content-sm-start">
-  <a class="btn btn-primary bg-pitt-royal border-pitt-royal"
-    data-bs-toggle="modal" data-bs-target="#editDatasetModal"
-    href="" role="button">Edit Dataset</a>
+    <div class="btn-group">
+      <button type="button" data-bs-toggle="dropdown" aria-expanded="false"
+        class="btn btn-primary dropdown-toggle bg-pitt-royal border-pitt-royal">
+        Edit Dataset
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a class="dropdown-item" 
+            href="/copy/?id={{ dataset.public_id }}">Edit copy</a>
+        </li>
+        <li>
+          <a class="dropdown-item" 
+            href="/edit/?id={{ dataset.public_id }}">Edit original</a>
+        </li>
+      </ul>
+    </div>
   <a class="btn btn-primary bg-pitt-royal border-pitt-royal"
     href="" role="button">Pin Dataset</a>
   <a class="btn btn-primary bg-pitt-royal border-pitt-royal"
@@ -46,21 +59,10 @@
       <div class="card-body">
         <div class="row">
           <div class="col text-end border-bottom mb-2 pb-2">
-            <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
-              data-bs-title="Pin item"><img class="card-header-icons"
-              src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-            <!-- <span data-bs-toggle="tooltip" data-bs-placement="top" 
-              data-bs-title="Tag item">
-              <a data-bs-toggle="modal" data-bs-target="#tagItemModal" 
-              href="" role="button"><img class="card-header-icons"
-              src="{% static 'images/tag_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-            </span> -->
-            <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
-              data-bs-title="Add item to dataset"><img class="card-header-icons"
-              src="{% static 'images/add_FILL0_wght400_GRAD0_opsz48.png' %}"></a>
-            <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
-              data-bs-title="Remove item from dataset"><img class="card-header-icons"
-              src="{% static 'images/delete_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+            {% include 'snippets/pin-item.html' %}
+            <!-- {% include 'snippets/tag-item.html' %} -->
+            {% include 'snippets/add-item.html' %}
+            {% include 'snippets/remove-item.html' %}
           </div>
         </div>
         <a href="/item/?id={{ item.item_id }}">
@@ -112,7 +114,20 @@
   </div>
 </div>
 
-<!-- Scripts -->
+
+<!-- Add Item Modals -->
+{% for item in dataset.items.all %}
+  {% include 'snippets/add-item-modal.html' %}
+{% endfor %}
+
+<!-- Remove Item Modals -->
+{% for item in dataset.items.all %}
+  {% include 'snippets/remove-item-modal.html' %}
+{% endfor %}
+
+{% endblock %}
+
+{% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script>
   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
