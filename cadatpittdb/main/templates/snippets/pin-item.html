@@ -1,0 +1,14 @@
+{% load static %}
+{% if user.is_authenticated %}
+    {% if user in item.pinned_by.all %}
+    <a  href="/unpin-item/?id={{ item.item_id }}"  data-bs-toggle="tooltip" 
+        data-bs-placement="top" data-bs-title="Unpin item">
+        <img class="card-header-icons"
+            src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+    {% else %}
+    <a href="/pin-item/?id={{ item.item_id }}" data-bs-toggle="tooltip" 
+        data-bs-placement="top" data-bs-title="Pin item">
+        <img class="card-header-icons" 
+        src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+    {% endif %}
+{% endif %}

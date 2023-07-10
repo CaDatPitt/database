@@ -14,7 +14,7 @@
 <p class="contact"><strong>Date:</strong> {{ item.date }}</p>
 <p class="contact"><strong>Type:</strong> 
     {% for type in item.get_types %}
-        {{ type }}{% if type != item.get_types|last %},{% endif %}
+        {{ type|title }}{% if type != item.get_types|last %},{% endif %}
     {% endfor %}
 </p>
 <p class="contact"><strong>Collections:</strong> 

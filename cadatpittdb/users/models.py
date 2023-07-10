@@ -51,6 +51,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def get_affiliations(self):
         return self.affiliation.split('|')
     
+    def get_datasets(self):
+        return Dataset.objects.filter(created_by=self).all()
+    
 
 class Collection(models.Model):
     collection_id = models.CharField(_('collection ID'), max_length=200, primary_key=True)
@@ -125,7 +128,6 @@ class Dataset(models.Model):
     description = models.CharField(_('description'), max_length=5000, blank=True, default='')
     tags = models.CharField(_('tags'), max_length=500, blank=True, default='')
     search_parameters = models.JSONField(_('search parameters'), blank=True, default=dict)
-    number_items = models.IntegerField(_('number of items'))
     tags = models.ManyToManyField(Tag)
     created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='creator')
     date_created = models.DateTimeField(_('date created'), default=timezone.now)

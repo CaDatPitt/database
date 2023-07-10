@@ -3,6 +3,7 @@ from django.contrib import messages
 from oaipmh.client import Client
 from oaipmh.metadata import MetadataRegistry, oai_dc_reader
 from eldar import Query
+from datetime import datetime
 import pandas as pd
 import re
 import os
@@ -105,7 +106,7 @@ def add_item(dataset=Dataset, item=Item):
         return False
 
 
-def add_tag(tags=str, user=User, dataset=Dataset, item=Item):
+def add_tags(tags=str, user=User, dataset=Dataset, item=Item):
     tag_list = tags.split("|||")
 
     for tag in tag_list:
@@ -127,25 +128,51 @@ def add_tag(tags=str, user=User, dataset=Dataset, item=Item):
 
 
 def copy_dataset(user=User, dataset=Dataset):
+    items = dataset.items.all()
+
     try:
+        # Create copy of given dataset
         dataset.pk = None
         dataset.created_by = user
-        dataset.date_created = None
-        dataset.last_modified = None
+        dataset.date_created = datetime.now()
+        dataset.last_modified = datetime.now()
         dataset._state.adding = True
         dataset.save() 
+
+        # Associate items with dataset
+        for item in items:
+            add_item(dataset=dataset, item=item)
+
         return dataset
     except:
         return None
     
 
-def create_item(item_id=str, title=str, item_type=str, thumbnail=str):
-    # Distinguish identifier from thumbnail
-    cur_item = Item(item_id=item_id, title=title, type=item_type, 
-                    thumbnail=thumbnail)
-    cur_item.save()
+def create_item(item_id=str, title=str, creator=str, date=str, item_type=str, 
+                thumbnail=str, collection_ids=str):
+    if not title:
+        try:
+            item_record = get_dataset(item_ids=[item_id])
+            title = item_record['title'].iloc[0]
+            creator = item_record['creator'].iloc[0]
+            date = item_record['date'].iloc[0]
+            item_type = item_record['type'].iloc[0]
+            thumbnail = item_record['thumbnail'].iloc[0]
+            collection_ids = item_record['collection'].iloc[0].split('|||')
+        except:
+            return None
 
-    return cur_item
+    # Distinguish identifier from thumbnail
+    new_item = Item(item_id=item_id, title=title, creator=creator, date=date,
+                    type=item_type, thumbnail=thumbnail)
+    new_item.save()
+
+    # Associate collection(s) with item
+    for id in collection_ids:
+        collection = Collection.objects.filter(collection_id=id.replace('_', ':'))
+        new_item.collections.add(collection)
+
+    return new_item
 
 
 def create_dataset(dataset=pd.DataFrame, title=str, description=str, tags=list,
@@ -171,13 +198,15 @@ def create_dataset(dataset=pd.DataFrame, title=str, description=str, tags=list,
         # Create item if it doesn't already exist
         cur_item = Item.objects.filter(item_id=item['identifier']).first()
         if not cur_item:
-            cur_item = add_item(item_id=item['identifier'], title=item['title'],
+            cur_item = create_item(item_id=item['identifier'], title=item['title'],
                                 type=item['type'], thumbnail=item['identifier'])
         # Save items to dataset
         add_item(new_dataset, cur_item)
 
     # Add tags
-    add_tag(tags=tags, dataset=new_dataset)
+    add_tags(tags=tags, dataset=new_dataset)
+
+    return new_dataset
 
 
 def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str, 
@@ -446,6 +475,23 @@ def remove_tag(tag=str, dataset=Dataset, item=Item):
 #         return False
 
 
+def unpin_dataset(user=User, dataset=Dataset):
+    try:
+        dataset.pinned_by.remove(user)
+        return True
+    except:
+        return False
+
+
+def unpin_item(user=User, item=Item):
+    try:
+        item.pinned_by.remove(user)
+        return True
+    except:
+        return False
+
+
+
 def update_dataset(dataset=Dataset, title=str, description=str, tags=list,
                    search_parameters=str, public=bool):
     try:
@@ -454,7 +500,7 @@ def update_dataset(dataset=Dataset, title=str, description=str, tags=list,
         dataset.search_paremeters = search_parameters
         dataset.public = public
         dataset.save()
-        add_tag(dataset=dataset, tags=tags)
+        add_tags(dataset=dataset, tags=tags)
         return True
     except:
         return False
