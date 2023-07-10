@@ -4,6 +4,7 @@ from oaipmh.client import Client
 from oaipmh.metadata import MetadataRegistry, oai_dc_reader
 from eldar import Query
 from datetime import datetime
+from uuid import uuid4
 import pandas as pd
 import re
 import os
@@ -100,7 +101,7 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[]):
 
 def add_item(dataset=Dataset, item=Item):
     try:
-        item.datasets.add(dataset)
+        dataset.items.add(item)
         return True
     except:
         return False
@@ -114,8 +115,11 @@ def add_tags(tags=str, user=User, dataset=Dataset, item=Item):
         
         # Create tag if doesn't already exist
         if not cur_tag:
-            cur_tag = Tag(text=tag)
-            cur_tag.save()
+            try:
+                cur_tag = Tag(text=tag)
+                cur_tag.save()
+            except:
+                pass
 
         # Associate tag with user
         cur_tag.created_by.add(user)
@@ -127,12 +131,14 @@ def add_tags(tags=str, user=User, dataset=Dataset, item=Item):
             item.tags.add(cur_tag)
 
 
-def copy_dataset(user=User, dataset=Dataset):
+def copy_dataset(user=User, dataset=Dataset, title=str):
     items = dataset.items.all()
 
     try:
         # Create copy of given dataset
         dataset.pk = None
+        dataset.public_id = str(uuid4())
+        dataset.title = title
         dataset.created_by = user
         dataset.date_created = datetime.now()
         dataset.last_modified = datetime.now()
@@ -178,11 +184,14 @@ def create_item(item_id=str, title=str, creator=str, date=str, item_type=str,
 def create_dataset(dataset=pd.DataFrame, title=str, description=str, tags=list,
                    search_parameters=dict, created_by=str, public=bool):
     
-    new_dataset = Dataset(title=title, description=description,
-                          search_parameters=search_parameters, 
-                          number_items=len(dataset), created_by=created_by, 
-                          public=public)
-    new_dataset.save()
+    try:
+        new_dataset = Dataset(title=title, description=description,
+                            search_parameters=search_parameters, 
+                            number_items=len(dataset), created_by=created_by, 
+                            public=public)
+        new_dataset.save()
+    except:
+        return None
 
     """
     Traceback (most recent call last):
@@ -195,13 +204,22 @@ def create_dataset(dataset=pd.DataFrame, title=str, description=str, tags=list,
     
     # Add items
     for index, item in dataset:
-        # Create item if it doesn't already exist
-        cur_item = Item.objects.filter(item_id=item['identifier']).first()
-        if not cur_item:
-            cur_item = create_item(item_id=item['identifier'], title=item['title'],
-                                type=item['type'], thumbnail=item['identifier'])
-        # Save items to dataset
-        add_item(new_dataset, cur_item)
+        try:
+            # Create item if it doesn't already exist
+            cur_item = Item.objects.filter(item_id=item['identifier']).first()
+            if not cur_item:
+                cur_item = create_item(item_id=item['identifier'], 
+                                       title=item['title'],
+                                       creator=item['creator'],
+                                       date=item['date'],
+                                       type=item['type'], 
+                                       thumbnail=item['identifier'])
+                
+            # Save items to dataset
+            add_item(new_dataset, cur_item)
+        except:
+            # Do something with exceptions?
+            pass
 
     # Add tags
     add_tags(tags=tags, dataset=new_dataset)
@@ -216,7 +234,6 @@ def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str,
     filtered_dataset = dataset
     search_parameters = {}
 
-    # add search parameters to dictionary, then update dataset
     if title:
         try:
             query = Query(title)
@@ -491,7 +508,6 @@ def unpin_item(user=User, item=Item):
         return False
 
 
-
 def update_dataset(dataset=Dataset, title=str, description=str, tags=list,
                    search_parameters=str, public=bool):
     try:
@@ -504,3 +520,4 @@ def update_dataset(dataset=Dataset, title=str, description=str, tags=list,
         return True
     except:
         return False
+
