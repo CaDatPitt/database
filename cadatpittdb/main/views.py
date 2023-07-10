@@ -425,6 +425,7 @@ def retrieve_vw(request):
 
 """ Action Views """
 
+@login_required
 def add_item_vw(request):
     item_id = request.GET.get('item')
     item = Item.objects.filter(item_id=item_id).first()
@@ -451,6 +452,7 @@ def add_item_vw(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def copy_vw(request):
     user = request.user
     dataset_id = request.GET.get('id')
@@ -475,6 +477,7 @@ def copy_vw(request):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def delete_dataset_vw(request):
     dataset_id = request.GET.get('id')
     print(dataset_id)
@@ -489,6 +492,7 @@ def delete_dataset_vw(request):
     return redirect("/dashboard/")
 
 
+@login_required
 def download_vw(request):
     context = {
         "title": "Download Dataset",
@@ -506,6 +510,7 @@ def download_vw(request):
     return render(request, "core/download.html", context, response)
 
 
+@login_required
 def pin_dataset_vw(request):
     dataset_id = request.GET.get('id')
     dataset = Dataset.objects.filter(public_id=dataset_id).first()
@@ -520,6 +525,7 @@ def pin_dataset_vw(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def pin_item_vw(request):
     item_id = request.GET.get('id')
     item = Item.objects.filter(item_id=item_id).first()
@@ -534,6 +540,7 @@ def pin_item_vw(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     
 
+@login_required
 def remove_item_vw(request):
     item_id = request.GET.get('item')
     dataset_id = request.GET.get('dataset')
@@ -545,6 +552,7 @@ def remove_item_vw(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def tag_item_vw(request):
     tags = request.POST.get("tags")
     user_id = request.GET.get('user')
@@ -561,6 +569,7 @@ def tag_item_vw(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def unpin_dataset_vw(request):
     dataset_id = request.GET.get('id')
     dataset = Dataset.objects.filter(public_id=dataset_id).first()
@@ -575,6 +584,7 @@ def unpin_dataset_vw(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def unpin_item_vw(request):
     item_id = request.GET.get('id')
     item = Item.objects.filter(item_id=item_id).first()
