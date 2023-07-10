@@ -4,6 +4,7 @@ from django.utils import timezone
 from .managers import CustomUserManager
 from django.utils.translation import gettext_lazy as _
 import uuid
+from main.controlled_vocab import vocab
 
     
 class CustomUser(AbstractBaseUser, PermissionsMixin):
@@ -49,7 +50,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.first_name
     
     def get_affiliations(self):
-        return self.affiliation.split('|')
+        affiliations = self.affiliation.split('|||')
+        other_affiliations = []
+
+        for affiliation in affiliations:
+            if affiliation not in vocab['affiliation_type']:
+                other_affiliations.append(affiliation)
+        
+        return affiliations, other_affiliations
+
     
     def get_datasets(self):
         return Dataset.objects.filter(created_by=self).all()

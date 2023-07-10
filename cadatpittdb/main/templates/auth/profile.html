@@ -18,11 +18,7 @@
 {% endif %}
 <br/>
 <p class="contact"><strong>Pronouns:</strong> {{ person.pronouns }}</p>
-<p class="contact"><strong>Email:</strong> <a href="mailto:{{ person.email }}">{{ person.email }}</a></p>
-{% if user.website %}
-<p class="contact"><strong>Website:</strong> 
-    <a href="{{ person.website }}" target="_blank">{{ person.website }}</a></p>
-{% endif %}
+<p class="contact"><strong>Title:</strong> {{ person.title }}</p>
 <p class="contact">
     <strong>Affiliation:</strong> 
     {% if affiliations|length > 1 %}
@@ -31,10 +27,12 @@
     {% for affiliation in affiliations %}
     {{ affiliation }}<br/>
     {% endfor %}
-    {% for affiliation in other_affiliations %}
-    {{ affiliation }}<br/>
-    {% endfor %}
 </p>
+<p class="contact"><strong>Email:</strong> <a href="mailto:{{ person.email }}">{{ person.email }}</a></p>
+{% if user.website %}
+<p class="contact"><strong>Website:</strong> 
+    <a href="{{ person.website }}" target="_blank">{{ person.website }}</a></p>
+{% endif %}
 {% if user.bio %}
 <p class="contact"><strong>Bio:</strong> {% autoescape on %}{{ bio }} {% endautoescape %}</p>
 {% endif %}

@@ -44,6 +44,9 @@
       selected
       {% endif %}>{{ affiliation }}</option>
       {% endfor %}
+      {% for affiliation in other_affiliations %}
+      <option value="{{ affiliation }}" selected>{{ affiliation }}</option>
+      {% endfor %}
     </select>
 </div>
 <br/>
@@ -54,9 +57,7 @@
     class="form-control tagin" 
     id="other_affiliation" 
     name="other_affiliation"
-    {% if user.is_authenticated %}
-    value="{{ other_affiliations|join:'|' }}"
-    {% elif form %}
+    {% if not user.is_authenticated %}
     value="{{ form.other_affiliation }}"
     {% endif %}>
 </div>
