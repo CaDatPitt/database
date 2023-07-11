@@ -25,6 +25,7 @@ urlpatterns = [
     path("profile/", views.profile_vw),
     path("remove-item/", views.remove_item_vw),
     path("retrieve/", views.retrieve_vw),
+    path("search/", views.search_vw),
     path("signup/", views.signup_vw),
     path("tag-item/", views.tag_item_vw),
     path("unpin-dataset/", views.unpin_dataset_vw),

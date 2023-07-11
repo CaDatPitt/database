@@ -83,6 +83,15 @@ def help_vw(request):
         return render(request, "core/help.html", context)
     else:
         return HttpResponseNotAllowed(["POST"])
+    
+
+def search_vw(request):
+    context = {
+        "title": "Search",
+        "vocab": vocab,
+    }
+    return render(request, "core/search.html", context)
+
 
 
 """ Auth Pages """
