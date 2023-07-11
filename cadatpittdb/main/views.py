@@ -24,9 +24,6 @@ def index_vw(request):
             "vocab": vocab,
             "datasets": Dataset.objects.filter(public=True).all().order_by('-last_modified')[:4],
         }
-
-        for dataset in context['datasets']:
-            print(dataset.public_id)
         return render(request, "core/index.html", context)
     else:
         return HttpResponseNotAllowed(["POST"])
@@ -163,15 +160,12 @@ def profile_vw(request):
     }
 
     User = get_user_model()
-    user = None
+    username = request.GET.get('user')
 
-    if request.method == "GET":
-        username = request.GET.get('user')
-        user = User.objects.get(username=username)
- 
-        if not user:
-            messages.error(request, "That user does not exist!")
-            return redirect("/")
+    user = User.objects.get(username=username)
+    if not user:
+        messages.error(request, "That user does not exist!")
+        return redirect("/")
         
     if request.method == "POST":
         pronouns = request.POST.get('pronouns')
@@ -181,9 +175,6 @@ def profile_vw(request):
         website = request.POST.get('website')
         bio = request.POST.get('bio')
         photo_url = request.POST.get('photo_url')
-
-        # Format affiliation fields
-        affiliation = format_affiliation(affiliation, other_affiliation)
 
         # Update profile data
         updated = update_profile(user=request.user, pronouns=pronouns, 
@@ -444,7 +435,6 @@ def item_vw(request):
     }
     if request.method == "GET":
         item_id = request.GET.get('id')
-        print(item_id)
         item = Item.objects.filter(item_id=item_id).first()
 
         if not item:
@@ -744,10 +734,16 @@ def tag_item_vw(request):
     item_id = request.GET.get('id')
     item = Item.objects.filter(item_id=item_id).first()
 
-    if item:
-        add_tags(user=request.user, tags=tags, dataset=None, item=item)
-    else:
-        messages.error(request, "That item does not exist!")
+    if not item:
+        item = create_item(item_id=item_id, title=None, creator=None,
+                           date=None, item_type=None, thumbnail=None,
+                           collection_ids=None)
+        
+    tagged = add_tags(user=request.user, tags=tags, dataset=None, item=item)
+
+    if not tagged:
+        messages.error(request, "The item could not be tagged. \
+                       Please try again or contact us to report the issue.")
         return redirect("/")
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

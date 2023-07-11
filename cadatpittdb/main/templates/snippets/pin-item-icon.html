@@ -1,6 +1,6 @@
 {% load static %}
 {% if user.is_authenticated %}
-    {% if user in item.pinned_by.all %}
+    {% if item.item_id in user.get_pinned_item_ids  %}
     <a  href="/unpin-item/?id={{ item.item_id }}"  data-bs-toggle="tooltip" 
         data-bs-placement="top" data-bs-title="Unpin item">
         <img class="card-header-icons"

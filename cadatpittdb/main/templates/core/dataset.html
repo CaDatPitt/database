@@ -47,8 +47,13 @@
    data-bs-toggle="modal" data-bs-target="#editDatasetModal"
     href="" role="button">Edit Dataset</a>
   {% endif %}
+  {% if user in dataset.pinned_by.all %}
   <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
-    href="" role="button">Pin Dataset</a>
+    href="/unpin-dataset/?id={{ dataset.public_id }}" role="button">Unpin Dataset</a>
+  {% else %}
+  <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
+    href="/pin-dataset/?id={{ dataset.public_id }}" role="button">Pin Dataset</a>
+  {% endif %}
   <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
     href="" role="button">Download Dataset</a>
 </div>
@@ -60,7 +65,7 @@
 <div class="row gy-4">
   {% for item in dataset.items.all %}
   <div class="col-lg-6">
-    <div class="card item-card shadow-sm bg-light-gray">
+    <div class="card h-100 item-card shadow-sm bg-light-gray">
       <img src="{{ item.thumbnail }}" class="card-img-top item-thumbnail" />
       <div class="card-body">
         <div class="row">
