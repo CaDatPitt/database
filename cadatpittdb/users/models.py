@@ -147,7 +147,7 @@ class Dataset(models.Model):
     filters = models.JSONField(_('filters'), blank=True, default=dict)
     tags = models.ManyToManyField(Tag)
     creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='creator')
-    editors = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='editors', blank=True, default='')
+    editors = models.ManyToManyField(CustomUser, related_name='editor')
     date_created = models.DateTimeField(_('date created'), default=timezone.now)
     last_modified = models.DateTimeField(_('last modified'), blank=True, default=timezone.now)
     public = models.BooleanField(_('public'), default=False)
