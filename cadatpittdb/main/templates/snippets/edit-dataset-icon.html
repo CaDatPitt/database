@@ -1,0 +1,27 @@
+{% load static %}
+{% if user.is_authenticated %}
+<span data-bs-toggle="tooltip" data-bs-placement="top" 
+    data-bs-title="Edit dataset">
+    {% if user == dataset.created_by %}
+    <div class="btn-group">
+        <a role="button" data-bs-toggle="dropdown" aria-expanded="false"
+          class="dropdown-toggle"><img class="card-header-icons"
+          src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+        <ul class="dropdown-menu">
+          <li>
+            <a data-bs-toggle="modal" data-bs-target="#editDatasetModal"
+              class="dropdown-item" href="">Edit copy</a>
+          </li>
+          <li>
+            <a class="dropdown-item" 
+              href="/edit/?id={{ dataset.public_id }}">Edit original</a>
+          </li>
+        </ul>
+      </div>
+    {% else %}
+    <a data-bs-toggle="modal" data-bs-target="#editDatasetModal"
+      href="" role="button"><img class="card-header-icons"
+      src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+    {% endif %}
+</span>
+{% endif %}

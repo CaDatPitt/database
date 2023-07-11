@@ -127,6 +127,14 @@ class Item(models.Model):
     def get_types(self):
         return self.type.split('|||')
     
+    def get_tags(self):
+        print("getting tags")
+        tags = []
+        for tag in self.tags.get_all.value_list('text', flat=True):
+            tags.append(tag)
+            print(tag)
+        return tags
+    
 
 class Dataset(models.Model):
     dataset_id = models.BigAutoField(_('dataset ID'), auto_created=True, primary_key=True)
@@ -153,3 +161,11 @@ class Dataset(models.Model):
         
     def get_id(self):
         return self.dataset_id
+    
+    def get_tags(self):
+        print("getting tags")
+        tags = []
+        for tag in self.tags.values_list('text', flat=True):
+            tags.append(tag)
+            print(tag)
+        return tags

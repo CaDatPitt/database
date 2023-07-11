@@ -68,7 +68,16 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[]):
             try:
                 record = client.getRecord(metadataPrefix=metadata_prefix,
                                             identifier=id)
-                data = reformat_data(record[1].getMap())
+                data = record[1].getMap()
+                data['item_id'] = data['item_id'][0]
+                data['collection'] = []
+                collection_ids = record[0].setSpec()
+                for collection_id in collection_ids:
+                    id = collection_id.replace("pitt_", "pitt:")
+                    collection = Collection.objects.filter(collection_id=id).first()
+                    if collection:
+                        data['collection'].append((collection.title, 
+                                                collection.get_urls()[0]))
                 dataset.append(data)
             except:
                 exceptions.append(id)
@@ -84,10 +93,21 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[]):
         else:
             records = client.listRecords(metadataPrefix=metadata_prefix)
 
-        i = 0
         for record in records:
-            data = reformat_data(record[1].getMap())
-            dataset.append(data)
+            try:
+                data = record[1].getMap()
+                data['item_id'] = data['item_id'][0]
+                data['collection'] = []
+                collection_ids = record[0].setSpec()
+                for collection_id in collection_ids:
+                    id = collection_id.replace("pitt_", "pitt:")
+                    collection = Collection.objects.filter(collection_id=id).first()
+                    if collection:
+                        data['collection'].append((collection.title, 
+                                                collection.get_urls()[0]))
+                dataset.append(data)
+            except:
+                exceptions.append(id)
 
     dataset_df = pd.DataFrame.from_dict(dataset)
     
@@ -95,6 +115,27 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[]):
     dataset_df = decode_values(dataset_df)
 
     return dataset_df, exceptions
+
+
+def get_item(metadata_prefix="oai_dc", item_id=str):
+    registry = MetadataRegistry()
+    reader = pitt_oai_dc_reader
+    if metadata_prefix == 'mods':
+        pass
+    registry.registerReader(metadata_prefix, reader)
+    client = Client(URL, registry)
+    item_id = item_id.replace("pitt:", "pitt_")
+
+    try:
+        record = client.getRecord(metadataPrefix=metadata_prefix, 
+                                    identifier=item_id)
+        collection_ids = record[0].setSpec()
+        data = record[1].getMap()
+        item_record = reformat_data(data)
+        item_record['collection'] = collection_ids
+        return item_record
+    except:
+        return None
 
 
 """ Other Functions """
@@ -107,7 +148,7 @@ def add_item(dataset=Dataset, item=Item):
         return False
 
 
-def add_tags(tags=str, user=User, dataset=Dataset, item=Item):
+def add_tags(user=User, tags=str, dataset=Dataset, item=Item):
     tag_list = tags.split("|||")
 
     for tag in tag_list:
@@ -122,7 +163,7 @@ def add_tags(tags=str, user=User, dataset=Dataset, item=Item):
                 pass
 
         # Associate tag with user
-        cur_tag.created_by.add(user)
+        cur_tag.created_by.add(user.user_id)
         
         # Associate tag with dataset or item
         if dataset:
@@ -155,27 +196,45 @@ def copy_dataset(user=User, dataset=Dataset, title=str):
     
 
 def create_item(item_id=str, title=str, creator=str, date=str, item_type=str, 
-                thumbnail=str, collection_ids=str):
-    if not title:
-        try:
-            item_record = get_dataset(item_ids=[item_id])
-            title = item_record['title'].iloc[0]
-            creator = item_record['creator'].iloc[0]
-            date = item_record['date'].iloc[0]
-            item_type = item_record['type'].iloc[0]
-            thumbnail = item_record['thumbnail'].iloc[0]
-            collection_ids = item_record['collection'].iloc[0].split('|||')
-        except:
-            return None
+                thumbnail=str, collection_ids=list):
+    
+    try:
+        new_item = Item(item_id=item_id, title=title, creator=creator, date=date,
+                        type=item_type, thumbnail=thumbnail)
+        new_item.save()
 
-    # Distinguish identifier from thumbnail
+        # Associate collection(s) with item
+        for id in collection_ids:
+            collection_id = id[0].replace('_', ':')
+            collection = Collection.objects.filter(collection_id=collection_id)
+            new_item.collections.add(collection)
+        
+        return new_item
+    except:
+        return None
+
+
+def create_item_from_id(item_id=str):
+    # try:
+    print("item_id", item_id)
+    item_record = get_item(item_id=item_id)
+    title = item_record['title']
+    creator = item_record['creator']
+    date = item_record['date']
+    item_type = item_record['type']
+    thumbnail = item_record['thumbnail']
+    collection_ids = item_record['collection']
+    # except:
+    #     return None
+
     new_item = Item(item_id=item_id, title=title, creator=creator, date=date,
                     type=item_type, thumbnail=thumbnail)
     new_item.save()
 
     # Associate collection(s) with item
     for id in collection_ids:
-        collection = Collection.objects.filter(collection_id=id.replace('_', ':'))
+        collection_id = id.replace('_', ':')
+        collection = Collection.objects.filter(collection_id=collection_id)
         new_item.collections.add(collection)
 
     return new_item
@@ -186,9 +245,9 @@ def create_dataset(dataset=pd.DataFrame, title=str, description=str, tags=list,
     
     try:
         new_dataset = Dataset(title=title, description=description,
-                            search_parameters=search_parameters, 
-                            number_items=len(dataset), created_by=created_by, 
-                            public=public)
+                              search_parameters=search_parameters, 
+                              number_items=len(dataset), created_by=created_by, 
+                              public=public)
         new_dataset.save()
     except:
         return None
@@ -206,14 +265,15 @@ def create_dataset(dataset=pd.DataFrame, title=str, description=str, tags=list,
     for index, item in dataset:
         try:
             # Create item if it doesn't already exist
-            cur_item = Item.objects.filter(item_id=item['identifier']).first()
+            cur_item = Item.objects.filter(item_id=item['item_id']).first()
             if not cur_item:
-                cur_item = create_item(item_id=item['identifier'], 
+                cur_item = create_item(item_id=item['item_id'], 
                                        title=item['title'],
                                        creator=item['creator'],
                                        date=item['date'],
-                                       type=item['type'], 
-                                       thumbnail=item['identifier'])
+                                       item_type=item['type'], 
+                                       thumbnail=item['thumbnail'],
+                                       collection_ids=item['collection'])
                 
             # Save items to dataset
             add_item(new_dataset, cur_item)
@@ -508,16 +568,15 @@ def unpin_item(user=User, item=Item):
         return False
 
 
-def update_dataset(dataset=Dataset, title=str, description=str, tags=list,
-                   search_parameters=str, public=bool):
-    try:
-        dataset.title = title
-        dataset.description = description
-        dataset.search_paremeters = search_parameters
-        dataset.public = public
-        dataset.save()
-        add_tags(dataset=dataset, tags=tags)
-        return True
-    except:
-        return False
+def update_dataset(user=User, dataset=Dataset, title=str, description=str, 
+                   tags=str, public=bool):
+    # try:
+    dataset.title = title
+    dataset.description = description
+    dataset.public = public
+    dataset.save()
+    add_tags(user=user, dataset=dataset, tags=tags)
+    return True
+    # except:
+    #     return False
 

@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="{% static 'main.css' %}">
 <link rel="stylesheet" href="{% static 'tagin/dist/tagin.min.css' %}" />
 {% endblock%}
-{% block navbar_retrieve %}class="nav-link active"{% endblock %}
 {% block content %}
 
 <!-- First Section-->
@@ -24,13 +23,18 @@
               class="form-control" 
               id="title" 
               name="title"
+              value="{{ dataset.title }}"
               required>
           </div>
         </div>
         <div class="col-12 col-md-6">
           <div class="form-group">
             <label for="title" class="bold">Tags</label>
-            <input type="text" name="tags" class="form-control tagin" />
+            <input 
+              class="form-control tagin"
+              type="text" 
+              name="tags"
+              value="{{ dataset.get_tags|join:'|||'}}">
           </div>
         </div>
         <div class="col-12">
@@ -43,7 +47,7 @@
               name="description"
               rows="3"
               placeholder="Markdown-enabled field"
-              ></textarea>
+              >{{ dataset.description }}</textarea>
           </div>
         </div>
         <div class="col-12">
@@ -56,7 +60,7 @@
               class="form-check-input" 
               id="public"
               name="public"
-              value=True>
+              {% if dataset.public %}checked{% endif %}>
           </div>
         </div>
       </div>

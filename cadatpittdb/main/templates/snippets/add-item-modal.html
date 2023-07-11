@@ -10,7 +10,8 @@
       <div class="modal-body">
         <!-- Create Dataset Form -->
         <div id="create_dataset_form">
-          <form method="POST" action="/add-item/id={{ item_id }}">
+          <form method="POST" action="/add-item/?id={{ item.item_id }}">
+            {% csrf_token %}
             <div class="form-group">
               <label for="inquiry_type" class="bold">Dataset
               <span class="required-field">*</span>

@@ -1,6 +1,7 @@
 {% load static %}
 {% if user.is_authenticated %}
-<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add item">
+<span data-bs-toggle="tooltip" data-bs-placement="top" 
+  data-bs-title="Add item to dataset">
     <a data-bs-toggle="modal" data-bs-target="#add{{ item.item_id }}"
       role="button" href=""><img class="card-header-icons"
       src="{% static 'images/add_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>

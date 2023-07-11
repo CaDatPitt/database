@@ -3,6 +3,7 @@
 {% block title %}{{ title }}{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="{% static 'main.css' %}">
+<link rel="stylesheet" href="{% static 'tagin/dist/tagin.min.css' %}" />
 {% endblock%}
 {% block navbar_retrieve %}class="nav-link active"{% endblock %}
 {% block content %}
@@ -13,15 +14,18 @@
 
 <!-- Dataset Action Buttons -->
 {% if not dataset.empty %}
-<div class="d-grid gap-2 d-md-flex justify-content-center justify-content-md-start">
+<div class="d-grid gap-2 d-lg-flex justify-content-center justify-content-lg-start">
+    <a class="btn btn-primary bg-pitt-royal border-pitt-royal" role="button"
+      href="/retrieve/" style="width: 10em;">Start Over</a>
+    <!-- <a class="btn btn-primary bg-pitt-royal border-pitt-royal" role="button"
+    data-bs-toggle="modal" data-bs-target="#createDatasetModal"
+    href="">Modify Search</a> -->
     <a class="btn btn-primary bg-pitt-royal border-pitt-royal" role="button"
     data-bs-toggle="modal" data-bs-target="#createDatasetModal"
-    href="">Modify Search</a>
+    href="" style="width: 10em;">Save Results</a>
     <a class="btn btn-primary bg-pitt-royal border-pitt-royal" role="button"
     data-bs-toggle="modal" data-bs-target="#createDatasetModal"
-    href="">Save Search</a>
-    <a class="btn btn-primary bg-pitt-royal border-pitt-royal" role="button"
-    data-bs-toggle="modal" data-bs-target="#createDatasetModal">Create Dataset</a>
+    style="width: 10em;">Create Dataset</a>
 </div>
 {% endif %}
 <hr/>
@@ -183,30 +187,32 @@
     {% if num_results > 0 %}
     <p><em>{{ num_results }} results</em></p>
     <div class="row gy-4">
-      {% for index, result in dataset.iterrows %}
+      {% for index, item in dataset.iterrows %}
       <div class="col-12">
         <div class="card item-card shadow-sm bg-light-gray">
-          <img src="{{ result.thumbnail }}" class="card-img-top item-thumbnail" />
+          <img src="{{ item.thumbnail.0 }}" class="card-img-top item-thumbnail" />
           <div class="card-body">
             <div class="row border-bottom mb-2 pb-2">
               <div class="col text-end">
-                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
-                  data-bs-title="Pin dataset"><img class="card-header-icons"
-                  src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
-                  data-bs-title="Edit dataset"><img class="card-header-icons"
-                  src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+                {% include 'snippets/pin-item-icon.html' %}
+                <!--{% include 'snippets/tag-item-icon.html' %}-->
+                {% include 'snippets/add-item-icon.html' %}
               </div>
             </div>
             <a target="_blank" 
-              href="https://digital.library.pitt.edu/islandora/object/{{ result.identifier }}">
-              <h5 class="card-title">{{ result.title }}</h5>
+              href="https://digital.library.pitt.edu/islandora/object/{{ item.item_id }}">
+              <h5 class="card-title">{{ item.title|join:", " }}</h5>
             </a>
             <p class="mb-0">
-              <strong>Creator</strong>: {{ result.creator }}<br/>
-              <strong>Date</strong>: {{ result.date }}<br/>
-              <strong>Type</strong>: {{ result.type }}
-              <strong>Collections</strong>: {{ result.collection }}<br/>
+              <strong>Creator</strong>: {{ item.creator|join:", " }}<br/>
+              <strong>Date</strong>: {{ item.date|join:", " }}<br/>
+              <strong>Type</strong>: {{ item.type|join:", " }}<br/>
+              <strong>Collection</strong>: 
+              {% for collection in item.collection %}
+              <br/>
+              <a target="_blank" 
+                href="{{ collection.1 }}">{{ collection.0 }}</a>
+              {% endfor %}
             </p>
           </div>
         </div>
@@ -241,6 +247,13 @@
         </div>
     </div>
 </div>
+
+<!-- Add/Tag Item Modals -->
+{% for index, item in dataset.iterrows %}
+  {% include 'snippets/add-item-modal.html' %}
+  <!-- {% include 'snippets/tag-item-modal.html' %} -->
+{% endfor %}
+
 {% endblock %}
 
 {% block scripts %}
@@ -258,7 +271,7 @@
   duplicate: false,
   enter: true,
   transform: 'input => input',
-  placeholder: 'Type tag name and press Enter/Return too add'
+  placeholder: 'Type tag name and press Enter/Return to add'
   })
 </script>
 {% endblock %}

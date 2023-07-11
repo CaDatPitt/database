@@ -1,0 +1,14 @@
+{% load static %}
+{% if user.is_authenticated %}
+    {% if user in dataset.pinned_by.all %}
+    <a  href="/unpin-dataset/?id={{ dataset.public_id }}"  data-bs-toggle="tooltip" 
+        data-bs-placement="top" data-bs-title="Unpin dataset">
+        <img class="card-header-icons"
+            src="{% static 'images/push_pin_w_strike_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+    {% else %}
+    <a href="/pin-dataset/?id={{ dataset.public_id }}" data-bs-toggle="tooltip" 
+        data-bs-placement="top" data-bs-title="Pin dataset">
+        <img class="card-header-icons" 
+        src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+    {% endif %}
+{% endif %}

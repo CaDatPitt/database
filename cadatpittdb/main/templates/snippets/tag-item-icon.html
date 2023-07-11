@@ -1,7 +1,9 @@
 {% load static %}
 {% if user.is_authenticated %}
-    <a  href="/tag-item/?id={{ item.item_id }}"  data-bs-toggle="tooltip" 
-        data-bs-placement="top" data-bs-title="Tag item">
-        <img class="card-header-icons"
-            src="{% static 'images/tag_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+<span data-bs-toggle="tooltip" data-bs-placement="top" 
+    data-bs-title="Tag item">
+    <a data-bs-toggle="modal" data-bs-target="#tag{{ item.item_id }}"
+        role="button" href=""><img class="card-header-icons"
+        src="{% static 'images/tag_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+</span>
 {% endif %}
