@@ -111,10 +111,13 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[]):
                     collection = Collection.objects.filter(collection_id=id).first()
                     if collection:
                         data['collection'].append((collection.title, 
-                                                collection.get_urls()[0]))
+                                                   collection.get_urls()[0]))
+                    else:
+                        exceptions.append("collection %s was not found" % id)
                 dataset.append(data)
             except:
-                exceptions.append(id)
+                exceptions.append("item %s was not processed successfully" 
+                                  % data['item_id'][0])
 
     dataset_df = pd.DataFrame.from_dict(dataset)
     
@@ -205,19 +208,19 @@ def copy_dataset(user=User, dataset=Dataset, title=str):
 def create_item(item_id=str, title=str, creator=str, date=str, item_type=str, 
                 thumbnail=str, collections=list):
     
-    # try:
-    new_item = Item(item_id=item_id, title=title, creator=creator, date=date,
-                    type=item_type, thumbnail=thumbnail)
-    new_item.save()
+    try:
+        new_item = Item(item_id=item_id, title=title, creator=creator, date=date,
+                        type=item_type, thumbnail=thumbnail)
+        new_item.save()
 
-    # Associate collection(s) with item
-    for title in collections:
-        collection = Collection.objects.filter(title=title).first()
-        new_item.collections.add(collection)
-    
-    return new_item
-    # except:
-    #     return None
+        # Associate collection(s) with item
+        for title in collections:
+            collection = Collection.objects.filter(title=title).first()
+            new_item.collections.add(collection)
+        
+        return new_item
+    except:
+        return None
 
 
 def create_item_from_id(item_id=str):
@@ -241,7 +244,6 @@ def create_item_from_id(item_id=str):
     # Associate collection(s) with item
     for id in collection_ids:
         collection_id = id.replace('_', ':')
-        print(collection_id)
         collection = Collection.objects.filter(collection_id=collection_id).first()
         new_item.collections.add(collection)
 
@@ -256,36 +258,28 @@ def create_dataset(dataset=dict, title=str, description=str, tags=list,
         new_dataset.save()
     except:
         return None
-
-    """
-    Traceback (most recent call last):
-    File test.py", line 15, in <module>
-        create_dataset(dataset=dataset, title="Test Dataset",
-    File "\main\datasets.py", line 154, in create_dataset
-        for index, item in dataset:
-    ValueError: too many values to unpack (expected 2)
-    """
     
-    # Add items
+    # Add items and log exceptions
+    exceptions = []
     for record in dataset:
         item = reformat_data(record)
-        # try:
-        # Create item if it doesn't already exist
-        cur_item = Item.objects.filter(item_id=item['item_id']).first()
-        if not cur_item:
-            cur_item = create_item(item_id=item['item_id'], 
-                                    title=item['title'],
-                                    creator=item['creator'],
-                                    date=item['date'],
-                                    item_type=item['type'], 
-                                    thumbnail=item['thumbnail'],
-                                    collections=item['collection'])
-            
-        # Save items to dataset
-        add_item(new_dataset, cur_item)
-        # except:
-        #     # Do something with exceptions?
-        #     pass
+        try:
+            # Create item if it doesn't already exist
+            cur_item = Item.objects.filter(item_id=item['item_id']).first()
+            if not cur_item:
+                cur_item = create_item(item_id=item['item_id'], 
+                                        title=item['title'],
+                                        creator=item['creator'],
+                                        date=item['date'],
+                                        item_type=item['type'], 
+                                        thumbnail=item['thumbnail'],
+                                        collections=item['collection'])
+                
+            # Save items to dataset
+            add_item(new_dataset, cur_item)
+        except:
+            # Do something with exceptions?
+            exceptions.append(item)
 
     # Add tags
     add_tags(user=creator, tags=tags, dataset=new_dataset)
@@ -576,13 +570,13 @@ def unpin_item(user=User, item=Item):
 
 def update_dataset(user=User, dataset=Dataset, title=str, description=str, 
                    tags=str, public=bool):
-    # try:
-    dataset.title = title
-    dataset.description = description
-    dataset.public = public
-    dataset.save()
-    add_tags(user=user, dataset=dataset, tags=tags)
-    return True
-    # except:
-    #     return False
+    try:
+        dataset.title = title
+        dataset.description = description
+        dataset.public = public
+        dataset.save()
+        add_tags(user=user, dataset=dataset, tags=tags)
+        return True
+    except:
+        return False
 
