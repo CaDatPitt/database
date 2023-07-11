@@ -40,24 +40,24 @@
     <!--My Datasets, Pinned Datasets, Saved Searches section-->
     <div class="card shadow-sm bg-light-gray mt-4">
       <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs" role="tablist">
+        <ul class="nav nav-tabs card-header-tabs" role="tablist" id="dashboard-list">
           <li class="nav-item">
-            <a class="nav-link active" role="tab">My Datasets</a>
+            <a class="nav-link active" href="#mydatasets" role="tab" aria-controls="mydatasets" aria-selected="true">My Datasets</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#deals" role="tab">Saved Searches</a>
+            <a class="nav-link" href="#savedsearches" role="tab" aria-controls="savedsearches" aria-selected="false">Saved Searches</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link"  href="#history" role="tab">Pinned Datasets</a>
+            <a class="nav-link"  href="#pinneddatasets" role="tab" aria-controls="pinneddatasets" aria-selected="false">Pinned Datasets</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#deals" role="tab">Pinned Items</a>
+            <a class="nav-link" href="#pinneditems" role="tab" aria-controls="pinneditems" aria-selected="false">Pinned Items</a>
           </li>
         </ul>
       </div>
       <div class="card-body">
-        <div class="tab-content">
-          <div class="tab-pane active" id="description" role="tabpanel">
+        <div class="tab-content mt-3">
+          <div class="tab-pane active" id="mydatasets" role="tabpanel" aria-labelledby="mydatasets-tab">
 
             <!--My Datasets-->
             <ul class="list-group">
@@ -113,15 +113,15 @@
           </div>
 
           <!--Saved Searches-->
-          <div class="tab-pane" id="saved-searches" role="tabpanel" aria-labelledby="saved-searches-tab">
+          <div class="tab-pane" id="savedsearches" role="tabpanel" aria-labelledby="saved-searches-tab">
           </div>
 
             <!--Pinned Datasets-->
-          <div class="tab-pane" id="pinned-datasets" role="tabpanel" aria-labelledby="pinned-datasets-tab">
+          <div class="tab-pane" id="pinneddatasets" role="tabpanel" aria-labelledby="pinned-datasets-tab">
           </div>
 
             <!--Pinned Items -->
-          <div class="tab-pane" id="pinned-items" role="tabpanel" aria-labelledby="pinned-items-tab">
+          <div class="tab-pane" id="pinneditems" role="tabpanel" aria-labelledby="pinned-items-tab">
           </div>
         </div>
       </div>
@@ -152,6 +152,32 @@
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
   })
+</script>
+<script src="https://getbootstrap.com/docs/5.0/components/navs-tabs/"></script>
+
+<!--Tabbed card movement-->
+<script src="https://getbootstrap.com/docs/5.0/components/navs-tabs/#via-javascript"></script>
+<script>
+  var triggerTabList = [].slice.call(document.querySelectorAll('#dashboard-list a'))
+  triggerTabList.forEach(function (triggerEl) {
+    var tabTrigger = new bootstrap.Tab(triggerEl)
+
+    triggerEl.addEventListener('click', function (event) {
+      event.preventDefault()
+      tabTrigger.show()
+    })
+  })
+  var triggerEl = document.querySelector('#dashboard-list a[href="#mydatasets"]')
+  bootstrap.Tab.getInstance(triggerEl).show()
+
+  var triggerEl = document.querySelector('#dashboard-list a[href="#savedsearches"]')
+  bootstrap.Tab.getInstance(triggerEl).show()
+
+  var triggerEl = document.querySelector('#dashboard-list a[href="#pinneddatasets"]')
+  bootstrap.Tab.getInstance(triggerEl).show()
+
+  var triggerEl = document.querySelector('#dashboard-list a[href="#pinneditems"]')
+  bootstrap.Tab.getInstance(triggerEl).show()
 </script>
 {% endblock %}
 {% block bootstrapjs %}
