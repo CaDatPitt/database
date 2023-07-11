@@ -3,7 +3,7 @@
 <span data-bs-toggle="tooltip" data-bs-placement="top" 
     data-bs-title="Delete dataset">
     {% if user == dataset.creator %}
-    <a data-bs-toggle="modal" data-bs-target="#deleteDatasetModal"
+    <a data-bs-toggle="modal" data-bs-target="#delete{{ dataset.public_id }}"
       href="" role="button"><img class="card-header-icons"
       src="{% static 'images/delete_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
     {% endif %}

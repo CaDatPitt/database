@@ -178,8 +178,10 @@ def add_tags(user=User, tags=str, dataset=Dataset, item=Item):
         # Associate tag with dataset or item
         if dataset:
             dataset.tags.add(cur_tag)
+            dataset.save()
         else:
             item.tags.add(cur_tag)
+            item.save()
 
 
 def copy_dataset(user=User, dataset=Dataset, title=str):
@@ -483,10 +485,13 @@ def filter_datasets(request, keywords=str, title=str, creator=str,
     return results
 
 
-def delete_dataset(dataset=Dataset):
+def delete_dataset(dataset_id=str):
     try:
-        dataset.delete()
-        return True
+        deleted = Dataset.objects.filter(public_id=dataset_id).delete()
+        if deleted:
+            return True
+        else:
+            return False
     except:
         return False
 
@@ -503,6 +508,7 @@ def download_dataset(request, dataset):
 def pin_dataset(user=User, dataset=Dataset):
     try:
         dataset.pinned_by.add(user)
+        dataset.save()
         return True
     except:
         return False
@@ -511,6 +517,7 @@ def pin_dataset(user=User, dataset=Dataset):
 def pin_item(user=User, item=Item):
     try:
         item.pinned_by.add(user)
+        item.save()
         return True
     except:
         return False
@@ -518,7 +525,8 @@ def pin_item(user=User, item=Item):
 
 def remove_item(dataset=Dataset, item=Item):
     try:
-        item.datasets.remove(dataset)
+        dataset.items.remove(item)
+        dataset.save()
         return True
     except:
         return False
@@ -529,8 +537,10 @@ def remove_tag(tag=str, dataset=Dataset, item=Item):
     try:
         if dataset:
             dataset.tags.remove(tag)
+            dataset.save()
         else:
             item.tags.remove(tag)
+            item.save()
         return True
     except:
         return False

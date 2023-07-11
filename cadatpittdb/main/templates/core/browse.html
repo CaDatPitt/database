@@ -195,6 +195,7 @@
     <!--Dataset Cards-->
     <div class="col-md col-lg-8">
         <h5 align="left">Datasets</h5>
+        <p><em>{{ datasets|length }} datasets</em></p>
         <div class="row gy-4">
             {% for dataset in datasets %}
             <div class="col-sm-12">
@@ -207,20 +208,17 @@
                                 >{{ dataset.creator }}</a>
                             </div>
                             <div class="col-3 text-end">
-                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                                    data-bs-title="Pin dataset"><img class="card-header-icons"
-                                    src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                                    data-bs-title="Edit dataset"><img class="card-header-icons"
-                                    src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+                                {% include 'snippets/pin-dataset-icon.html' %}
+                                {% include 'snippets/tag-dataset-icon.html' %}
+                                {% include 'snippets/edit-dataset-icon.html' %}
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <a href="/dataset?id={{ dataset.public_id }}">
-                            <h6 class="card-title">{{ dataset.title }}</h6>
-                        </a>
-                        <h* class="card-subtitle">{{ dataset.description }}</h*>
+                        <h6 class="card-title">
+                            <a href="/dataset?id={{ dataset.public_id }}">{{ dataset.title }}</a>
+                        </h6>
+                        <h* class="card-subtitle">{{ dataset.description|truncatewords:50 }}</h*>
                         <p class="card-text mt-2"><strong># of items</strong>: 
                             {{ dataset.number_items }}<br/>
                         <strong>Last modified</strong>: {{ dataset.last_modified }}
@@ -232,6 +230,13 @@
         </div>
     </div>
 </div>
+
+<!-- Dataset Modoals -->
+{% for dataset in datasets %}
+  {% include 'snippets/tag-dataset-modal.html' %}
+  {% include 'snippets/edit-dataset-modal.html' %}
+{% endfor %}
+
 {% endblock %}
 
 {% block scripts %}
