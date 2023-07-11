@@ -269,7 +269,7 @@ def signup_vw(request):
             context['form'] = {'first_name': first_name, 'last_name': last_name,
                                'username': username, 'email': email, 
                                'pronouns': pronouns, 'title': title, 
-                               'affiliations': affiliations, 
+                               'affiliations': affiliation, 
                                'other_affiliation': other_affiliation,
                                'website': website, 'bio': bio, 
                                'photo_url': photo_url, 'password': password}            

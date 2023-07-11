@@ -19,6 +19,12 @@ body {
   .btn-action {
     width: 10em;
   }
+
+  .btn-xs {
+    --bs-btn-padding-y: .1em; 
+    --bs-btn-padding-x: .5em; 
+    --bs-btn-font-size: .75em;
+  }
   
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",

@@ -63,6 +63,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def get_datasets(self):
         return Dataset.objects.filter(creator=self).all()
     
+    def get_saved_results(self):
+        return Dataset.objects.filter(creator=self, title='').all()
+    
+    def get_pinned_datasets(self):
+        return Dataset.objects.filter(pinned_by=self).all()
+    
+    def get_pinned_items(self):
+        return Item.objects.filter(pinned_by=self).all()
+    
 
 class Collection(models.Model):
     collection_id = models.CharField(_('collection ID'), max_length=200, primary_key=True)
@@ -123,6 +132,9 @@ class Item(models.Model):
     
     def get_id(self):
         return self.item_id
+    
+    def get_datasets(self):
+        return Dataset.objects.filter(items=self).all()
     
     def get_types(self):
         return self.type.split('|||')
