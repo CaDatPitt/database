@@ -18,7 +18,7 @@ def format_affiliation(affiliations=[], other_affiliation=''):
 
 
 def get_user_datasets(user=User):
-    datasets = Dataset.objects.filter(created_by=user).all()
+    datasets = Dataset.objects.filter(creator=user).all()
     return datasets
 
 
@@ -65,7 +65,7 @@ def get_rights(rights_input=list) -> list:
 
 def get_creators():
     User = get_user_model()
-    users = Dataset.objects.all().values_list('created_by', flat=True)
+    users = Dataset.objects.all().values_list('creator', flat=True)
     user_list = []
     
     for user in users:

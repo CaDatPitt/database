@@ -2,9 +2,8 @@
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.core.files.temp import NamedTemporaryFile
-from django.http import HttpResponseRedirect, HttpResponseNotAllowed
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
 from wsgiref.util import FileWrapper
-from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
@@ -312,7 +311,7 @@ def browse_vw(request):
     if request.method == "POST":
         keywords = request.POST.get("keywords")
         title = request.POST.get("title")
-        created_by = request.POST.get("created_by")
+        creator = request.POST.get("creator")
         description = request.POST.get("description")
         tags = request.POST.get("tags")
         min_num_items = request.POST.get("min_num_items")   
@@ -328,6 +327,7 @@ def browse_vw(request):
 @login_required
 def create_vw(request):
     if request.method == "POST":
+        # Get data from form
         title = request.POST.get("title")
         description = request.POST.get("description")
         tags = request.POST.get("tags")
@@ -336,12 +336,33 @@ def create_vw(request):
             public = True
         else:
             public = False
-        
-        dataset = create_dataset(title=title, description=description, tags=tags, 
-                                created_by=request.user, public=public)
 
+        # Get data from session
+        dataset = request.session.get('dataset')
+        filters = request.session.get('filters')
+        if not dataset:
+            messages.error(request, "No dataset was given. You must first \
+                           retrieve data before attempting to create a dataset.")
+        if not filters:
+            filters = {}
+        new_dataset = create_dataset(dataset=dataset, title=title, 
+                                     description=description, tags=tags, 
+                                     filters=filters, creator=request.user, 
+                                     public=public)
         
-    return redirect(f"/dataset/?id={ dataset.public_id }")
+        if new_dataset:
+            # Remove session variables
+            del request.session['dataset']
+            if filters:
+                del request.session['filters']
+            request.session.modified = True
+            return redirect(f"/dataset/?id={ new_dataset.public_id }")
+        else:
+            # Send request again using info about dataset?
+            messages.error(request, "Item could not be added. Please try \
+                               again or contact us to report the issue.")
+            return redirect("/retrieve/")
+        
 
 
 def dataset_vw(request):
@@ -375,7 +396,7 @@ def edit_vw(request):
 
     if request.method == "POST": 
         # Verify user can modify dataset
-        if not verify_user(request, dataset.created_by):
+        if not verify_user(request, dataset.creator):
             messages.error(request, 'You do not have permission to directly edit \
                            this dataset. Click the "Edit Dataset" button to \
                            edit a copy of this dataset.')
@@ -428,7 +449,6 @@ def retrieve_vw(request):
         "vocab": vocab,
         "show_results": False,
         "collections": Collection.objects.all(),
-        "dataset": pd.DataFrame(),
         "rights": vocab['rights']
     }
 
@@ -453,13 +473,23 @@ def retrieve_vw(request):
             coverage = request.POST.get("coverage")
             copyright = request.POST.getlist("copyright")
 
-            dataset = filter_dataset(keywords=keywords, title=title, 
+            dataset, dataset_df = filter_dataset(keywords=keywords, title=title, 
                                      creator=creator, contributor=contributor,
                                      publisher=publisher, depositor=depositor,
                                      start_year=start_year, end_year=end_year, 
                                      language=language, description=description,
                                      item_type=item_type, subject=subject, 
                                      coverage=coverage, copyright=copyright)
+                        
+            request.session['filters'] = {
+                'keywords': keywords, 'title': title, 'creator': creator,  
+                'contributor':contributor, 'publisher': publisher, 
+                'depositor': depositor,  'start_year': start_year, 
+                'end_year': end_year, 'language': language, 
+                'description': description, 'item_type': item_type, 
+                'subject': subject, 'coverage': coverage, 'copyright': copyright
+            }
+
         else:
             # Get form input
             retrieval_method = request.GET.get("retrieval_method")
@@ -479,7 +509,7 @@ def retrieve_vw(request):
                     try:
                         df = pd.read_csv(csv_file)
                         item_ids = df.iloc[:, 0].values.tolist()
-                        dataset, exceptions = get_dataset(item_ids=item_ids)
+                        dataset, dataset_df, exceptions = get_dataset(item_ids=item_ids)
 
                         if exceptions:
                             # Do something with them
@@ -493,17 +523,20 @@ def retrieve_vw(request):
                                        uploaded. Please try again or contact \
                                        us to report the issue.')
             elif retrieval_method == 'collections':
-                dataset, exceptions = get_dataset(collections=collections)
+                dataset, dataset_df, exceptions = get_dataset(collections=collections)
             else:
                 messages.error(request, "You must either paste a list of \
                                 item identifiers (each on a separate line) \
                                 or upload a CSV file with a list of item \
                                 identifiers.")
                 
-            if not dataset.empty:
-                # Add dataset to context
-                context['dataset'] = dataset
-                context['num_results'] = dataset.shape[0]
+            if dataset:
+                # Add dataset to session and context
+                request.session['dataset'] = dataset
+                context['dataset'] = dataset_df
+
+                # Add dataset info to context
+                context['num_results'] = dataset_df.shape[0]
 
                 # Toggle to display results
                 context['show_results'] = True
@@ -527,7 +560,7 @@ def add_item_vw(request):
         dataset = Dataset.objects.filter(title=dataset_title).first()
 
     if dataset:
-        if not verify_user(request, dataset.created_by):
+        if not verify_user(request, dataset.creator):
             messages.error(request, 'You do not have permission to directly edit \
                            this dataset. Click the "Edit Dataset" button to \
                            edit a copy of this dataset.')
@@ -576,7 +609,7 @@ def delete_dataset_vw(request):
 
     if dataset:
         # Verify user has permission to delete dataset
-        if verify_user(request, dataset.created_by):
+        if verify_user(request, dataset.creator):
             messages.error(request, 'You do not have permission to directly edit \
                            this dataset. Click the "Edit Dataset" button to \
                            edit a copy of this dataset.')
@@ -651,7 +684,7 @@ def remove_item_vw(request):
 
     if item:
         if dataset:
-            if verify_user(request, dataset.created_by):
+            if verify_user(request, dataset.creator):
                 messages.error(request, 'You do not have permission to directly \
                                edit this dataset. Click the "Edit Dataset" \
                                button to edit a copy of this dataset.')

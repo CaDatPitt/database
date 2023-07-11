@@ -16,7 +16,7 @@ body {
     font-weight: bold;
   }
 
-  a.jumbotron {
+  .btn-action {
     width: 10em;
   }
   

@@ -61,7 +61,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     
     def get_datasets(self):
-        return Dataset.objects.filter(created_by=self).all()
+        return Dataset.objects.filter(creator=self).all()
     
 
 class Collection(models.Model):
@@ -88,7 +88,7 @@ class Collection(models.Model):
 class Tag(models.Model):
     tag_id = models.BigAutoField(_('tag ID'), auto_created=True, primary_key=True)
     text = models.CharField(_('tag'), max_length=50, blank=True, default='')
-    created_by = models.ManyToManyField(CustomUser)
+    creator = models.ManyToManyField(CustomUser)
     date_created = models.DateTimeField(_('date created'), default=timezone.now)
 
     class Meta:
@@ -144,9 +144,10 @@ class Dataset(models.Model):
     removed_items = models.ManyToManyField(Item, related_name='removed_items')
     description = models.CharField(_('description'), max_length=5000, blank=True, default='')
     tags = models.CharField(_('tags'), max_length=500, blank=True, default='')
-    search_parameters = models.JSONField(_('search parameters'), blank=True, default=dict)
+    filters = models.JSONField(_('filters'), blank=True, default=dict)
     tags = models.ManyToManyField(Tag)
-    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='creator')
+    creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='creator')
+    editors = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='editors', blank=True, default='')
     date_created = models.DateTimeField(_('date created'), default=timezone.now)
     last_modified = models.DateTimeField(_('last modified'), blank=True, default=timezone.now)
     public = models.BooleanField(_('public'), default=False)

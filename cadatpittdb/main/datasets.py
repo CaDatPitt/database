@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib import messages
+from django.http import HttpRequest
 from oaipmh.client import Client
 from oaipmh.metadata import MetadataRegistry, oai_dc_reader
 from eldar import Query
@@ -114,7 +115,7 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[]):
     # decode encoded columns
     dataset_df = decode_values(dataset_df)
 
-    return dataset_df, exceptions
+    return dataset, dataset_df, exceptions
 
 
 def get_item(metadata_prefix="oai_dc", item_id=str):
@@ -163,7 +164,7 @@ def add_tags(user=User, tags=str, dataset=Dataset, item=Item):
                 pass
 
         # Associate tag with user
-        cur_tag.created_by.add(user.user_id)
+        cur_tag.creator.add(user.user_id)
         
         # Associate tag with dataset or item
         if dataset:
@@ -180,7 +181,7 @@ def copy_dataset(user=User, dataset=Dataset, title=str):
         dataset.pk = None
         dataset.public_id = str(uuid4())
         dataset.title = title
-        dataset.created_by = user
+        dataset.creator = user
         dataset.date_created = datetime.now()
         dataset.last_modified = datetime.now()
         dataset._state.adding = True
@@ -198,20 +199,20 @@ def copy_dataset(user=User, dataset=Dataset, title=str):
 def create_item(item_id=str, title=str, creator=str, date=str, item_type=str, 
                 thumbnail=str, collection_ids=list):
     
-    try:
-        new_item = Item(item_id=item_id, title=title, creator=creator, date=date,
-                        type=item_type, thumbnail=thumbnail)
-        new_item.save()
+    # try:
+    new_item = Item(item_id=item_id, title=title, creator=creator, date=date,
+                    type=item_type, thumbnail=thumbnail)
+    new_item.save()
 
-        # Associate collection(s) with item
-        for id in collection_ids:
-            collection_id = id[0].replace('_', ':')
-            collection = Collection.objects.filter(collection_id=collection_id)
-            new_item.collections.add(collection)
-        
-        return new_item
-    except:
-        return None
+    # Associate collection(s) with item
+    for id in collection_ids:
+        collection_id = id[0].replace('_', ':')
+        collection = Collection.objects.filter(collection_id=collection_id)
+        new_item.collections.add(collection)
+    
+    return new_item
+    # except:
+    #     return None
 
 
 def create_item_from_id(item_id=str):
@@ -240,14 +241,12 @@ def create_item_from_id(item_id=str):
     return new_item
 
 
-def create_dataset(dataset=pd.DataFrame, title=str, description=str, tags=list,
-                   search_parameters=dict, created_by=str, public=bool):
-    
+def create_dataset(dataset=dict, title=str, description=str, tags=list,
+                   filters=dict, creator=str, public=bool):
+    dataset_df = pd.DataFrame.from_dict(dataset)
     try:
         new_dataset = Dataset(title=title, description=description,
-                              search_parameters=search_parameters, 
-                              number_items=len(dataset), created_by=created_by, 
-                              public=public)
+                              filters=filters, creator=creator, public=public)
         new_dataset.save()
     except:
         return None
@@ -262,7 +261,7 @@ def create_dataset(dataset=pd.DataFrame, title=str, description=str, tags=list,
     """
     
     # Add items
-    for index, item in dataset:
+    for index, item in dataset_df:
         try:
             # Create item if it doesn't already exist
             cur_item = Item.objects.filter(item_id=item['item_id']).first()
@@ -287,18 +286,18 @@ def create_dataset(dataset=pd.DataFrame, title=str, description=str, tags=list,
     return new_dataset
 
 
-def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str, 
+def filter_dataset(request=HttpRequest, dataset=pd.DataFrame, keywords=str, title=str, 
                    creator=str, contributor=str, publisher=str, depositor=str, 
                    start_year=str, end_year=str, language=str, description=str, 
                    item_type=str, subject=str, coverage=str, rights=list):
     filtered_dataset = dataset
-    search_parameters = {}
+    filters = {}
 
     if title:
         try:
             query = Query(title)
             filtered_dataset = filtered_dataset[filtered_dataset.title.apply(query)]
-            search_parameters['title'] = title
+            filters['title'] = title
         except:
             messages.error(request, "'Title' filter could not be applied. \
                            Make sure that your expression is correct.")
@@ -306,7 +305,7 @@ def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str,
         try:
             query = Query(creator)
             filtered_dataset = filtered_dataset[filtered_dataset.creator.apply(query)]
-            search_parameters['creator'] = creator
+            filters['creator'] = creator
         except:
             messages.error(request, "'Creator' filter could not be applied. \
                            Make sure that your expression is correct.")
@@ -314,7 +313,7 @@ def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str,
         try:
             query = Query(contributor)
             filtered_dataset = filtered_dataset[filtered_dataset.contributor.apply(query)]
-            search_parameters['contributor'] = contributor
+            filters['contributor'] = contributor
         except:
             messages.error(request, "'Contributor' filter could not be applied. \
                            Make sure that your expression is correct.")
@@ -322,7 +321,7 @@ def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str,
         try:
             query = Query(publisher)
             filtered_dataset = filtered_dataset[filtered_dataset.publisher.apply(query)]
-            search_parameters['publisher'] = publisher
+            filters['publisher'] = publisher
         except:
             messages.error(request, "'Publisher' filter could not be applied. \
                            Make sure that your expression is correct.")
@@ -330,7 +329,7 @@ def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str,
         try:
             query = Query(depositor)
             filtered_dataset = filtered_dataset[filtered_dataset.depositor.apply(query)]
-            search_parameters['depositor'] = depositor
+            filters['depositor'] = depositor
         except:
             messages.error(request, "'Depositor' filter could not be applied. \
                            Make sure that your expression is correct.")
@@ -340,7 +339,7 @@ def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str,
             filtered_dataset = filtered_dataset[
                 filtered_dataset['date'][:4].astype(int) >= start_year
                 ]
-            search_parameters['start_year'] = start_year
+            filters['start_year'] = start_year
         except:
             messages.error(request, "'Start Date' filter could not be applied.\
                            This is likely an issue with the data.")
@@ -350,7 +349,7 @@ def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str,
             filtered_dataset = filtered_dataset[
                 filtered_dataset['date'][:4].astype(int) <= end_year
                 ]
-            search_parameters['end_year'] = end_year
+            filters['end_year'] = end_year
         except:
             messages.error(request, "'End Date' filter could not be applied.\
                            This is likely an issue with the data.")
@@ -358,7 +357,7 @@ def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str,
         try:
             query = Query(language)
             filtered_dataset = filtered_dataset[filtered_dataset.language.apply(query)]
-            search_parameters['language'] = language
+            filters['language'] = language
         except:
             messages.error(request, "'Language' filter could not be applied. \
                            Make sure that your expression is correct.")
@@ -366,7 +365,7 @@ def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str,
         try:
             query = Query(description)
             filtered_dataset = filtered_dataset[filtered_dataset.description.apply(query)]
-            search_parameters['description'] = description
+            filters['description'] = description
         except:
             messages.error(request, "'Description' filter could not be applied.\
                             Make sure that your expression is correct.")
@@ -374,7 +373,7 @@ def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str,
         try:
             query = Query(item_type)
             filtered_dataset = filtered_dataset[filtered_dataset.type.apply(query)]
-            search_parameters['item_type'] = item_type
+            filters['item_type'] = item_type
         except:
             messages.error(request, "'Type' filter could not be applied.\
                             Make sure that your expression is correct.")
@@ -382,7 +381,7 @@ def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str,
         try:
             query = Query(subject)
             filtered_dataset = filtered_dataset[filtered_dataset.subject.apply(query)]
-            search_parameters['subject'] = subject
+            filters['subject'] = subject
         except:
             messages.error(request, "'Subject' filter could not be applied. \
                            Make sure that your expression is correct.")
@@ -390,7 +389,7 @@ def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str,
         try:
             query = Query(coverage)
             filtered_dataset = filtered_dataset[filtered_dataset.coverage.apply(query)]
-            search_parameters['coverage'] = coverage
+            filters['coverage'] = coverage
         except:
             messages.error(request, "'Coverage' filter could not be applied. \
                            Make sure that your expression is correct.")
@@ -401,13 +400,13 @@ def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str,
             filtered_dataset.rights.apply(lambda x: x.split('|||')[-1]).\
                 isin(rights_urls)
             ]
-        search_parameters['rights'] = rights
+        filters['rights'] = rights
     if keywords:
         try:
             query = Query(keywords)
             keyword_dataset = filtered_dataset[filtered_dataset.apply(query).any(1)]
             filtered_dataset = pd.concat([keyword_dataset, filtered_dataset])
-            search_parameters['keywords'] = keywords
+            filters['keywords'] = keywords
         except:
             messages.error(request, "'Keywords' filter could not be applied.\
                             Make sure that your expression is correct.")
@@ -415,7 +414,7 @@ def filter_dataset(request, dataset=pd.DataFrame, keywords=str, title=str,
     return filtered_dataset
 
 
-def filter_datasets(request, keywords=str, title=str, created_by=str, 
+def filter_datasets(request, keywords=str, title=str, creator=str, 
                     description=str, tags=list, min_num_items=int, 
                     max_num_items=int, start_date=str, end_date=str):
     results = Dataset.objects.all()
@@ -427,9 +426,9 @@ def filter_datasets(request, keywords=str, title=str, created_by=str,
         except:
             messages.error(request, "'Title' filter could not be applied. \
                            Make sure that your expression is correct.")
-    if created_by:
+    if creator:
         try:
-            query = Query(created_by)
+            query = Query(creator)
         except:
             messages.error(request, "'Creator' filter could not be applied. \
                            Make sure that your expression is correct.")

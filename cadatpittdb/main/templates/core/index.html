@@ -22,15 +22,15 @@
     <!--Action Buttons -->
     <div class="row gy-4 mt-5">
       <div class="col-lg d-grid gap-2 d-lg-flex justify-content-center justify-content-lg-end">
-        <a class="btn btn-primary btn-lg bg-pitt-royal border-pitt-royal jumbotron"
+        <a class="btn btn-primary btn-action btn-lg bg-pitt-royal border-pitt-royal"
           href="signup" role="button">Create an Account</a>
       </div>
       <div class="col-lg d-grid gap-2 d-lg-flex justify-content-center">
-        <a class="btn btn-primary btn-lg bg-pitt-royal border-pitt-royal jumbotron"
+        <a class="btn btn-primary btn-action btn-lg bg-pitt-royal border-pitt-royal"
           href="browse" role="button">Browse Datasets</a>
       </div>
       <div class="col-lg d-grid gap-2 d-lg-flex justify-content-center justify-content-lg-start">
-        <a class="btn btn-primary btn-lg bg-pitt-royal border-pitt-royal jumbotron"
+        <a class="btn btn-primary btn-action btn-lg bg-pitt-royal border-pitt-royal"
           href="about" role="button">Learn More</a>
       </div>
     </div>
@@ -50,8 +50,8 @@
             <div class="row">
                 <div class="col-9">
                     <strong>Created by</strong>: 
-                    <a href="/profile/?user={{ dataset.created_by.username }}"
-                    >{{ dataset.created_by }}</a>
+                    <a href="/profile/?user={{ dataset.creator.username }}"
+                    >{{ dataset.creator }}</a>
                 </div>
                 <div class="col-3 text-end">
                     <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
