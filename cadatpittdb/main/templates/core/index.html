@@ -54,12 +54,8 @@
                     >{{ dataset.creator }}</a>
                 </div>
                 <div class="col-3 text-end">
-                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                    data-bs-title="Pin dataset"><img class="card-header-icons"
-                    src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
-                      data-bs-title="Edit dataset"><img class="card-header-icons"
-                      src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+                    {% include 'snippets/pin-dataset-icon.html' %}
+                    {% include 'snippets/edit-dataset-icon.html' %}
                 </div>
             </div>
           </div>

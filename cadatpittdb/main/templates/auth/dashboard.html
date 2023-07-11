@@ -9,7 +9,7 @@
 
 <div class="row gy-4">
   <!-- Dashboard -->
-  <div class="col-md col-lg-8">
+  <div class="col-12 col-lg-8">
     <h2 align="center" class="mb-4">Dashboard</h2>
     <form method="POST" action="#">
       {% csrf_token %}
@@ -29,7 +29,7 @@
           <div class="dropdown-menu">
             <a class="dropdown-item" href="#">All Content</a>
             <a class="dropdown-item" href="#">My Datasets</a>
-            <a class="dropdown-item" href="#">Saved Searches</a>
+            <a class="dropdown-item" href="#">Saved Results</a>
             <a class="dropdown-item" href="#">Pinned Datasets</a>
             <a class="dropdown-item" href="#">Pinned Items</a>
           </div>
@@ -37,75 +37,43 @@
       </div>
     </form>
 
-    <!--My Datasets, Pinned Datasets, Saved Searches section-->
+    <!--My Datasets, Pinned Datasets, Saved Results section -->
     <div class="card shadow-sm bg-light-gray mt-4">
       <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs" role="tablist" id="dashboard-list">
           <li class="nav-item">
-            <a class="nav-link active" href="#mydatasets" role="tab" aria-controls="mydatasets" aria-selected="true">My Datasets</a>
+            <a class="nav-link active text-pitt-dark-blue" href="#mydatasets" role="tab" aria-controls="mydatasets" aria-selected="true">My Datasets</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#savedsearches" role="tab" aria-controls="savedsearches" aria-selected="false">Saved Searches</a>
+            <a class="nav-link text-pitt-dark-blue" href="#savedsearches" role="tab" aria-controls="savedsearches" aria-selected="false">Saved Results</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link"  href="#pinneddatasets" role="tab" aria-controls="pinneddatasets" aria-selected="false">Pinned Datasets</a>
+            <a class="nav-link text-pitt-dark-blue"  href="#pinned-datasets" role="tab" aria-controls="pinned-datasets" aria-selected="false">Pinned Datasets</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#pinneditems" role="tab" aria-controls="pinneditems" aria-selected="false">Pinned Items</a>
+            <a class="nav-link text-pitt-dark-blue" href="#pinned-items" role="tab" aria-controls="pinned-items" aria-selected="false">Pinned Items</a>
           </li>
         </ul>
       </div>
       <div class="card-body">
         <div class="tab-content mt-3">
+          <!--My Datasets -->
           <div class="tab-pane active" id="mydatasets" role="tabpanel" aria-labelledby="mydatasets-tab">
-
-            <!--My Datasets-->
             <ul class="list-group">
+              {% for dataset in user.get_datasets %}
               <li class="list-group-item bg-light-gray ">
                 <div class="row">
-                  <div class="col-auto">
-                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                      data-bs-title="Pin dataset"><img class="card-header-icons"
-                      src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                      data-bs-title="Edit dataset"><img class="card-header-icons"
-                      src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+                  <div class="col-3 col-md-2">
+                    {% include 'snippets/pin-dataset-icon.html' %}
+                    {% include 'snippets/edit-dataset-icon.html' %}
+                    {% include 'snippets/delete-dataset-icon.html' %}
                   </div>
-                  <div class="col-auto">
-                    August Wilson plays
+                  <div class="col-9 col-md-10">
+                    <a href="/dataset/?id={{ dataset.public_id }}">{{ dataset.title }}</a>
                   </div>
                 </div>
               </li>
-              <li class="list-group-item bg-light-gray">
-                <div class="row">
-                  <div class="col-auto">
-                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                      data-bs-title="Pin dataset"><img class="card-header-icons"
-                      src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                      data-bs-title="Edit dataset"><img class="card-header-icons"
-                      src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                  </div>
-                  <div class="col-auto">
-                    Pittsburgh major league sports
-                  </div>
-                </div>
-              </li>
-              <li class="list-group-item bg-light-gray">
-                <div class="row">
-                  <div class="col-auto">
-                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                      data-bs-title="Pin dataset"><img class="card-header-icons"
-                      src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                      data-bs-title="Edit dataset"><img class="card-header-icons"
-                      src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-                  </div>
-                  <div class="col-auto">
-                    Pittsburgh Northside 1990s
-                  </div>
-                </div>
-              </li>
+              {% endfor %}
             </ul>
             <!-- My Datasets pagination-->
             <nav aria-label="My Datasets navigation">
@@ -130,72 +98,80 @@
             <div class="col-md-12 text-center mt-3">
               <a href="#" class="btn btn-primary bg-pitt-royal border-pitt-royal">Create New Dataset</a>
             </div>
+            <!-- Pagination -->
+            {% include 'snippets/pagination.html' %}
+            <!-- Create New Dataset Button -->
+            <!-- <div class="col-md-12 text-center mt-3">
+              <a class="btn btn-primary bg-pitt-royal border-pitt-royal"
+                role="button" href="/retrieve/">Create New Dataset</a>
+            </div> -->
           </div>
 
-          <!--Saved Searches-->
-          <div class="tab-pane" id="savedsearches" role="tabpanel" aria-labelledby="saved-searches-tab">
-            <!-- Saved Searches pagination-->
-            <nav aria-label="Saved searches navigation">
-              <ul class="pagination justify-content-center">
-                <li class="page-item">
-                  <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                  <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+          <!--Saved Results -->
+          <div class="tab-pane" id="savedsearches" role="tabpanel" aria-labelledby="saved-results-tab">
+            {% if user.get_saved_results %}
+            <ul class="list-group">
+              {% for dataset in user.get_saved_results %}
+              <li class="list-group-item bg-light-gray ">
+                <div class="row">
+                  <div class="col-2 col-xl-1">
+                    <a class="btn btn-warning btn-xs bg-pitt-gold border-pitt-gold" role="button"
+                      href="/dataset/?id={{ dataset.public_id }}">View</a>
+                  </div>
+                  <div class="col-10 col-xl-11">
+                    <a href="/dataset/?id={{ dataset.public_id }}">{{ dataset.title }}</a>
+                  </div>
+                </div>
+              </li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+            <!-- Pagination -->
+            {% include 'snippets/pagination.html' %}
+            <!-- Retrieve Data Button -->
+            <!-- <div class="col-md-12 text-center mt-3">
+              <a class="btn btn-primary bg-pitt-royal border-pitt-royal"
+                role="button" href="/retrieve/">Retrieve Data</a>
+            </div> -->
           </div>
 
-            <!--Pinned Datasets-->
-          <div class="tab-pane" id="pinneddatasets" role="tabpanel" aria-labelledby="pinned-datasets-tab">
-            <!--pagination-->
-            <nav aria-label="Pinned Datasets navigation">
-              <ul class="pagination justify-content-center">
-                <li class="page-item">
-                  <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                  <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+            <!-- Pinned Datasets -->
+          <div class="tab-pane" id="pinned-datasets" role="tabpanel" aria-labelledby="pinned-datasets-tab">
+            {% if user.get_pinned_datasets %}
+            <ul class="list-group">
+              {% for dataset in user.get_pinned_datasets %}
+              <li class="list-group-item bg-light-gray ">
+                <div class="row">
+                  <div class="col-3 col-md-2">
+                    {% include 'snippets/pin-dataset-icon.html' %}
+                    {% include 'snippets/edit-dataset-icon.html' %}
+                    {% include 'snippets/delete-dataset-icon.html' %}
+                  </div>
+                  <div class="col-9 col-md-10">
+                    <a href="/dataset/?id={{ dataset.public_id }}">{{ dataset.title }}</a>
+                  </div>
+                </div>
+              </li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+            <!-- Pagination -->
+            {% include 'snippets/pagination.html' %}
           </div>
 
-            <!--Pinned Items -->
-          <div class="tab-pane" id="pinneditems" role="tabpanel" aria-labelledby="pinned-items-tab">
-            <!--pagination-->
-            <nav aria-label="Pinned Items navigation">
-              <ul class="pagination justify-content-center">
-                <li class="page-item">
-                  <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                  <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+            <!-- Pinned Items -->
+          <div class="tab-pane" id="pinned-items" role="tabpanel" aria-labelledby="pinned-items-tab">
+            {% if user.get_pinned_items %}
+            <ul class="list-group">
+              {% for item in user.get_pinned_items %}
+              <li class="list-group-item bg-light-gray ">
+                  <a href="/item/?id={{ item.item_id }}">{{ item.title }}</a>
+              </li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+            <!-- Pagination -->
+            {% include 'snippets/pagination.html' %}
           </div>
         </div>
       </div>
@@ -218,6 +194,12 @@
     </div>
   </div>
 </div>
+
+<!-- Modals -->
+{% for dataset in user.get_datasets %}
+  {% include 'snippets/delete-dataset-modal.html' %}
+{% endfor %}
+
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
@@ -247,10 +229,10 @@
   var triggerEl = document.querySelector('#dashboard-list a[href="#savedsearches"]')
   bootstrap.Tab.getInstance(triggerEl).show()
 
-  var triggerEl = document.querySelector('#dashboard-list a[href="#pinneddatasets"]')
+  var triggerEl = document.querySelector('#dashboard-list a[href="#pinned-datasets"]')
   bootstrap.Tab.getInstance(triggerEl).show()
 
-  var triggerEl = document.querySelector('#dashboard-list a[href="#pinneditems"]')
+  var triggerEl = document.querySelector('#dashboard-list a[href="#pinned-items"]')
   bootstrap.Tab.getInstance(triggerEl).show()
 </script>
 {% endblock %}
