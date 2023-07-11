@@ -64,6 +64,7 @@ def documentation_vw(request):
     else:
         return HttpResponseNotAllowed(["POST"])
 
+
 def faq_vw(request):
     if request.method == "GET":
         context = {
@@ -73,6 +74,7 @@ def faq_vw(request):
         return render(request, "core/faq.html", context)
     else:
         return HttpResponseNotAllowed(["POST"])
+
 
 def help_vw(request):
     if request.method == "GET":
@@ -91,7 +93,7 @@ def help_vw(request):
 def dashboard_vw(request):
     if request.method == "GET":
         context = {
-            "title": "About",
+            "title": "Dashboard",
             "vocab": vocab,
         }
         return render(request, "auth/dashboard.html", context)
@@ -340,11 +342,14 @@ def create_vw(request):
         # Get data from session
         dataset = request.session.get('dataset')
         filters = request.session.get('filters')
+        
         if not dataset:
             messages.error(request, "No dataset was given. You must first \
                            retrieve data before attempting to create a dataset.")
         if not filters:
             filters = {}
+
+        # Create dataset
         new_dataset = create_dataset(dataset=dataset, title=title, 
                                      description=description, tags=tags, 
                                      filters=filters, creator=request.user, 
@@ -356,10 +361,11 @@ def create_vw(request):
             if filters:
                 del request.session['filters']
             request.session.modified = True
+
             return redirect(f"/dataset/?id={ new_dataset.public_id }")
         else:
             # Send request again using info about dataset?
-            messages.error(request, "Item could not be added. Please try \
+            messages.error(request, "Dataset could not be created. Please try \
                                again or contact us to report the issue.")
             return redirect("/retrieve/")
         
@@ -454,10 +460,7 @@ def retrieve_vw(request):
 
     if request.method == "POST":      
         if request.POST.get("filter"):
-            # dataset = request.POST.get("dataset")
-
-            # Get parameters from form input
-            # request, dataset=pd.DataFrame, keywords=str, title=str, 
+            # Get filters from form
             keywords = request.POST.get("keywords")
             title = request.POST.get("title")
             creator = request.POST.get("creator")
@@ -473,6 +476,7 @@ def retrieve_vw(request):
             coverage = request.POST.get("coverage")
             copyright = request.POST.getlist("copyright")
 
+            # Filter dataset
             dataset, dataset_df = filter_dataset(keywords=keywords, title=title, 
                                      creator=creator, contributor=contributor,
                                      publisher=publisher, depositor=depositor,
@@ -480,7 +484,8 @@ def retrieve_vw(request):
                                      language=language, description=description,
                                      item_type=item_type, subject=subject, 
                                      coverage=coverage, copyright=copyright)
-                        
+            
+            # Add filters to session
             request.session['filters'] = {
                 'keywords': keywords, 'title': title, 'creator': creator,  
                 'contributor':contributor, 'publisher': publisher, 
@@ -491,7 +496,7 @@ def retrieve_vw(request):
             }
 
         else:
-            # Get form input
+            # Get retrieval method from form
             retrieval_method = request.GET.get("retrieval_method")
             item_ids = request.POST.get("item_ids")
             csv_file = request.FILES.get('csv_file')
@@ -501,7 +506,7 @@ def retrieve_vw(request):
             # Get dataset
             if retrieval_method == 'identifiers':
                 item_ids = iter(item_ids.splitlines())
-                dataset, exceptions = get_dataset(item_ids=item_ids)
+                dataset, dataset_df, exceptions = get_dataset(item_ids=item_ids)
             elif retrieval_method == 'file':
                 if not csv_file.name.endswith('.csv'):
                     messages.error(request,'File is not CSV type.')

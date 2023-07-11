@@ -26,11 +26,17 @@ URL = 'https://digital.library.pitt.edu/oai2'
 User = get_user_model()
 
 
-def reformat_data(data):
+def reformat_data(data=dict):
     reformatted_data = {}
     
     for field in data:
-        reformatted_data[field] = "|||".join(data[field])
+        if field == 'collection':
+            collections = [item[0] for item in data[field]]
+            reformatted_data[field] = collections
+        elif isinstance(data[field], list):
+            reformatted_data[field] = "|||".join(data[field])
+        else:
+            reformatted_data[field] = data[field]
     
     return reformatted_data
 
@@ -197,7 +203,7 @@ def copy_dataset(user=User, dataset=Dataset, title=str):
     
 
 def create_item(item_id=str, title=str, creator=str, date=str, item_type=str, 
-                thumbnail=str, collection_ids=list):
+                thumbnail=str, collections=list):
     
     # try:
     new_item = Item(item_id=item_id, title=title, creator=creator, date=date,
@@ -205,9 +211,8 @@ def create_item(item_id=str, title=str, creator=str, date=str, item_type=str,
     new_item.save()
 
     # Associate collection(s) with item
-    for id in collection_ids:
-        collection_id = id[0].replace('_', ':')
-        collection = Collection.objects.filter(collection_id=collection_id)
+    for title in collections:
+        collection = Collection.objects.filter(title=title).first()
         new_item.collections.add(collection)
     
     return new_item
@@ -216,18 +221,19 @@ def create_item(item_id=str, title=str, creator=str, date=str, item_type=str,
 
 
 def create_item_from_id(item_id=str):
-    # try:
-    print("item_id", item_id)
-    item_record = get_item(item_id=item_id)
-    title = item_record['title']
-    creator = item_record['creator']
-    date = item_record['date']
-    item_type = item_record['type']
-    thumbnail = item_record['thumbnail']
-    collection_ids = item_record['collection']
-    # except:
-    #     return None
-
+    # Get item record data
+    try:
+        item_record = get_item(item_id=item_id)
+        title = item_record['title']
+        creator = item_record['creator']
+        date = item_record['date']
+        item_type = item_record['type']
+        thumbnail = item_record['thumbnail']
+        collection_ids = item_record['collection']
+    except:
+        return None
+    
+    # Create new item in database
     new_item = Item(item_id=item_id, title=title, creator=creator, date=date,
                     type=item_type, thumbnail=thumbnail)
     new_item.save()
@@ -235,17 +241,17 @@ def create_item_from_id(item_id=str):
     # Associate collection(s) with item
     for id in collection_ids:
         collection_id = id.replace('_', ':')
-        collection = Collection.objects.filter(collection_id=collection_id)
+        print(collection_id)
+        collection = Collection.objects.filter(collection_id=collection_id).first()
         new_item.collections.add(collection)
 
     return new_item
 
 
 def create_dataset(dataset=dict, title=str, description=str, tags=list,
-                   filters=dict, creator=str, public=bool):
-    dataset_df = pd.DataFrame.from_dict(dataset)
+                   filters=dict, creator=User, public=bool):
     try:
-        new_dataset = Dataset(title=title, description=description,
+        new_dataset = Dataset(title=title, description=description, 
                               filters=filters, creator=creator, public=public)
         new_dataset.save()
     except:
@@ -261,27 +267,28 @@ def create_dataset(dataset=dict, title=str, description=str, tags=list,
     """
     
     # Add items
-    for index, item in dataset_df:
-        try:
-            # Create item if it doesn't already exist
-            cur_item = Item.objects.filter(item_id=item['item_id']).first()
-            if not cur_item:
-                cur_item = create_item(item_id=item['item_id'], 
-                                       title=item['title'],
-                                       creator=item['creator'],
-                                       date=item['date'],
-                                       item_type=item['type'], 
-                                       thumbnail=item['thumbnail'],
-                                       collection_ids=item['collection'])
-                
-            # Save items to dataset
-            add_item(new_dataset, cur_item)
-        except:
-            # Do something with exceptions?
-            pass
+    for record in dataset:
+        item = reformat_data(record)
+        # try:
+        # Create item if it doesn't already exist
+        cur_item = Item.objects.filter(item_id=item['item_id']).first()
+        if not cur_item:
+            cur_item = create_item(item_id=item['item_id'], 
+                                    title=item['title'],
+                                    creator=item['creator'],
+                                    date=item['date'],
+                                    item_type=item['type'], 
+                                    thumbnail=item['thumbnail'],
+                                    collections=item['collection'])
+            
+        # Save items to dataset
+        add_item(new_dataset, cur_item)
+        # except:
+        #     # Do something with exceptions?
+        #     pass
 
     # Add tags
-    add_tags(tags=tags, dataset=new_dataset)
+    add_tags(user=creator, tags=tags, dataset=new_dataset)
 
     return new_dataset
 

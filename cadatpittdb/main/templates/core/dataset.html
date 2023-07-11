@@ -10,8 +10,8 @@
 <!-- Dataset Information -->
 <h1>{{ dataset.title }}</h1>
 <p class="contact"><strong>Created By:</strong> 
-  <a href="/profile/?user={{ dataset.created_by.username }}">
-    {{ dataset.created_by }}
+  <a href="/profile/?user={{ dataset.creator.username }}">
+    {{ dataset.creator }}
   </a>
 </p>
 <p class="contact"><strong>Description:</strong> {{ dataset.description }}</p>
@@ -25,7 +25,7 @@
 
 <!-- Dataset Action Buttons -->
 <div class="d-grid gap-2 d-sm-flex justify-content-center justify-content-sm-start">
-  {% if user == dataset.created_by %}
+  {% if user == dataset.creator %}
     <div class="btn-group">
       <button type="button" data-bs-toggle="dropdown" aria-expanded="false"
         class="btn btn-primary btn-action dropdown-toggle bg-pitt-royal border-pitt-royal">
