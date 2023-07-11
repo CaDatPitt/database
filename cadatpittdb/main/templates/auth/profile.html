@@ -46,36 +46,33 @@
 
 <!-- Datasets -->
 {% if datasets %}
-<hr style="margin-top: 1.75em;"/>
+<hr class="mt-4"/>
 <h3 class="mb-4">Datasets</h3>
 <div class="row gy-4">
-  {% for dataset in datasets %}
+  {% for dataset in user.get_datasets %}
   <div class="col-md-6 col-xl-4">
     <div class="card h-100 shadow-sm bg-light-gray">
       <div class="card-header">
         <div class="row">
           <div class="col text-end">
-            <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
-              data-bs-title="Pin dataset"><img class="card-header-icons"
-              src="{% static 'images/push_pin_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-            <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
-              data-bs-title="Edit dataset"><img class="card-header-icons"
-              src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
-            <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" 
-              data-bs-title="Delete dataset"><img class="card-header-icons"
-              src="{% static 'images/delete_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
+            {% include 'snippets/pin-dataset-icon.html' %}
+            {% include 'snippets/tag-dataset-icon.html' %}
+            {% include 'snippets/edit-dataset-icon.html' %}
+            {% include 'snippets/delete-dataset-icon.html' %}
           </div>
         </div>
       </div>
       <div class="card-body">
-        <h5 class="card-title">{{ dataset.title }}</h5>
+        <h5 class="card-title">
+          <a href="/dataset?id={{ dataset.public_id }}">{{ dataset.title }}</a>
+        </h5>
         <h* class="card-subtitle">{{ dataset.description }}</h*>
         <p class="card-text mt-2"><strong># of items</strong>: 
             {{ dataset.number_items }}<br/>
         <strong>Last modified</strong>: {{ dataset.last_modified }}
         </p>
-        <a class="btn btn-warning pitt-gold" role="button"
-            href="/dataset?id={{ dataset.public_id }}">View</a>
+        <!-- <a class="btn btn-warning pitt-gold" role="button"
+            href="/dataset?id={{ dataset.public_id }}">View</a> -->
         <a class="btn btn-warning pitt-gold">Download</a>
       </div>
     </div>
@@ -109,6 +106,14 @@
     </div>
   </div>
 </div>
+
+<!-- Dataset Modals -->
+{% for dataset in user.get_datasets %}
+  {% include 'snippets/tag-dataset-modal.html' %}
+  {% include 'snippets/edit-dataset-modal.html' %}
+  {% include 'snippets/delete-dataset-modal.html' %}
+{% endfor %}
+
 {% endblock %}
 
 {% block scripts %}

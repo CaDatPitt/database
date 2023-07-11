@@ -17,9 +17,6 @@
 <div class="d-grid gap-2 d-md-flex justify-content-center justify-content-lg-start">
     <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal" role="button"
       href="/retrieve/">Start Over</a>
-    <!-- <a class="btn btn-primary bg-pitt-royal border-pitt-royal" role="button"
-    data-bs-toggle="modal" data-bs-target="#createDatasetModal"
-    href="">Modify Search</a> -->
     <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal" role="button"
     data-bs-toggle="modal" data-bs-target="#createDatasetModal"
     href="">Save Results</a>
@@ -28,9 +25,9 @@
    >Create Dataset</a>
 </div>
 {% endif %}
-<hr/>
 
 <!-- Second Section -->
+<hr class="mt-4"/>
 <div class="row gy-4">
   <!-- Filters -->
   <div class="col-md col-lg-4">
@@ -195,7 +192,7 @@
             <div class="row border-bottom mb-2 pb-2">
               <div class="col text-end">
                 {% include 'snippets/pin-item-icon.html' %}
-                <!--{% include 'snippets/tag-item-icon.html' %}-->
+                {% include 'snippets/tag-item-icon.html' %}
                 {% include 'snippets/add-item-icon.html' %}
               </div>
             </div>
@@ -251,7 +248,7 @@
 <!-- Add/Tag Item Modals -->
 {% for index, item in dataset.iterrows %}
   {% include 'snippets/add-item-modal.html' %}
-  <!-- {% include 'snippets/tag-item-modal.html' %} -->
+  {% include 'snippets/tag-item-modal.html' %}
 {% endfor %}
 
 {% endblock %}

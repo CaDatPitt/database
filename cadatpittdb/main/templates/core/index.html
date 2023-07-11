@@ -48,26 +48,29 @@
         <div class="card h-100 shadow-sm bg-light-gray">
           <div class="card-header">
             <div class="row">
-                <div class="col-9">
+                <div class="col-8">
                     <strong>Created by</strong>: 
                     <a href="/profile/?user={{ dataset.creator.username }}"
                     >{{ dataset.creator }}</a>
                 </div>
-                <div class="col-3 text-end">
+                <div class="col-4 text-end">
                     {% include 'snippets/pin-dataset-icon.html' %}
+                    {% include 'snippets/tag-dataset-icon.html' %}
                     {% include 'snippets/edit-dataset-icon.html' %}
                 </div>
             </div>
           </div>
           <div class="card-body">
-            <h5 class="card-title">{{ dataset.title }}</h5>
+            <h5 class="card-title">
+              <a href="/dataset?id={{ dataset.public_id }}">{{ dataset.title }}</a>
+            </h5>
             <h* class="card-subtitle">{{ dataset.description }}</h*>
             <p class="card-text mt-2"><strong># of items</strong>: 
-                {{ dataset.number_items }}<br/>
+                {{ dataset.items.all|length }}<br/>
             <strong>Last modified</strong>: {{ dataset.last_modified }}
             </p>
-            <a class="btn btn-warning bg-pitt-gold border-pitt-gold" role="button"
-                href="/dataset?id={{ dataset.public_id }}">View</a>
+            <!-- <a class="btn btn-warning bg-pitt-gold border-pitt-gold" role="button"
+                href="/dataset?id={{ dataset.public_id }}">View</a> -->
             <a class="btn btn-warning bg-pitt-gold border-pitt-gold" role="button"
                 href="">Download</a>
           </div>
@@ -77,6 +80,12 @@
     </div>
   </div>
 </div>
+
+<!-- Dataset Modoals -->
+{% for dataset in datasets %}
+  {% include 'snippets/tag-dataset-modal.html' %}
+  {% include 'snippets/edit-dataset-modal.html' %}
+{% endfor %}
 
 <!-- Scripts -->
 {% block bootstrapjs %}

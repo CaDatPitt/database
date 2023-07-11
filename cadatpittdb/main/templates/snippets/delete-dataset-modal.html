@@ -1,4 +1,4 @@
-<div class="modal fade" id="deleteDataset" name="deleteDatasetModal" 
+<div class="modal fade" id="delete{{ dataset.public_id }}" name="deleteDatasetModal" 
   tabindex="-1" aria-labelledby="deleteDatasetModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -9,7 +9,9 @@
           aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p>Are you sure you want to remove your dataset, "{{ dataset.title }}"?</p>
+        <p>Are you sure you want to delete your dataset, "{{ dataset.title }}"? 
+          <strong>This action cannot be undone.</strong>
+        </p>
       </div>
       <div class="modal-footer">
         <form method="POST" target="_parent"

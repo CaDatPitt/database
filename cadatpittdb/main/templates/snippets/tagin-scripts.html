@@ -1,0 +1,11 @@
+{% load static %}
+<script src="{% static 'tagin/dist/tagin.js' %}"></script>
+<script>
+const tagin = new Tagin(document.querySelector('.tagin'), {
+separator: '|||',
+duplicate: false,
+enter: true,
+transform: 'input => input',
+placeholder: 'Type tag name and press Enter/Return to add'
+})
+</script>

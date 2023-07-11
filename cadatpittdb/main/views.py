@@ -315,7 +315,7 @@ def browse_vw(request):
     context = {
         "title": "Browse Datasets",
         "vocab": vocab,
-        "datasets": Dataset.objects.all(),
+        "datasets": Dataset.objects.filter(public=True).all(),
         'creators': get_creators()
     }
 
@@ -623,14 +623,18 @@ def delete_dataset_vw(request):
 
     if dataset:
         # Verify user has permission to delete dataset
-        if verify_user(request, dataset.creator):
+        if not verify_user(request, dataset.creator):
             messages.error(request, 'You do not have permission to directly edit \
                            this dataset. Click the "Edit Dataset" button to \
                            edit a copy of this dataset.')
             return redirect(f"/dataset/?id={ dataset_id }")
         
         # Delete dataset
-        delete_dataset(dataset)
+        deleted = delete_dataset(dataset.public_id)
+
+        if not deleted:
+            messages.error(request, "The dataset could not be deleted. \
+                           Please try again or contact us to report the issue.")
     else:
         messages.error(request, "That dataset does not exist!")
         return redirect("/")
@@ -662,7 +666,12 @@ def pin_dataset_vw(request):
     dataset = Dataset.objects.filter(public_id=dataset_id).first()
 
     if dataset:
-        pin_dataset(user=request.user, dataset=dataset)
+
+        pinned = pin_dataset(user=request.user, dataset=dataset)
+        
+        if not pinned:
+            messages.error(request, "The dataset could not be pinned. \
+                           Please try again or contact us to report the issue.")
     else:
         messages.error(request, "That dataset does not exist!")
         return redirect("/")
@@ -698,7 +707,7 @@ def remove_item_vw(request):
 
     if item:
         if dataset:
-            if verify_user(request, dataset.creator):
+            if not verify_user(request, dataset.creator):
                 messages.error(request, 'You do not have permission to directly \
                                edit this dataset. Click the "Edit Dataset" \
                                button to edit a copy of this dataset.')
@@ -715,9 +724,24 @@ def remove_item_vw(request):
 
 
 @login_required
+def tag_dataset_vw(request):
+    tags = request.POST.get("tags")
+    dataset_id = request.GET.get('id')
+    dataset = Dataset.objects.filter(public_id=dataset_id).first()
+
+    if dataset:
+        add_tags(user=request.user, tags=tags, dataset=dataset, item=None)
+    else:
+        messages.error(request, "That dataset does not exist!")
+        return redirect("/")
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
 def tag_item_vw(request):
     tags = request.POST.get("tags")
-    item_id = request.GET.get('item')
+    item_id = request.GET.get('id')
     item = Item.objects.filter(item_id=item_id).first()
 
     if item:

@@ -1,16 +1,16 @@
-<div class="modal fade" id="tag{{ item.item_id }}" name="tagItemModal" 
-  tabindex="-1" aria-labelledby="tagItemModalLabel" aria-hidden="true">
+<div class="modal fade" id="tag{{ dataset.public_id }}" name="tagdatasetModal" 
+  tabindex="-1" aria-labelledby="tagdatasetModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="tagItemModalLabel">Tag Item</h1>
+        <h1 class="modal-title fs-5" id="tagdatasetModalLabel">Tag Dataset</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" 
           aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div id="tag_item_form">
+        <div id="tag_dataset_form">
           <form method="POST" 
-            action="/tag-item/?id={{ item.item_id }}">
+            action="/tag-dataset/?id={{ dataset.public_id }}">
             {% csrf_token %}
             <div class="form-group">
               <label for="title" class="bold">Tags</label>
@@ -19,7 +19,7 @@
             </div>
             <div class="col-md-12 text-center">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-warning pitt-gold">Add tag</button>
+              <button type="submit" class="btn btn-warning pitt-gold">Add Tag</button>
             </div>
           </form>
         </div>
