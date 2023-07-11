@@ -46,15 +46,15 @@
 <!-- Datasets -->
 <h4 class="mb-4">Datasets</h4>
 <div class="row gy-4">
-  {% for dataset in datasets %}
+  {% for dataset in item.get_datasets %}
   <div class="col-md-6 col-xl-4">
     <div class="card h-100 shadow-sm bg-light-gray">
       <div class="card-header">
         <div class="row">
             <div class="col-9">
                 <strong>Created by</strong>: 
-                <a href="/profile/?user={{ dataset.created_by.username }}"
-                >{{ dataset.created_by }}</a>
+                <a href="/profile/?user={{ dataset.creator.username }}"
+                >{{ dataset.creator }}</a>
             </div>
             <div class="col-3 text-end">
                 <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -70,7 +70,7 @@
         <h5 class="card-title">{{ dataset.title }}</h5>
         <h* class="card-subtitle">{{ dataset.description }}</h*>
         <p class="card-text mt-2"><strong># of items</strong>: 
-            {{ dataset.number_items }}<br/>
+            {{ dataset.items.all|length }}<br/>
         <strong>Last modified</strong>: {{ dataset.last_modified }}
         </p>
         <a class="btn btn-warning bg-pitt-gold border-pitt-gold" role="button"
