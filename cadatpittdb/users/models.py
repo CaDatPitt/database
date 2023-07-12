@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
 from .managers import CustomUserManager
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettitle_lazy as _
 import uuid
 from main.controlled_vocab import vocab
 
@@ -152,7 +152,7 @@ class Item(models.Model):
     
     def get_tags(self):
         tags = []
-        for tag in self.tags.get_all.value_list('text', flat=True):
+        for tag in self.tags.get_all.value_list('title', flat=True):
             tags.append(tag)
         return tags
     
@@ -185,7 +185,7 @@ class Dataset(models.Model):
     
     def get_tags(self):
         tags = []
-        for tag in self.tags.values_list('text', flat=True):
+        for tag in self.tags.values_list('title', flat=True):
             tags.append(tag)
         return tags
     
