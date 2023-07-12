@@ -21,7 +21,7 @@
         <form method="POST" target="_parent"
           {% if title == 'View Item' %}
           action="/remove-tag/?id={{ tag.tag_id }}&item={{ item.item_id }}"
-          {% else %}
+          {% elif title == 'View Dataset' %}
           action="/remove-tag/?id={{ tag.tag_id }}&dataset={{ dataset.public_id }}"
           {% endif %}>
           {% csrf_token %}

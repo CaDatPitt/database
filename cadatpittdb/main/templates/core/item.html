@@ -25,7 +25,6 @@
 </p>
 <p class="contact"><strong>Tags:</strong> 
     {% for tag in item.tags.all %}
-        <!-- {{ tag }}{% if tag != item.tags.all.last %},{% endif %} -->
       {% include 'snippets/tag-badge.html' %}
     {% endfor %}
 </p>

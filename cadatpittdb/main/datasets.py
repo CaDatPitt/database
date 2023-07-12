@@ -180,7 +180,7 @@ def add_tags(user=User, tags=str, dataset=Dataset, item=Item):
             if dataset:
                 dataset.tags.add(cur_tag)
                 dataset.save()
-            else:
+            if item:
                 item.tags.add(cur_tag)
                 item.save()
 
