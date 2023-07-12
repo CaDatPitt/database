@@ -1,5 +1,6 @@
 {% extends "core/base.html" %}
 {% load static %}
+{% load strfilters %}
 {% block title %}{{ title }}{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="{% static 'main.css' %}">
@@ -21,11 +22,13 @@
 </div>
 <div class="collapse" id="browseByTagCollapse">
     {% for tag in tags %}
+    {% if tag.get_num_datasets > 0 %}
     <a role="button" href="/tag/?title={{ tag }}" 
         class="btn btn-warning bg-pitt-gold badge-tag text-pitt-dark-blue">
         {{ tag }} 
-        <span class="badge bg-pitt-royal">{{ tag.get_datasets|length}}</span>
+        <span class="badge bg-pitt-royal">{{ tag.get_num_datasets }}</span>
     </a>
+    {% endif %}
     {% endfor %}
 </div>
 
@@ -239,8 +242,8 @@
                         </h6>
                         <h* class="card-subtitle">{{ dataset.description|truncatewords:50 }}</h*>
                         <p class="card-text mt-2"><strong># of items</strong>: 
-                            {{ dataset.number_items }}<br/>
-                        <strong>Last modified</strong>: {{ dataset.last_modified }}
+                            {{ dataset.items.all|length }}<br/>
+                        <strong>Last modified</strong>: {{ dataset.last_modified|truncate_date }}
                         </p>
                     </div>
                 </div>
@@ -250,7 +253,7 @@
     </div>
 </div>
 
-<!-- Dataset Modoals -->
+<!-- Dataset Modals -->
 {% for dataset in datasets %}
   {% include 'snippets/tag-dataset-modal.html' %}
   {% include 'snippets/edit-dataset-modal.html' %}

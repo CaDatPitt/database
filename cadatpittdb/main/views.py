@@ -563,7 +563,7 @@ def tag_vw(request):
             messages.error(request, "That tag does not exist!")
             return redirect("/")
         
-        context['tag'] = title  
+        context['tag'] = tag  
         context['items'] = Item.objects.filter(tags=tag.tag_id).all()
         context['datasets'] = Dataset.objects.filter(tags=tag.tag_id).all()
 
@@ -771,34 +771,48 @@ def remove_tag_vw(request):
 
 @login_required
 def tag_dataset_vw(request):
-    tags = request.POST.get("tags")
+    tag = request.POST.get("tags").strip()
     dataset_id = request.GET.get('id')
     dataset = Dataset.objects.filter(public_id=dataset_id).first()
+    
+    if tag:
+        if dataset:
+            # Tag dataset
+            tagged = add_tags(user=request.user, tags=tag, dataset=dataset, item=None)
 
-    if dataset:
-        add_tags(user=request.user, tags=tags, dataset=dataset, item=None)
+            if not tagged:
+                messages.error(request, "The dataset could not be tagged. \
+                            Please try again or contact us to report the issue.")
+        else:
+            messages.error(request, "That dataset does not exist!")
     else:
-        messages.error(request, "That dataset does not exist!")
+        messages.error(request, "You entered an empty tag!")
+    
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
 def tag_item_vw(request):
-    tags = request.POST.get("tags")
+    tag = request.POST.get("tags").strip()
     item_id = request.GET.get('id')
     item = Item.objects.filter(item_id=item_id).first()
 
-    if not item:
-        item = create_item(item_id=item_id, title=None, creator=None,
-                           date=None, item_type=None, thumbnail=None,
-                           collection_ids=None)
+    if tag:
+        # Create item if it doesn't exist in the database
+        if not item:
+            item = create_item(item_id=item_id, title=None, creator=None,
+                            date=None, item_type=None, thumbnail=None,
+                                collection_ids=None)
         
-    tagged = add_tags(user=request.user, tags=tags, dataset=None, item=item)
+        # Tag item
+        tagged = add_tags(user=request.user, tags=tag, dataset=None, item=item)
 
-    if not tagged:
-        messages.error(request, "The item could not be tagged. \
-                       Please try again or contact us to report the issue.")
+        if not tagged:
+            messages.error(request, "The item could not be tagged. \
+                        Please try again or contact us to report the issue.")
+    else:
+        messages.error(request, "You entered an empty tag!")
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

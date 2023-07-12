@@ -1,5 +1,6 @@
 {% extends "core/base.html" %}
 {% load static %}
+{% load strfilters %}
 {% block title %}{{ title }}{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="{% static 'main.css' %}">
@@ -20,7 +21,8 @@
   {{ tag }}{% if tag != dataset.tags.all.last %},{% endif %}
   {% endfor %}
 </p>
-<p class="contact"><strong>Last modified</strong>: {{ dataset.last_modified }}</p>
+<p class="contact"><strong>Last modified</strong>: 
+  {{ dataset.last_modified|truncate_date }}</p>
 <br/>
 
 <!-- Dataset Action Buttons -->
@@ -65,38 +67,46 @@
 <div class="row gy-4">
   {% for item in dataset.items.all %}
   <div class="col-lg-6">
-    <div class="card h-100 item-card shadow-sm bg-light-gray">
-      <img src="{{ item.thumbnail }}" class="card-img-top item-thumbnail" />
-      <div class="card-body">
+    <div class="card h-100 shadow-sm bg-light-gray">
+      <div class="card-header">
         <div class="row">
-          <div class="col text-end border-bottom mb-2 pb-2">
+          <div class="col text-end">
             {% include 'snippets/pin-item-icon.html' %}
             {% include 'snippets/tag-item-icon.html' %}
             {% include 'snippets/add-item-icon.html' %}
             {% include 'snippets/remove-item-icon.html' %}
           </div>
         </div>
-        <a href="/item/?id={{ item.item_id }}">
-          <h5 class="card-title">{{ item.title }}</h5>
-        </a>
-        <p>
-          <strong>Date:</strong> {{ item.date }}<br/>
-          <strong>Type:</strong> 
-          {% for type in item.get_types %}
-          {{ type|title }}{% if type != item.get_types|last %},{% endif %}
-          {% endfor %}
-          <br/>
-          <strong>Collections:</strong> 
-          {% for collection in item.collections.all %}
-          <br/>    
-          <a href="{{ collection.get_urls.0 }}" target="_blank">{{ collection }}</a>
-          {% endfor %}
-        </p>
-        <a role="button" class="btn btn-warning pitt-gold"
-          href="https://digital.library.pitt.edu/islandora/object/{{ item.item_id}} " 
-          target="_blank">
-        View Full Item Info
-        </a>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-4 col-xl-3">
+            <img src="{{ item.thumbnail }}" class="card-img-top item-thumbnail" />
+          </div>
+          <div class="col-8 col-xl-9">
+            <a href="/item/?id={{ item.item_id }}">
+              <h5 class="card-title">{{ item.title }}</h5>
+            </a>
+            <p>
+              <strong>Date:</strong> {{ item.date }}<br/>
+              <strong>Type:</strong> 
+              {% for type in item.get_types %}
+              {{ type|title }}{% if type != item.get_types|last %},{% endif %}
+              {% endfor %}
+              <br/>
+              <strong>Collections:</strong> 
+              {% for collection in item.collections.all %}
+              <br/>    
+              <a href="{{ collection.get_urls.0 }}" target="_blank">{{ collection }}</a>
+              {% endfor %}
+            </p>
+            <a role="button" class="btn btn-warning pitt-gold"
+              href="https://digital.library.pitt.edu/islandora/object/{{ item.item_id}} " 
+              target="_blank">
+            View Full Item Info
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
