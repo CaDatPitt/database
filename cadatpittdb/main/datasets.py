@@ -162,26 +162,31 @@ def add_tags(user=User, tags=str, dataset=Dataset, item=Item):
     tag_list = tags.split("|||")
 
     for tag in tag_list:
-        cur_tag = Tag.objects.filter(text=tag).first()
+        cur_tag = Tag.objects.filter(title=tag).first()
         
         # Create tag if doesn't already exist
         if not cur_tag:
             try:
-                cur_tag = Tag(text=tag)
+                cur_tag = Tag(title=tag)
                 cur_tag.save()
             except:
-                pass
+                return False
+            
+        try:
+            # Associate tag with user
+            cur_tag.creator.add(user.user_id)
+            
+            # Associate tag with dataset or item
+            if dataset:
+                dataset.tags.add(cur_tag)
+                dataset.save()
+            else:
+                item.tags.add(cur_tag)
+                item.save()
 
-        # Associate tag with user
-        cur_tag.creator.add(user.user_id)
-        
-        # Associate tag with dataset or item
-        if dataset:
-            dataset.tags.add(cur_tag)
-            dataset.save()
-        else:
-            item.tags.add(cur_tag)
-            item.save()
+            return True
+        except:
+            return False  
 
 
 def copy_dataset(user=User, dataset=Dataset, title=str):

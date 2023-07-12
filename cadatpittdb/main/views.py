@@ -737,12 +737,12 @@ def remove_item_vw(request):
 
 @login_required
 def remove_tag_vw(request):
-    title = request.GET.get('title')
+    tag_id = request.GET.get('id')
     item_id = request.GET.get('item')
     dataset_id = request.GET.get('dataset') 
     item = dataset = None
 
-    tag = Tag.objects.filter(title=title).first()
+    tag = Tag.objects.filter(tag_id=tag_id).first()
 
     if tag:
         if dataset_id:
@@ -762,7 +762,9 @@ def remove_tag_vw(request):
                         Please try again or contact us to report the issue.")
         
         else:
-          messages.error(request, "A dataset ID or item ID must be provided.")  
+          messages.error(request, "A dataset ID or item ID must be provided.")
+    else:
+        messages.error(request, "That tag does not exist!")
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -777,7 +779,6 @@ def tag_dataset_vw(request):
         add_tags(user=request.user, tags=tags, dataset=dataset, item=None)
     else:
         messages.error(request, "That dataset does not exist!")
-        return redirect("/")
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -798,7 +799,6 @@ def tag_item_vw(request):
     if not tagged:
         messages.error(request, "The item could not be tagged. \
                        Please try again or contact us to report the issue.")
-        return redirect("/")
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
