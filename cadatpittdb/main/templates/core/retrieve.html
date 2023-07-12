@@ -30,12 +30,12 @@
 <hr class="mt-4"/>
 <div class="row gy-4">
   <!-- Filters -->
-  <div class="col-md col-lg-4">
+  <div class="col-lg-4">
     {% include 'snippets/filters-form.html' %}
   </div>
 
   <!-- Data Retrieval Forms -->
-  <div class="col-md col-lg-8">
+  <div class="col-lg-8">
     {% if not show_results %}
     <!-- Option Toggles -->
     <h5 align="left">Retrieval Method</h5>
@@ -115,7 +115,7 @@
                 <br/>
                 <div class="col-md-12 text-center">
                   <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal">
-                  Submit
+                  Retrieve
                   </button>
                 </div>
               </form>
@@ -144,7 +144,7 @@
                   <button 
                     type="submit" 
                     class="btn btn-primary bg-pitt-royal border-pitt-royal">
-                  Submit
+                  Retrieve
                   </button>
                 </div>
               </form>
@@ -186,31 +186,50 @@
     <div class="row gy-4">
       {% for index, item in dataset.iterrows %}
       <div class="col-12">
-        <div class="card item-card shadow-sm bg-light-gray">
-          <img src="{{ item.thumbnail.0 }}" class="card-img-top item-thumbnail" />
-          <div class="card-body">
-            <div class="row border-bottom mb-2 pb-2">
+        <div class="card shadow-sm bg-light-gray">
+          <div class="card-header">
+            <div class="row">
+              <div class="col text-start">
+                  <input 
+                    type="checkbox" 
+                    class="item-checkbox mt-1" 
+                    id="include{{ item.item_id }}"
+                    name="include"
+                    value="">
+                  <label class="form-check-label" for="public">
+                    Include in dataset
+                  </label>
+              </div>
               <div class="col text-end">
                 {% include 'snippets/pin-item-icon.html' %}
                 {% include 'snippets/tag-item-icon.html' %}
                 {% include 'snippets/add-item-icon.html' %}
               </div>
             </div>
-            <a target="_blank" 
-              href="https://digital.library.pitt.edu/islandora/object/{{ item.item_id }}">
-              <h5 class="card-title">{{ item.title|join:", " }}</h5>
-            </a>
-            <p class="mb-0">
-              <strong>Creator</strong>: {{ item.creator|join:", " }}<br/>
-              <strong>Date</strong>: {{ item.date|join:", " }}<br/>
-              <strong>Type</strong>: {{ item.type|join:", " }}<br/>
-              <strong>Collection</strong>: 
-              {% for collection in item.collection %}
-              <br/>
-              <a target="_blank" 
-                href="{{ collection.1 }}">{{ collection.0 }}</a>
-              {% endfor %}
-            </p>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-3 d-none d-md-block">
+                <img src="{{ item.thumbnail.0 }}" class="card-img-top item-thumbnail" />
+              </div>
+              <div class="col-12 col-md-9">
+                <a target="_blank" 
+                  href="https://digital.library.pitt.edu/islandora/object/{{ item.item_id }}">
+                  <h5 class="card-title">{{ item.title|join:", " }}</h5>
+                </a>
+                <p class="mb-0">
+                  <strong>Creator</strong>: {{ item.creator|join:", " }}<br/>
+                  <strong>Date</strong>: {{ item.date|join:", " }}<br/>
+                  <strong>Type</strong>: {{ item.type|join:", " }}<br/>
+                  <strong>Collection</strong>: 
+                  {% for collection in item.collection %}
+                  <br/>
+                  <a target="_blank" 
+                    href="{{ collection.1 }}">{{ collection.0 }}</a>
+                  {% endfor %}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

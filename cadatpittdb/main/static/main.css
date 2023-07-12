@@ -53,11 +53,11 @@ body {
   }
 
   img.item-thumbnail {
-    max-width: 9em;
-    max-height: 9em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     object-fit: contain;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: calc(0.25rem - 1px);
+    height: 100%;
   }
 
 .badge {
@@ -92,6 +92,11 @@ body {
 
 .accordionCollapse {
   transition: none;
+}
+
+.item-checkbox {
+  width: 1em;
+  height: 1em;
 }
 
 .bold {
