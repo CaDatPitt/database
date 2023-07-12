@@ -72,6 +72,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def get_pinned_items(self):
         return Item.objects.filter(pinned_by=self).all()
     
+    def get_pinned_item_ids(self):
+        results = Item.objects.filter(pinned_by=self).all().values('item_id')
+        item_ids = []
+        
+        for res in results:
+            item_ids.append(res['item_id'])
+        return item_ids
+    
 
 class Collection(models.Model):
     collection_id = models.CharField(_('collection ID'), max_length=200, primary_key=True)
@@ -140,11 +148,9 @@ class Item(models.Model):
         return self.type.split('|||')
     
     def get_tags(self):
-        print("getting tags")
         tags = []
         for tag in self.tags.get_all.value_list('text', flat=True):
             tags.append(tag)
-            print(tag)
         return tags
     
 
@@ -175,9 +181,15 @@ class Dataset(models.Model):
         return self.dataset_id
     
     def get_tags(self):
-        print("getting tags")
         tags = []
         for tag in self.tags.values_list('text', flat=True):
             tags.append(tag)
-            print(tag)
         return tags
+    
+    def get_item_ids(self):
+        results = self.items.all().values('item_id')
+        item_ids = []
+        
+        for res in results:
+            item_ids.append(res['item_id'])
+        return item_ids
