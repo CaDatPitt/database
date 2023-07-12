@@ -68,7 +68,7 @@
         </h5>
         <h* class="card-subtitle">{{ dataset.description }}</h*>
         <p class="card-text mt-2"><strong># of items</strong>: 
-            {{ dataset.number_items }}<br/>
+            {{ dataset.items.all|length }}<br/>
         <strong>Last modified</strong>: {{ dataset.last_modified }}
         </p>
         <!-- <a class="btn btn-warning pitt-gold" role="button"
@@ -131,7 +131,7 @@ separator: '|||',
 duplicate: false,
 enter: true,
 transform: 'input => input',
-placeholder: 'Type affiliation and press Enter/Return too add'
+placeholder: 'Type affiliation and press Enter/Return to add'
 })
 </script>
 {% endblock %}

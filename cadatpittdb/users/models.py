@@ -120,6 +120,9 @@ class Tag(models.Model):
     
     def get_datasets(self):
         return Dataset.objects.filter(tags=self).all()
+    
+    def get_num_datasets(self):
+        return Dataset.objects.filter(tags=self).count()
 
 
 class Item(models.Model):
