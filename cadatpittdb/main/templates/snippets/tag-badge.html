@@ -1,0 +1,16 @@
+<span 
+    class="badge rounded-pill text-bg-warning bg-pitt-gold">
+    <a href="/tag/?title={{ tag }}" class="badge-tag text-pitt-dark-blue">{{ tag }}</a>
+    <span 
+        data-bs-toggle="tooltip" data-bs-placement="top" 
+        data-bs-title="Remove tag">
+        <button 
+            type="button" 
+            class="btn-close btn-tag" 
+            data-bs-toggle="modal" 
+            data-bs-target="#removeTag{{ tag.tag_id }}"
+            data-dismiss="alert" 
+            aria-label="Close">
+        </button>
+    </span>
+</span>
