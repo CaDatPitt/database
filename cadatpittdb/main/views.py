@@ -307,6 +307,7 @@ def browse_vw(request):
         "title": "Browse Datasets",
         "vocab": vocab,
         "datasets": Dataset.objects.filter(public=True).all(),
+        "tags": Tag.objects.all(),
         'creators': get_creators()
     }
 
@@ -548,6 +549,27 @@ def retrieve_vw(request):
     return render(request, "core/retrieve.html", context)
 
 
+def tag_vw(request):
+    context = {
+        "title": "View Tag",
+        "vocab": vocab,
+    }
+
+    if request.method == "GET":
+        title = request.GET.get('title')
+        tag = Tag.objects.filter(title=title).first()
+
+        if not tag:
+            messages.error(request, "That tag does not exist!")
+            return redirect("/")
+        
+        context['tag'] = title  
+        context['items'] = Item.objects.filter(tags=tag.tag_id).all()
+        context['datasets'] = Dataset.objects.filter(tags=tag.tag_id).all()
+
+    return render(request, "core/tag.html", context)
+
+
 """ Action Views """
 
 @login_required
@@ -711,6 +733,38 @@ def remove_item_vw(request):
         messages.error(request, "That item does not exist!")
 
     return redirect(f"/dataset/?id={ dataset_id }")
+
+
+@login_required
+def remove_tag_vw(request):
+    title = request.GET.get('title')
+    item_id = request.GET.get('item')
+    dataset_id = request.GET.get('dataset') 
+    item = dataset = None
+
+    tag = Tag.objects.filter(title=title).first()
+
+    if tag:
+        if dataset_id:
+            dataset = Dataset.objects.filter(public_id=dataset_id).first()
+            removed = remove_tag(tag=tag, dataset=dataset, item=None)
+
+            if not removed:
+                messages.error(request, "The tag could not be removed. \
+                        Please try again or contact us to report the issue.")
+        
+        elif item_id:
+            item = Item.objects.filter(item_id=item_id).first() 
+            removed = remove_tag(tag=tag, dataset=None, item=item)
+            
+            if not removed:
+                messages.error(request, "The tag could not be removed. \
+                        Please try again or contact us to report the issue.")
+        
+        else:
+          messages.error(request, "A dataset ID or item ID must be provided.")  
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required

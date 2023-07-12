@@ -10,7 +10,26 @@
 <!-- First Section-->
 <h2>Browse Datasets</h2>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque aliquet sapien eget pulvinar venenatis. Quisque imperdiet dolor at cursus hendrerit. In consectetur porttitor ultrices.</p>
-<hr/>
+
+<div class="d-grid gap-2 d-sm-flex justify-content-center justify-content-lg-start my-4">
+    <!-- <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
+        href="" role="button">Browse All</a> -->
+    <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
+        data-bs-toggle="collapse" data-bs-target="#browseByTagCollapse" 
+        aria-expanded="false" aria-controls="browseByTagButton"
+        href="" role="button">Browse by Tag</a>
+</div>
+<div class="collapse" id="browseByTagCollapse">
+    {% for tag in tags %}
+    <a role="button" href="/tag/?title={{ tag }}" 
+        class="btn btn-warning bg-pitt-gold badge-tag text-pitt-dark-blue">
+        {{ tag }} 
+        <span class="badge bg-pitt-royal">{{ tag.get_datasets|length}}</span>
+    </a>
+    {% endfor %}
+</div>
+
+<hr class="my-4"/>
 
 <!-- Second Section -->
 <div class="row gy-4">

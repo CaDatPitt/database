@@ -9,7 +9,7 @@
 
 <!-- Item Info -->
 <h1>{{ item.title }}</h1>
-<img src="{{ item.thumbnail }}"/>
+<img src="{{ item.thumbnail }}" class="my-2"/>
 <p class="contact"><strong>Creator:</strong> {{ item.creator }}</p>
 <p class="contact"><strong>Date:</strong> {{ item.date }}</p>
 <p class="contact"><strong>Type:</strong> 
@@ -25,13 +25,14 @@
 </p>
 <p class="contact"><strong>Tags:</strong> 
     {% for tag in item.tags.all %}
-        {{ tag }}{% if tag != item.tags.all.last %},{% endif %}
+        <!-- {{ tag }}{% if tag != item.tags.all.last %},{% endif %} -->
+      {% include 'snippets/tag-badge.html' %}
     {% endfor %}
 </p>
 <br/>
 
 <!-- Item Action Buttons -->
-<div class="d-grid gap-2 d-sm-flex justify-content-center justify-content-sm-start">
+<div class="d-grid gap-2 d-sm-flex justify-content-center justify-content-lg-start">
   <a role="button" class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
     href="https://digital.library.pitt.edu/islandora/object/pitt%3A{{ item.item_id}} " 
     target="_blank">View Full Item Info</a>
@@ -118,6 +119,11 @@
 {% for dataset in item.get_datasets %}
   {% include 'snippets/tag-dataset-modal.html' %}
   {% include 'snippets/edit-dataset-modal.html' %}
+{% endfor %}
+
+<!-- Tag Modals -->
+{% for tag in item.tags.all %}
+  {% include 'snippets/remove-tag-modal.html' %}
 {% endfor %}
 
 {% endblock %}

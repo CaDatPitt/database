@@ -104,7 +104,7 @@ class Collection(models.Model):
 
 class Tag(models.Model):
     tag_id = models.BigAutoField(_('tag ID'), auto_created=True, primary_key=True)
-    text = models.CharField(_('tag'), max_length=50, blank=True, default='')
+    title = models.CharField(_('tag'), max_length=50, blank=True, default='')
     creator = models.ManyToManyField(CustomUser)
     date_created = models.DateTimeField(_('date created'), default=timezone.now)
 
@@ -113,10 +113,13 @@ class Tag(models.Model):
         verbose_name_plural = 'tags'
 
     def __str__(self):
-        return self.text
+        return self.title
         
     def get_id(self):
         return self.tag_id
+    
+    def get_datasets(self):
+        return Dataset.objects.filter(tags=self).all()
 
 
 class Item(models.Model):
