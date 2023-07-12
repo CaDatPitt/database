@@ -70,8 +70,10 @@ body {
 }
 
 .btn-tag {
-  width: .5em;
-  height: .5em;
+  width: 0.75em;
+  height: 0.75em;
+  margin-top: 0.25em;
+  padding: 0;
 }
 
 .card-list-item {

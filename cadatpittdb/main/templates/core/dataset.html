@@ -16,17 +16,17 @@
   </a>
 </p>
 <p class="contact"><strong>Description:</strong> {{ dataset.description }}</p>
-<p class="contact"><strong>Tags:</strong> 
-  {% for tag in dataset.tags.all %}
-  {{ tag }}{% if tag != dataset.tags.all.last %},{% endif %}
-  {% endfor %}
-</p>
 <p class="contact"><strong>Last modified</strong>: 
   {{ dataset.last_modified|truncate_date }}</p>
+<p class="contact"><strong>Tags:</strong> 
+  {% for tag in dataset.tags.all %}
+    {% include 'snippets/tag-badge.html' %}
+  {% endfor %}
+</p>
 <br/>
 
 <!-- Dataset Action Buttons -->
-<div class="d-grid gap-2 d-sm-flex justify-content-center justify-content-sm-start">
+<div class="d-grid gap-2 d-sm-flex justify-content-center justify-content-lg-start">
   {% if user == dataset.creator %}
     <div class="btn-group">
       <button type="button" data-bs-toggle="dropdown" aria-expanded="false"
@@ -80,10 +80,10 @@
       </div>
       <div class="card-body">
         <div class="row">
-          <div class="col-4 col-xl-3">
+          <div class="col-4 col-md-3">
             <img src="{{ item.thumbnail }}" class="card-img-top item-thumbnail" />
           </div>
-          <div class="col-8 col-xl-9">
+          <div class="col-8 col-md-9">
             <a href="/item/?id={{ item.item_id }}">
               <h5 class="card-title">{{ item.title }}</h5>
             </a>
@@ -121,6 +121,11 @@
   {% include 'snippets/tag-item-modal.html' %}
   {% include 'snippets/add-item-modal.html' %}
   {% include 'snippets/remove-item-modal.html' %}
+{% endfor %}
+
+<!-- Tag Modals -->
+{% for tag in dataset.tags.all %}
+  {% include 'snippets/remove-tag-modal.html' %}
 {% endfor %}
 
 {% endblock %}
