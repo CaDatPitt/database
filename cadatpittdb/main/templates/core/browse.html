@@ -12,7 +12,8 @@
 <h2>Browse Datasets</h2>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque aliquet sapien eget pulvinar venenatis. Quisque imperdiet dolor at cursus hendrerit. In consectetur porttitor ultrices.</p>
 
-<div class="d-grid gap-2 d-sm-flex justify-content-center justify-content-lg-start my-4">
+<div id="retrievalMethod">
+  <div class="d-grid gap-2 d-sm-flex justify-content-center justify-content-lg-start my-4">
     <!-- <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
       href="" role="button">Browse All</a> -->
     <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
@@ -29,7 +30,7 @@
   <div class="accordion-group">
     <!-- Browse by Tag  -->
     <div 
-      class="collapse accordionCollapse" 
+      class="collapse" 
       data-bs-parent="#browseMethod"
       id="browseByTagCollapse">
       {% for tag in tags %}
@@ -45,7 +46,7 @@
 
     <!-- Browse by Collection -->
     <div 
-      class="collapse accordionCollapse" 
+      class="collapse" 
       data-bs-parent="#browseMethod"
       id="browseByCollectionCollapse">
       {% for collection in collections %}
