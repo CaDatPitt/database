@@ -306,9 +306,10 @@ def browse_vw(request):
     context = {
         "title": "Browse Datasets",
         "vocab": vocab,
-        "datasets": Dataset.objects.filter(public=True).all(),
+        "collections": Collection.objects.filter(num_datasets__gt=0).all().order_by('title'),
+        'creators': get_creators(),
+        "datasets": Dataset.objects.filter(public=True).all().order_by('title'),
         "tags": Tag.objects.all(),
-        'creators': get_creators()
     }
 
     if request.method == "POST":
@@ -325,6 +326,33 @@ def browse_vw(request):
         context['datasets'] = filter_datasets(context['datasets'])
 
     return render(request, "core/browse.html", context)
+
+
+@login_required
+def collection_vw(request):
+    context = {
+        "title": "View Datasets by Collection",
+        "vocab": vocab,
+    }
+
+    if request.method == "GET":
+        # Get values from HTTP request
+        id = request.GET.get('id')
+        collection = Collection.objects.filter(collection_id=id).first()
+
+        # Check if the collection doesn't exist
+        if not collection:
+            messages.error(request, "That collection does not exist!")
+            return redirect("/")
+        
+        # Get datasets associated with collection
+        datasets = Dataset.objects.filter(items__collections=collection).distinct()
+
+        # Add objects to context
+        context['collection'] = collection
+        context['datasets'] = datasets
+
+    return render(request, "core/collection.html", context)
 
 
 @login_required
@@ -370,7 +398,6 @@ def create_vw(request):
                                again or contact us to report the issue.")
             return redirect("/retrieve/")
         
-
 
 def dataset_vw(request):
     context = {
@@ -551,7 +578,7 @@ def retrieve_vw(request):
 
 def tag_vw(request):
     context = {
-        "title": "View Tag",
+        "title": "View Datasets by Tag",
         "vocab": vocab,
     }
 
