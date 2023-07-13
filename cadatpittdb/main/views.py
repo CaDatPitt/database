@@ -306,7 +306,7 @@ def browse_vw(request):
     context = {
         "title": "Browse Datasets",
         "vocab": vocab,
-        "collections": Collection.objects.filter(num_datasets__gt=0).all().order_by('title'),
+        "collections": Collection.objects.filter(has_dataset=1).all().order_by('title'),
         'creators': get_creators(),
         "datasets": Dataset.objects.filter(public=True).all().order_by('title'),
         "tags": Tag.objects.all(),

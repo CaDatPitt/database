@@ -17,13 +17,22 @@ def format_affiliation(affiliations=[], other_affiliation=''):
     return affiliation_str
 
 
-def get_user_datasets(user=User):
-    datasets = Dataset.objects.filter(creator=user).all()
-    return datasets
+def get_dataset_collections():
+    collections_list = []
+    for collection in Collection.objects.all():
+        if Dataset.objects.filter(items__collections=collection):
+            collections_list.append(collection)
+    
+    return collections_list
 
 
 def get_item_datasets(item=Item):
     datasets = Dataset.objects.filter(items=item).all()
+    return datasets
+
+
+def get_user_datasets(user=User):
+    datasets = Dataset.objects.filter(creator=user).all()
     return datasets
 
 

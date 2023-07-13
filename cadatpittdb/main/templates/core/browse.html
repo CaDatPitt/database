@@ -14,96 +14,103 @@
 
 <div class="d-grid gap-2 d-sm-flex justify-content-center justify-content-lg-start my-4">
     <!-- <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
-        href="" role="button">Browse All</a> -->
+      href="" role="button">Browse All</a> -->
     <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
-        data-bs-toggle="collapse" data-bs-target="#browseByTagCollapse" 
-        aria-expanded="false" aria-controls="browseByTagButton"
-        href="" role="button">Browse by Tag</a>
+      data-bs-toggle="collapse" data-bs-target="#browseByTagCollapse" 
+      aria-expanded="false" aria-controls="browseByTagButton"
+      href="" role="button">Browse by Tag</a>
     <a class="btn btn-primary bg-pitt-royal border-pitt-royal"
-        data-bs-toggle="collapse" data-bs-target="#browseByCollectionCollapse" 
-        aria-expanded="false" aria-controls="browseByCollectionButton"
-        href="" role="button">Browse by Collection</a>
-</div>
+      data-bs-toggle="collapse" data-bs-target="#browseByCollectionCollapse" 
+      aria-expanded="false" aria-controls="browseByCollectionButton"
+      href="" role="button">Browse by Collection</a>
+  </div>
 
-<!-- Browse by Tag Content -->
-<div class="collapse" id="browseByTagCollapse">
-    {% for tag in tags %}
-    {% if tag.get_num_datasets > 0 %}
-    <a role="button" href="/tag/?title={{ tag }}" 
+  <!-- Browse Methods -->
+  <div class="accordion-group">
+    <!-- Browse by Tag  -->
+    <div 
+      class="collapse accordionCollapse" 
+      data-bs-parent="#browseMethod"
+      id="browseByTagCollapse">
+      {% for tag in tags %}
+      {% if tag.get_num_datasets > 0 %}
+      <a role="button" href="/tag/?title={{ tag }}" 
         class="btn btn-warning bg-pitt-gold badge-tag text-pitt-dark-blue mb-2">
-        {{ tag }} 
-        <span class="badge bg-pitt-royal">{{ tag.get_num_datasets }}</span>
-    </a>
-    {% endif %}
-    {% endfor %}
-</div>
+      {{ tag }} 
+      <span class="badge bg-pitt-royal">{{ tag.get_num_datasets }}</span>
+      </a>
+      {% endif %}
+      {% endfor %}
+    </div>
 
-<!-- Browse by Collection Content -->
-<div class="collapse" id="browseByCollectionCollapse">
-    {% for collection in collections %}
-    <a role="button" href="/collection/?id={{ collection.collection_id }}" 
+    <!-- Browse by Collection -->
+    <div 
+      class="collapse accordionCollapse" 
+      data-bs-parent="#browseMethod"
+      id="browseByCollectionCollapse">
+      {% for collection in collections %}
+      <a role="button" href="/collection/?id={{ collection.collection_id }}" 
         class="btn btn-warning bg-pitt-gold badge-tag text-pitt-dark-blue mb-2">
-        {{ collection }} 
-        <span class="badge bg-pitt-royal">{{ collection.get_num_datasets }}</span>
-    </a>
-    {% endfor %}
+      {{ collection }} 
+      <span class="badge bg-pitt-royal">{{ collection.get_num_datasets }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
 </div>
-
-<hr class="my-4"/>
 
 <!-- Second Section -->
+<hr class="my-4"/>
 <div class="row gy-4">
-    
-    <!--Filters-->
-    <div class="col-md col-lg-4">
-        {% include 'snippets/browse-filter-form.html' %}
-    </div>
-    
-    <!--Dataset Cards-->
-    <div class="col-md col-lg-8">
-        <h5 align="left">Datasets</h5>
-        <p><em>{{ datasets|length }} datasets</em></p>
-        <div class="row gy-4">
-            {% for dataset in datasets %}
-            <div class="col-sm-12">
-                <div class="card h-100 shadow-sm bg-light-gray">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-9">
-                                <strong>Created by</strong>: 
-                                <a href="/profile/?user={{ dataset.creator.username }}"
-                                >{{ dataset.creator }}</a>
-                            </div>
-                            <div class="col-3 text-end">
-                                {% include 'snippets/pin-dataset-icon.html' %}
-                                {% include 'snippets/tag-dataset-icon.html' %}
-                                {% include 'snippets/edit-dataset-icon.html' %}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-title">
-                            <a href="/dataset?id={{ dataset.public_id }}">{{ dataset.title }}</a>
-                        </h6>
-                        <h* class="card-subtitle">{{ dataset.description|truncatewords:50 }}</h*>
-                        <p class="card-text mt-2"><strong># of items</strong>: 
-                            {{ dataset.items.all|length }}<br/>
-                        <strong>Last modified</strong>: {{ dataset.last_modified|truncate_date }}
-                        </p>
-                    </div>
-                </div>
+  <!--Filters-->
+  <div class="col-md col-lg-4">
+    {% include 'snippets/browse-filter-form.html' %}
+  </div>
+
+  <!--Dataset Cards-->
+  <div class="col-md col-lg-8">
+    <h5 align="left">Datasets</h5>
+    <p><em>{{ datasets|length }} datasets</em></p>
+    <div class="row gy-4">
+      {% for dataset in datasets %}
+      <div class="col-sm-12">
+        <div class="card h-100 shadow-sm bg-light-gray">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-9">
+                <strong>Created by</strong>: 
+                <a href="/profile/?user={{ dataset.creator.username }}"
+                  >{{ dataset.creator }}</a>
+              </div>
+              <div class="col-3 text-end">
+                {% include 'snippets/pin-dataset-icon.html' %}
+                {% include 'snippets/tag-dataset-icon.html' %}
+                {% include 'snippets/edit-dataset-icon.html' %}
+              </div>
             </div>
-            {% endfor %}
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">
+              <a href="/dataset?id={{ dataset.public_id }}">{{ dataset.title }}</a>
+            </h6>
+            <h* class="card-subtitle">{{ dataset.description|truncatewords:50 }}</h*>
+            <p class="card-text mt-2"><strong># of items</strong>: 
+              {{ dataset.items.all|length }}<br/>
+              <strong>Last modified</strong>: {{ dataset.last_modified|truncate_date }}
+            </p>
+          </div>
         </div>
+      </div>
+      {% endfor %}
     </div>
+  </div>
 </div>
 
 <!-- Dataset Modals -->
 {% for dataset in datasets %}
-  {% include 'snippets/tag-dataset-modal.html' %}
-  {% include 'snippets/edit-dataset-modal.html' %}
+{% include 'snippets/tag-dataset-modal.html' %}
+{% include 'snippets/edit-dataset-modal.html' %}
 {% endfor %}
-
 {% endblock %}
 
 {% block scripts %}

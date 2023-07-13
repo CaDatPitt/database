@@ -148,46 +148,7 @@ def get_item(metadata_prefix="oai_dc", item_id=str):
         return None
 
 
-""" Other Functions """
-
-def add_item(dataset=Dataset, item=Item):
-    try:
-        dataset.items.add(item)
-        return True
-    except:
-        return False
-
-
-def add_tags(user=User, tags=str, dataset=Dataset, item=Item):
-    tag_list = tags.split("|||")
-
-    for tag in tag_list:
-        cur_tag = Tag.objects.filter(title=tag).first()
-        
-        # Create tag if doesn't already exist
-        if not cur_tag:
-            try:
-                cur_tag = Tag(title=tag)
-                cur_tag.save()
-            except:
-                return False
-            
-        try:
-            # Associate tag with user
-            cur_tag.creator.add(user.user_id)
-            
-            # Associate tag with dataset or item
-            if dataset:
-                dataset.tags.add(cur_tag)
-                dataset.save()
-            if item:
-                item.tags.add(cur_tag)
-                item.save()
-
-            return True
-        except:
-            return False  
-
+""" Dataset Functions """
 
 def copy_dataset(user=User, dataset=Dataset, title=str):
     items = dataset.items.all()
@@ -210,51 +171,6 @@ def copy_dataset(user=User, dataset=Dataset, title=str):
         return dataset
     except:
         return None
-    
-
-def create_item(item_id=str, title=str, creator=str, date=str, item_type=str, 
-                thumbnail=str, collections=list):
-    
-    try:
-        new_item = Item(item_id=item_id, title=title, creator=creator, date=date,
-                        type=item_type, thumbnail=thumbnail)
-        new_item.save()
-
-        # Associate collection(s) with item
-        for title in collections:
-            collection = Collection.objects.filter(title=title).first()
-            new_item.collections.add(collection)
-        
-        return new_item
-    except:
-        return None
-
-
-def create_item_from_id(item_id=str):
-    # Get item record data
-    try:
-        item_record = get_item(item_id=item_id)
-        title = item_record['title']
-        creator = item_record['creator']
-        date = item_record['date']
-        item_type = item_record['type']
-        thumbnail = item_record['thumbnail']
-        collection_ids = item_record['collection']
-    except:
-        return None
-    
-    # Create new item in database
-    new_item = Item(item_id=item_id, title=title, creator=creator, date=date,
-                    type=item_type, thumbnail=thumbnail)
-    new_item.save()
-
-    # Associate collection(s) with item
-    for id in collection_ids:
-        collection_id = id.replace('_', ':')
-        collection = Collection.objects.filter(collection_id=collection_id).first()
-        new_item.collections.add(collection)
-
-    return new_item
 
 
 def create_dataset(dataset=dict, title=str, description=str, tags=list,
@@ -290,6 +206,13 @@ def create_dataset(dataset=dict, title=str, description=str, tags=list,
 
     # Add tags
     add_tags(user=creator, tags=tags, dataset=new_dataset)
+
+    # Update collections
+    for collection in Collection.objects.all():
+        if Dataset.objects.filter(items__collections=collection):
+            collection.has_dataset = 1
+        else:
+            collection.has_dataset = 0
 
     return new_dataset
 
@@ -517,6 +440,69 @@ def pin_dataset(user=User, dataset=Dataset):
         return True
     except:
         return False
+    
+    
+def unpin_dataset(user=User, dataset=Dataset):
+    try:
+        dataset.pinned_by.remove(user)
+        return True
+    except:
+        return False
+
+
+""" Item Functions """
+
+def add_item(dataset=Dataset, item=Item):
+    try:
+        dataset.items.add(item)
+        return True
+    except:
+        return False    
+
+
+def create_item(item_id=str, title=str, creator=str, date=str, item_type=str, 
+                thumbnail=str, collections=list):
+    
+    try:
+        new_item = Item(item_id=item_id, title=title, creator=creator, date=date,
+                        type=item_type, thumbnail=thumbnail)
+        new_item.save()
+
+        # Associate collection(s) with item
+        for title in collections:
+            collection = Collection.objects.filter(title=title).first()
+            new_item.collections.add(collection)
+        
+        return new_item
+    except:
+        return None  
+
+
+def create_item_from_id(item_id=str):
+    # Get item record data
+    try:
+        item_record = get_item(item_id=item_id)
+        title = item_record['title']
+        creator = item_record['creator']
+        date = item_record['date']
+        item_type = item_record['type']
+        thumbnail = item_record['thumbnail']
+        collection_ids = item_record['collection']
+    except:
+        return None
+    
+    # Create new item in database
+    new_item = Item(item_id=item_id, title=title, creator=creator, date=date,
+                    type=item_type, thumbnail=thumbnail)
+    new_item.save()
+
+    # Associate collection(s) with item
+    for id in collection_ids:
+        collection_id = id.replace('_', ':')
+        collection = Collection.objects.filter(collection_id=collection_id).first()
+        new_item.collections.add(collection)
+
+    return new_item
 
 
 def pin_item(user=User, item=Item):
@@ -537,6 +523,47 @@ def remove_item(dataset=Dataset, item=Item):
         return False
 
 
+def unpin_item(user=User, item=Item):
+    try:
+        item.pinned_by.remove(user)
+        return True
+    except:
+        return False
+
+
+""" Tag Functions """
+
+def add_tags(user=User, tags=str, dataset=Dataset, item=Item):
+    tag_list = tags.split("|||")
+
+    for tag in tag_list:
+        cur_tag = Tag.objects.filter(title=tag).first()
+        
+        # Create tag if doesn't already exist
+        if not cur_tag:
+            try:
+                cur_tag = Tag(title=tag)
+                cur_tag.save()
+            except:
+                return False
+            
+        try:
+            # Associate tag with user
+            cur_tag.creator.add(user.user_id)
+            
+            # Associate tag with dataset or item
+            if dataset:
+                dataset.tags.add(cur_tag)
+                dataset.save()
+            if item:
+                item.tags.add(cur_tag)
+                item.save()
+
+            return True
+        except:
+            return False
+
+
 def remove_tag(tag=str, dataset=Dataset, item=Item):
     # Associate tag with dataset or item
     try:
@@ -546,38 +573,6 @@ def remove_tag(tag=str, dataset=Dataset, item=Item):
         else:
             item.tags.remove(tag)
             item.save()
-        return True
-    except:
-        return False
-    
-
-# def tag_dataset(dataset=Dataset, tag=Tag):
-#     try:
-#         dataset.tags.add(tag)
-#         return True
-#     except:
-#         return False
-    
-
-# def tag_item(item=Item, tag=Tag):
-#     try:
-#         item.tags.add(tag)
-#         return True
-#     except:
-#         return False
-
-
-def unpin_dataset(user=User, dataset=Dataset):
-    try:
-        dataset.pinned_by.remove(user)
-        return True
-    except:
-        return False
-
-
-def unpin_item(user=User, item=Item):
-    try:
-        item.pinned_by.remove(user)
         return True
     except:
         return False
@@ -594,4 +589,3 @@ def update_dataset(user=User, dataset=Dataset, title=str, description=str,
         return True
     except:
         return False
-

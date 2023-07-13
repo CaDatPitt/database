@@ -86,7 +86,7 @@ class Collection(models.Model):
     title = models.CharField(_('title'), max_length=200)
     url = models.CharField(_('url'), max_length=500, blank=True, default='')
     sites = models.CharField(_('sites'), max_length=100, blank=True, default='')
-    num_datasets = models.SmallIntegerField(_('number of datasets'), default=0)
+    has_dataset = models.BooleanField(_('has dataset'), default=False)
     date_added = models.DateTimeField(_('date added'), default=timezone.now)
 
     class Meta:
@@ -182,6 +182,7 @@ class Dataset(models.Model):
     date_created = models.DateTimeField(_('date created'), default=timezone.now)
     last_modified = models.DateTimeField(_('last modified'), blank=True, default=timezone.now)
     public = models.BooleanField(_('public'), default=False)
+    saved_results = models.BooleanField(_('is saved results'), default=False)
     pinned_by = models.ManyToManyField(CustomUser, related_name='pinner')
 
     class Meta:
@@ -207,3 +208,4 @@ class Dataset(models.Model):
         for res in results:
             item_ids.append(res['item_id'])
         return item_ids
+    
