@@ -7,14 +7,18 @@
 {% endblock%}
 {% block content %}
 
-<!-- Tag Title -->
-<h1 class="mb-4">{{ tag }}</h1>
-
+<!-- Collection Title -->
+<h1 class="mb-4">{{ collection }}</h1>
+<div class="d-grid gap-2 d-sm-flex justify-content-center justify-content-lg-start">
+  <a role="button" class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
+    href="{{ collection.get_urls.0 }}" 
+    target="_blank">View Collection</a>
+</div>
 <hr class="mt-4"/>
 
 <!-- Datasets -->
 <h4>Datasets</h4>
-<p><em>{{ tag.get_num_datasets }} dataset(s)</em></p>
+<p><em>{{ datasets|length }} dataset(s)</em></p>
 <div class="row gy-4">
   {% for dataset in datasets %}
   <div class="col-md-6 col-xl-4">

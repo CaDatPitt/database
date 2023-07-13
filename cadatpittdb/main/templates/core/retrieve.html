@@ -31,7 +31,7 @@
 <div class="row gy-4">
   <!-- Filters -->
   <div class="col-lg-4">
-    {% include 'snippets/filters-form.html' %}
+    {% include 'snippets/retrieve-filters-form.html' %}
   </div>
 
   <!-- Data Retrieval Forms -->
@@ -209,10 +209,10 @@
           </div>
           <div class="card-body">
             <div class="row">
-              <div class="col-3 d-none d-md-block">
+              <div class="col-2 d-none d-md-block">
                 <img src="{{ item.thumbnail.0 }}" class="card-img-top item-thumbnail" />
               </div>
-              <div class="col-12 col-md-9">
+              <div class="col-12 col-md-10">
                 <a target="_blank" 
                   href="https://digital.library.pitt.edu/islandora/object/{{ item.item_id }}">
                   <h5 class="card-title">{{ item.title|join:", " }}</h5>

@@ -7,6 +7,7 @@ urlpatterns = [
     path("add-item/", views.add_item_vw),
     path("browse/", views.browse_vw),
     path("contact/", views.contact_vw),
+    path("collection/", views.collection_vw),
     path("copy/", views.copy_vw),
     path("create/", views.create_vw),
     path("dashboard/", views.dashboard_vw),

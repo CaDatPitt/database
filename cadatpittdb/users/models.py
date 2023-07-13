@@ -85,7 +85,8 @@ class Collection(models.Model):
     collection_id = models.CharField(_('collection ID'), max_length=200, primary_key=True)
     title = models.CharField(_('title'), max_length=200)
     url = models.CharField(_('url'), max_length=500, blank=True, default='')
-    sites = models.CharField(_('title'), max_length=100, blank=True, default='')
+    sites = models.CharField(_('sites'), max_length=100, blank=True, default='')
+    num_datasets = models.SmallIntegerField(_('number of datasets'), default=0)
     date_added = models.DateTimeField(_('date added'), default=timezone.now)
 
     class Meta:
@@ -100,6 +101,12 @@ class Collection(models.Model):
     
     def get_urls(self):
         return self.url.split('|||')
+    
+    def get_datasets(self):
+        return Dataset.objects.filter(collections=self).all()
+    
+    def get_num_datasets(self):
+        return Dataset.objects.filter(collections=self).count()
     
 
 class Tag(models.Model):
@@ -169,6 +176,7 @@ class Dataset(models.Model):
     description = models.CharField(_('description'), max_length=5000, blank=True, default='')
     filters = models.JSONField(_('filters'), blank=True, default=dict)
     tags = models.ManyToManyField(Tag)
+    collections = models.ManyToManyField(Collection)
     creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='creator')
     editors = models.ManyToManyField(CustomUser, related_name='editor')
     date_created = models.DateTimeField(_('date created'), default=timezone.now)

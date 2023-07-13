@@ -1,0 +1,173 @@
+    <h5 align="left">Filters</h5>
+    <div class="card shadow-sm bg-light-gray">
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="keywords" class="bold">
+                        Keywords 
+                        <span 
+                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            data-bs-title='Find datasets that contain your 
+                            keywords. Search on a single phrase or multiple 
+                            phrases by putting quotes around each and 
+                            separating them with an OR like: "August Wilson"
+                            OR "Century Cycle"'>&#x1F6C8;
+                        </span>
+                    </label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="keywords" 
+                        name="keywords">
+                </div>
+                <br />
+                <div class="form-group">
+                    <label for="title" class="bold">Title
+                        <span 
+                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            data-bs-title='Enter help text here'>&#x1F6C8;
+                        </span>
+                    </label>
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      id="title" 
+                      name="title">
+                  </div>
+                <br />
+                <div class="form-group">
+                    <label for="creator" class="bold">
+                        Created By
+                        <span 
+                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            data-bs-title='Find datasets created by specific
+                            users. Search for a single user or multiple 
+                            users by using the AND and OR operators'>&#x1F6C8;
+                        </span>
+                    </label>
+                    <select 
+                        class="form-control"
+                        id="creator"
+                        name="creator" 
+                        multiple>
+                        <option value="" disabled>Select user(s)</option>
+                        {% for creator in creators %}
+                        <option value="{{ creator.user_id }}">
+                            {{ creator.first_name }} {{ creator.last_name}} 
+                            ({{ creator.username}})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <br />
+                <div class="form-group">
+                    <label for="description" class="bold">
+                        Description
+                        <span 
+                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            data-bs-title='Enter help text here'>&#x1F6C8;
+                        </span>
+                    </label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="description" 
+                        name="description">
+                    </div>
+                <br/>
+                <div class="form-group">
+                    <label for="tags" class="bold">
+                        Tags
+                        <span 
+                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            data-bs-title='Enter help text here'>&#x1F6C8;
+                        </span>
+                    </label>
+                    <select 
+                        class="form-control"
+                        id="tags"
+                        name="tags" 
+                        multiple>
+                        <option value="" disabled>Select tag(s)</option>
+                        {% for tag in tags %}
+                        <option value="{{ tag.tag_id }}">
+                            {{ tag.text }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col">   
+                        <div class="form-group">
+                            <label for="min_num_items" class="bold">Min # of Items
+                                <span 
+                                    data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                    data-bs-title='Enter help text here'>&#x1F6C8;
+                                </span>
+                            </label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                id="min_num_items" 
+                                name="min_num_items"
+                                min="1" max="500000" 
+                                step="1">
+                        </div>
+                    </div>
+                    <div class="col">   
+                        <div class="form-group">
+                            <label for="min_num_items" class="bold">Max # of Items
+                                <span 
+                                    data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                    data-bs-title='Enter help text here'>&#x1F6C8;
+                                </span>
+                            </label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                id="min_num_items" 
+                                name="min_num_items"
+                                min="1" max="500000" 
+                                step="1">
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col">   
+                        <div class="form-group">
+                            <label for="start_date" class="bold">Modification Date
+                                <span 
+                                    data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                    data-bs-title='Enter help text here'>&#x1F6C8;
+                                </span>
+                            </label>
+                            <input 
+                                type="date" 
+                                class="form-control" 
+                                id="start_date" 
+                                name="start_date">
+                        </div>
+                    </div>
+                    <div class="col">   
+                        <div class="form-group">
+                            <label for="end_date" class="bold"></label>
+                            <input 
+                                type="date" 
+                                class="form-control" 
+                                id="start_date" 
+                                name="start_date">
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="col-md-12 text-center">
+                    <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal">
+                        Apply Filters
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div> 
