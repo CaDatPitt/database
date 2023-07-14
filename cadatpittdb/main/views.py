@@ -110,11 +110,14 @@ def search_vw(request):
     if request.method == 'POST':
         keywords = request.POST.get("keywords").strip('"').strip("'").strip()
 
-        found, results = search(keywords)
-        context['keywords'] = keywords
-        context['found'] = found
-        context['results'] = results
-        context['show_results'] = True
+        if keywords:
+            found, results = search(keywords)
+            context['keywords'] = keywords
+            context['found'] = found
+            context['results'] = results
+            context['show_results'] = True
+        else:
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     return render(request, "core/search.html", context)
 

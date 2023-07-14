@@ -597,7 +597,8 @@ def search(keywords):
     found = False
 
     # Search Collections
-    collections = Collection.objects.filter(Q(title__icontains=keywords)).distinct()
+    collections = Collection.objects.filter(Q(collection_id__icontains=keywords) |
+                                            Q(title__icontains=keywords)).distinct()
     if collections: found = True
 
     # Search Datasets
@@ -606,7 +607,8 @@ def search(keywords):
     if datasets: found = True
 
     # Search Items
-    items = Item.objects.filter(Q(title__icontains=keywords) |
+    items = Item.objects.filter(Q(item_id__icontains=keywords) |
+                                Q(title__icontains=keywords) |
                                 Q(creator__icontains=keywords)).distinct()
     if items: found = True
 

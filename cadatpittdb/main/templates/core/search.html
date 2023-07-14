@@ -7,10 +7,13 @@
 {% block navbar_browse %}class="nav-link active"{% endblock %}
 {% block content %}
 
-{% if found and show_results %}
+<!-- Search Header -->
 <h2>Search results for:</h2>
 <p>"{{ keywords }}"</p>
 <hr class="mt-4"/>
+
+<!-- Results-->
+{% if found and show_results %}
 <div class="accordion" id="resultsAccordion">
     {% if results.datasets %}
     <div class="accordion-item">
@@ -187,6 +190,6 @@
       {% endif %}
   </div>
 {% elif show_results %}
-<p> No results were found.</p>
+<p><em>No results found.</em></p>
 {% endif %}
 {% endblock %}
