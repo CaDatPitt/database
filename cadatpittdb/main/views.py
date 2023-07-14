@@ -249,13 +249,16 @@ def signup_vw(request):
             except:
                 messages.error(request, "User could not be created. Please try \
                                again or contact us to report the issue.")
-                
+            
+            # Authenticate user
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
                 messages.success(request, "Account created! Thanks for joining!")
                 return redirect("/dashboard/")
         
+        # Sign up was unsuccessful
+        # Save given form input and return to sign up page
         if user_exists or user is None or not password_valid:
             context['form'] = {'first_name': first_name, 'last_name': last_name,
                                'username': username, 'email': email, 
@@ -323,6 +326,7 @@ def browse_vw(request):
         start_date = request.POST.get("start_date")
         end_date = request.POST.get("end_date")
 
+        # Add dataset to context
         context['datasets'] = filter_datasets(context['datasets'])
 
     return render(request, "core/browse.html", context)
@@ -336,7 +340,6 @@ def collection_vw(request):
     }
 
     if request.method == "GET":
-        # Get values from HTTP request
         id = request.GET.get('id')
         collection = Collection.objects.filter(collection_id=id).first()
 
@@ -384,6 +387,7 @@ def create_vw(request):
                                      filters=filters, creator=request.user, 
                                      public=public)
         
+        # Check if dataset was created
         if new_dataset:
             # Remove session variables
             del request.session['dataset']
@@ -408,6 +412,8 @@ def dataset_vw(request):
     if request.method == "GET":
         dataset_id = request.GET.get('id')
         dataset = Dataset.objects.filter(public_id=dataset_id).first()
+
+        # Add dataset to context
         context['dataset'] = dataset
 
     return render(request, "core/dataset.html", context)
@@ -419,23 +425,19 @@ def edit_vw(request):
         "title": "Edit Dataset",
         "vocab": vocab,
     }
+
+    # Get dataset from HTTP request
     dataset_id = request.GET.get('id')
     dataset = Dataset.objects.filter(public_id=dataset_id).first()
 
     if not dataset:
         messages.error(request, "That dataset does not exist!")
         return redirect("/browse/")
- 
+    
+    # Add dataset to context
     context['dataset'] = dataset
 
-    if request.method == "POST": 
-        # Verify user can modify dataset
-        if not verify_user(request, dataset.creator):
-            messages.error(request, 'You do not have permission to directly edit \
-                           this dataset. Click the "Edit Dataset" button to \
-                           edit a copy of this dataset.')
-            return redirect(f"/dataset/?id={ dataset_id }")
-        
+    if request.method == "POST":
         title = request.POST.get("title")
         description = request.POST.get("description")
         tags = request.POST.get("tags")
@@ -443,12 +445,20 @@ def edit_vw(request):
         if public == "on":
             public = True
         else:
-            public = False
+            public = False 
+        
+        # Verify user can modify dataset
+        if not verify_user(request, dataset.creator):
+            messages.error(request, 'You do not have permission to directly edit \
+                           this dataset. Click the "Edit Dataset" button to \
+                           edit a copy of this dataset.')
+            return redirect(f"/dataset/?id={ dataset_id }")
         
         # Update dataset
         updated = update_dataset(user=request.user, dataset=dataset, title=title, 
                                  description=description, tags=tags, public=public)
         
+        # Check if dataset
         if not updated:
             messages.error(request, "Dataset could not be updated. Please try \
                            again or contact us to report the issue.")
@@ -487,7 +497,6 @@ def retrieve_vw(request):
 
     if request.method == "POST":      
         if request.POST.get("filter"):
-            # Get filters from form
             keywords = request.POST.get("keywords")
             title = request.POST.get("title")
             creator = request.POST.get("creator")
@@ -613,22 +622,26 @@ def add_item_vw(request):
         dataset = Dataset.objects.filter(title=dataset_title).first()
 
     if dataset:
+        # Verify that user can modify request
         if not verify_user(request, dataset.creator):
             messages.error(request, 'You do not have permission to directly edit \
                            this dataset. Click the "Edit Dataset" button to \
                            edit a copy of this dataset.')
             return redirect(f"/dataset/?id={ dataset_id }")
         
+        # Create item if it's not created
         if not item:
             item = create_item_from_id(item_id=item_id)
             if not item:
                 messages.error(request, "Item could not be added. Please try \
                                again or contact us to report the issue.")
+                
+        # Add item to dataset
         add_item(dataset=dataset, item=item)
     else:
         messages.error(request, "That dataset does not exist!")
 
-    return redirect(f"/item/?id={ item.item_id }")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
@@ -636,7 +649,7 @@ def copy_vw(request):
     dataset_id = request.GET.get('id')
     dataset = Dataset.objects.filter(public_id=dataset_id).first()
     title = request.POST.get('title')
-
+    
     if not dataset:
         messages.error(request, "That dataset does not exist!")
     
