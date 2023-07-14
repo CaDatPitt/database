@@ -42,6 +42,44 @@ def reformat_data(data=dict):
     return reformatted_data
 
 
+def reformat_for_download(data=dict):
+    reformatted_data = {}
+    
+    for field in data:
+        reformatted_data[field] = "|||".join(data[field])
+    
+    return reformatted_data
+
+
+def process_record(record, download=False):
+    # Map record data
+    data = record[1].getMap()
+
+    # Append record data to dataset list
+    if download:
+        # Return reformmatted data
+        return reformat_for_download(data)
+    else:
+        # Store item ID as a string instead of a list
+        data['item_id'] = data['item_id'][0]
+
+        # Get collection IDs 
+        collection_ids = record[0].setSpec()
+        data['collection'] = []
+
+        # Use Collection IDs to retrieve collection objects from db
+        for collection_id in collection_ids:
+            id = collection_id.replace("pitt_", "pitt:")
+            collection = Collection.objects.filter(collection_id=id).first()
+            
+            # Append collection title and URL to list
+            if collection:
+                data['collection'].append((collection.title, 
+                                            collection.get_urls()[0]))
+        
+        return data
+
+
 def get_collections():
     sets = []
     url_prefix = "https://digital.library.pitt.edu/islandora/object/"
@@ -61,71 +99,76 @@ def get_collections():
     return sets
 
 
-def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[]):
+def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[],
+                download=False):
+    
+    # pyoai objects
     registry = MetadataRegistry()
     reader = pitt_oai_dc_reader
-    if metadata_prefix == 'mods':
-        pass
     registry.registerReader(metadata_prefix, reader)
     client = Client(URL, registry)
     dataset = []
     exceptions = []
 
+    # Build dataset from list of item IDs
     if item_ids:
         for id in item_ids:
+            # Try to get item record from OAI-PMH
             try:
+                # Get record object
                 record = client.getRecord(metadataPrefix=metadata_prefix,
                                             identifier=id)
-                data = record[1].getMap()
-                data['item_id'] = data['item_id'][0]
-                data['collection'] = []
-                collection_ids = record[0].setSpec()
-                for collection_id in collection_ids:
-                    id = collection_id.replace("pitt_", "pitt:")
-                    collection = Collection.objects.filter(collection_id=id).first()
-                    if collection:
-                        data['collection'].append((collection.title, 
-                                                collection.get_urls()[0]))
+                
+                # Get data from record object
+                if download:
+                    data = process_record(record, download=True)
+                else:
+                    data = process_record(record)
+                    
+                # Append data to dataset list
                 dataset.append(data)
-            except:
-                exceptions.append(id)
-    else:
-        records = None
-        if collections:
-            sets = ":".join(collections).replace("pitt:", "pitt_")
-            try:
-                records = client.listRecords(metadataPrefix=metadata_prefix,
-                                    set=sets)
-            except:
-                records = []
-        else:
-            records = client.listRecords(metadataPrefix=metadata_prefix)
 
+            # Add exception message to list
+            except:
+                exceptions.append("item %s was not processed successfully" 
+                                  % data['item_id'][0])
+    
+    # Get item records by collection/set(s)
+    else:
+        # Reformat and combine list of collection IDs
+        sets = ":".join(collections).replace("pitt:", "pitt_")
+        
+        # Try to get item records from OAI-PMH
+        records = None
+        try:
+            records = client.listRecords(metadataPrefix=metadata_prefix,
+                                set=sets)
+        # If retrieval not succesful, set records to empty list
+        except:
+            records = []
+        
+        # Get data from record objects
         for record in records:
             try:
-                data = record[1].getMap()
-                data['item_id'] = data['item_id'][0]
-                data['collection'] = []
-                collection_ids = record[0].setSpec()
-                for collection_id in collection_ids:
-                    id = collection_id.replace("pitt_", "pitt:")
-                    collection = Collection.objects.filter(collection_id=id).first()
-                    if collection:
-                        data['collection'].append((collection.title, 
-                                                   collection.get_urls()[0]))
-                    else:
-                        exceptions.append("collection %s was not found" % id)
+                # Process data
+                data = process_record(record)
+                
+                # Append data to dataset lit
                 dataset.append(data)
             except:
                 exceptions.append("item %s was not processed successfully" 
                                   % data['item_id'][0])
 
+    # Create DataFrame from list of dictionaries (dataset)
     dataset_df = pd.DataFrame.from_dict(dataset)
     
-    # decode encoded columns
-    dataset_df = decode_values(dataset_df)
+    if download:
+        return dataset_df
+    else:
+        # Decode encoded columns
+        dataset_df = decode_values(dataset_df)
 
-    return dataset, dataset_df, exceptions
+        return dataset, dataset_df, exceptions
 
 
 def get_item(metadata_prefix="oai_dc", item_id=str):
@@ -217,6 +260,12 @@ def create_dataset(dataset=dict, title=str, description=str, tags=list,
         collection.save()
 
     return new_dataset
+
+
+def dataset_to_df(dataset=Dataset):
+    item_ids = list(dataset.items.values_list('item_id', flat=True))
+    dataset = get_dataset(item_ids=item_ids, download=True)
+    return pd.DataFrame.from_dict(dataset)
 
 
 def filter_dataset(request=HttpRequest, dataset=pd.DataFrame, keywords=str, title=str, 
@@ -424,15 +473,6 @@ def delete_dataset(dataset_id=str):
             return False
     except:
         return False
-
-
-def download_dataset(request, dataset):
-    tmp = tempfile.NamedTemporaryFile(delete=False, prefix="dataset",
-                                      suffix=now())
-    with open(tmp.name, 'w') as f:
-        tmp.write(dataset.to_csv(index=False))
-    tmp.close()
-    os.unlink(tmp.name)
 
 
 def pin_dataset(user=User, dataset=Dataset):

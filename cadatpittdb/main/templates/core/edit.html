@@ -85,7 +85,7 @@
 <div class="row gy-4">
   <!-- Filters -->
   <div class="col-md col-lg-4">
-    {% include 'snippets/filters-form.html' %}
+    {% include 'snippets/browse-filter-form.html' %}
   </div>
 
   <!-- Item Cards -->
@@ -95,32 +95,52 @@
     <div class="row gy-4">
       {% for item in dataset.items.all %}
       <div class="col-12">
-        <div class="card item-card shadow-sm bg-light-gray">
-          <img src="{{ item.thumbnail }}" class="card-img-top item-thumbnail" />
-          <div class="card-body">
-            <div class="row border-bottom mb-2 pb-2">
+        <div class="card shadow-sm bg-light-gray">
+          <div class="card-header">
+            <div class="row">
+              <!-- <div class="col text-start">
+                  <input 
+                    type="checkbox" 
+                    class="item-checkbox mt-1" 
+                    id="include{{ item.item_id }}"
+                    name="include"
+                    value="">
+                  <label class="form-check-label" for="public">
+                    Include in dataset
+                  </label>
+              </div> -->
               <div class="col text-end">
                 {% include 'snippets/pin-item-icon.html' %}
                 {% include 'snippets/tag-item-icon.html' %}
+                {% include 'snippets/add-item-icon.html' %}
                 {% include 'snippets/remove-item-icon.html' %}
               </div>
             </div>
-            <a href="/item/?id={{ item.item_id }}">
-              <h5 class="card-title">{{ item.title }}</h5>
-            </a>
-            <p class="mb-0">
-              <strong>Creator</strong>: {{ item.creator }}<br/>
-              <strong>Date</strong>: {{ item.date }}<br/>
-              <strong>Type</strong>:
-              {% for type in item.get_types %}
-                {{ type|title }}{% if type != item.get_types|last %},{% endif %}
-              {% endfor %} <br/>
-              <strong>Collections</strong>:
-              {% for collection in item.collections.all %}
-              <br/>    
-              <a href="{{ collection.get_urls.0 }}" target="_blank">{{ collection }}</a>
-              {% endfor %}
-            </p>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-2 d-none d-md-block">
+                <img src="{{ item.thumbnail }}" class="card-img-top item-thumbnail" />
+              </div>
+              <div class="col-12 col-md-10">
+                <a href="/item/?id={{ item.item_id }}">
+                  <h5 class="card-title">{{ item.title }}</h5>
+                </a>
+                <p class="mb-0">
+                  <strong>Creator</strong>: {{ item.creator }}<br/>
+                  <strong>Date</strong>: {{ item.date }}<br/>
+                  <strong>Type</strong>:
+                  {% for type in item.get_types %}
+                    {{ type|title }}{% if type != item.get_types|last %},{% endif %}
+                  {% endfor %} <br/>
+                  <strong>Collections</strong>:
+                  {% for collection in item.collections.all %}
+                  <br/>    
+                  <a href="{{ collection.get_urls.0 }}" target="_blank">{{ collection }}</a>
+                  {% endfor %}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

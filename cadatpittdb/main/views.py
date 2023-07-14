@@ -2,7 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.core.files.temp import NamedTemporaryFile
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed, FileResponse
 from wsgiref.util import FileWrapper
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
@@ -120,7 +120,6 @@ def search_vw(request):
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     return render(request, "core/search.html", context)
-
 
 
 """ Auth Pages """
@@ -748,21 +747,27 @@ def delete_dataset_vw(request):
 
 @login_required
 def download_vw(request):
-    context = {
-        "title": "Download Dataset",
-        "vocab": vocab,
-    }
-    newfile = NamedTemporaryFile(suffix='.txt') # change suffix depending on option
-    # save your data to newfile.name
-    wrapper = FileWrapper(newfile)
-    content_type = mimetypes.guess_type(newfile.file.name)
-    response = HttpResponse(wrapper, content_type=content_type)
-    response['Content-Disposition'] = 'attachment; filename=%s' % os.path.basename(newfile.name)
-    response['Content-Length'] = os.path.getsize(newfile.name)
-    context['file'] = response
+    #
+    dataset_id = request.GET.get('id')
 
-    return render(request, "core/download.html", context, response)
+    # Get dataset from db
+    dataset = Dataset.objects.filter(public_id=dataset_id).first()
 
+    # Create df from dataset
+    dataset_df = dataset_to_df(dataset)
+
+    # Create temp CSV file for download
+    response = None
+
+    with NamedTemporaryFile() as csv_file:
+        # Write data to file
+        dataset_df.to_csv(csv_file.name, index=False)
+    
+        # Prepare and send file
+        response = FileResponse(open(csv_file.name, "rb"), 
+                                filename=dataset.title.replace(" ", "_") + ".csv")
+
+    return response
 
 @login_required
 def pin_dataset_vw(request):
@@ -770,7 +775,6 @@ def pin_dataset_vw(request):
     dataset = Dataset.objects.filter(public_id=dataset_id).first()
 
     if dataset:
-
         pinned = pin_dataset(user=request.user, dataset=dataset)
         
         if not pinned:
