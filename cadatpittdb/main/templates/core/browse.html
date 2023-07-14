@@ -10,7 +10,7 @@
 
 <!-- First Section-->
 <h2>Browse Datasets</h2>
-<p>Discover datasets and narrow your browsing by tag, collection, and filters. 
+<p>Discover datasets and narrow your browsing by tag, collection, and filters.<br/> 
   You can browse without an account. If you would like to pin, tag, or edit a 
   dataset, please <a href="/login/">log in</a> or <a href="/signup/">sign up</a>.
 </p>
@@ -33,7 +33,7 @@
   <div class="accordion-group">
     <!-- Browse by Tag  -->
     <div 
-      class="collapse" 
+      class="accordion-collapse collapse" 
       data-bs-parent="#browseMethod"
       id="browseByTagCollapse">
       {% for tag in tags %}
@@ -49,7 +49,7 @@
 
     <!-- Browse by Collection -->
     <div 
-      class="collapse" 
+      class="accordion-collapse collapse" 
       data-bs-parent="#browseMethod"
       id="browseByCollectionCollapse">
       {% for collection in collections %}

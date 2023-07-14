@@ -207,4 +207,17 @@ class Dataset(models.Model):
         for res in results:
             item_ids.append(res['item_id'])
         return item_ids
-    
+
+
+class Message(models.Model):
+    message_id = models.BigAutoField(_('dataset ID'), auto_created=True, primary_key=True)
+    email = models.EmailField(_('email address'))
+    full_name = models.CharField(_('full name'), max_length=150)
+    inquiry_type = models.CharField(_('inquiry type'), max_length=100, blank=True, default='')
+    subject = models.CharField(_('subject'), max_length=200, blank=True, default='')
+    message = models.CharField(_('message'), max_length=5000, blank=True, default='')
+    date_submitted = models.DateTimeField(_('date submitted'), default=timezone.now)
+
+    class Meta:
+        verbose_name = 'message'
+        verbose_name_plural = 'messages'

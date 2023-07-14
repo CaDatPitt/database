@@ -41,14 +41,30 @@ def about_vw(request):
 
 
 def contact_vw(request):
-    if request.method == "GET":
-        context = {
-            "title": "Contact Us",
-            "vocab": vocab,
-        }
-        return render(request, "core/contact.html", context)
-    else:
-        return HttpResponseNotAllowed(["POST"])
+    context = {
+        "title": "Contact Us",
+        "vocab": vocab,
+    }
+
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name')
+        email = request.POST.get('email')
+        inquiry_type = request.POST.get('inquiry_type')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+
+        # Create message
+        message = Message(full_name=full_name, email=email, 
+                          inquiry_type=inquiry_type, 
+                          subject=subject, message=message)
+        message.save()
+
+        # Flash acknowledgement
+        messages.success(request, "Thank you for contacting us! We've received\
+                         your message and will respond as soon as we can.")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    
+    return render(request, "core/contact.html", context)
 
 
 def documentation_vw(request):

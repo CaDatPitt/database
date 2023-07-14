@@ -11,7 +11,7 @@
   <!-- Dashboard -->
   <div class="col-12 col-lg-8">
     <h2 align="center" class="mb-4">Dashboard</h2>
-    <form method="POST" action="#">
+    <!-- <form method="POST" action="#">
       {% csrf_token %}
       <div class="input-group">
         <input
@@ -35,7 +35,7 @@
           </div>
         </div>
       </div>
-    </form>
+    </form> -->
 
     <!--My Datasets, Pinned Datasets, Saved Results section -->
     <div class="card shadow-sm bg-light-gray mt-4">
@@ -59,6 +59,7 @@
         <div class="tab-content mt-3">
           <!--My Datasets -->
           <div class="tab-pane active" id="mydatasets" role="tabpanel" aria-labelledby="mydatasets-tab">
+            {% if user.get_datasets|length > 0 %}
             <ul class="list-group">
               {% for dataset in user.get_datasets %}
               <li class="list-group-item bg-light-gray ">
@@ -76,7 +77,6 @@
               </li>
               {% endfor %}
               <!--pagination with django-->
-              <br/></br>
               <nav aria-label="page navigation">
                 <ul class="pagination">
                   {% if items.has_previous %}
@@ -91,10 +91,13 @@
                   {% if items.has_next %}
                     <li class="page-item>"><a class="page-link" href="?page={{ items.next_page_number }}">Next</a></li>
                     <li class="page-item>"><a class="page-link" href="?page={{ items.paginator.num_pages }}">Last &raquo</a></li>
-                  {% endif %}
                 </ul>
+                {% endif %}
               </nav>
-            </ul>     
+            </ul>
+            {% else %}
+            <p><em>You don't have any datasets yet.</em></p>
+            {% endif %}
             <!-- Create New Dataset Button -->
             <!-- <div class="col-md-12 text-center mt-3">
               <a class="btn btn-primary bg-pitt-royal border-pitt-royal"
@@ -121,9 +124,11 @@
               </li>
               {% endfor %}
             </ul>
+            {% else%}
+            <p><em>You don't have any saved results yet.</em></p>
             {% endif %}
             <!-- Pagination -->
-            {% include 'snippets/pagination.html' %}
+            <!-- {% include 'snippets/pagination.html' %} -->
             <!-- Retrieve Data Button -->
             <!-- <div class="col-md-12 text-center mt-3">
               <a class="btn btn-primary bg-pitt-royal border-pitt-royal"
@@ -150,9 +155,11 @@
               </li>
               {% endfor %}
             </ul>
+            {% else%}
+            <p><em>You don't have any pinned datasets yet.</em></p>
             {% endif %}
             <!-- Pagination -->
-            {% include 'snippets/pagination.html' %}
+            <!-- {% include 'snippets/pagination.html' %} -->
           </div>
 
             <!-- Pinned Items -->
@@ -174,9 +181,11 @@
               </li>
               {% endfor %}
             </ul>
+            {% else%}
+            <p><em>You don't have any pinned items yet.</em></p>
             {% endif %}
             <!-- Pagination -->
-            {% include 'snippets/pagination.html' %}
+            <!-- {% include 'snippets/pagination.html' %} -->
           </div>
         </div>
       </div>
