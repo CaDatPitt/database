@@ -106,7 +106,7 @@ class Collection(models.Model):
         return Dataset.objects.filter(collections=self).all()
     
     def get_num_datasets(self):
-        return Dataset.objects.filter(collections=self).count()
+        return Dataset.objects.filter(items__collections=self).distinct().count()
     
 
 class Tag(models.Model):
@@ -176,7 +176,6 @@ class Dataset(models.Model):
     description = models.CharField(_('description'), max_length=5000, blank=True, default='')
     filters = models.JSONField(_('filters'), blank=True, default=dict)
     tags = models.ManyToManyField(Tag)
-    collections = models.ManyToManyField(Collection)
     creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='creator')
     editors = models.ManyToManyField(CustomUser, related_name='editor')
     date_created = models.DateTimeField(_('date created'), default=timezone.now)
