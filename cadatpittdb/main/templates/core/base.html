@@ -89,17 +89,20 @@
             </li>
             {% endif %}
           </ul>
-          <form method="POST" class="d-flex" role="search">
+          <form method="POST" class="d-flex" role="search" action="/search/">
             {% csrf_token %}
             <img style="width: 2em;"
               src="https://upload.wikimedia.org/wikipedia/commons/b/bd/VisualEditor_-_Icon_-_Search-big_-_white.svg">
             <input
               class="form-control me-2"
-              type="search"
-              name="search_content"
+              type="keywords"
+              name="keywords"
               placeholder="Search the site"
               aria-label="Search">
-            <button class="btn btn-outline-warning border-pitt-gold" type="submit">Search</button>
+            <button 
+              class="btn btn-outline-warning border-pitt-gold" type="submit" 
+              data-bs-toggle="modal" data-bs-target="#loadingModal">Search
+            </button>
           </form>
         </div>
       </div>

@@ -104,7 +104,18 @@ def search_vw(request):
     context = {
         "title": "Search",
         "vocab": vocab,
+        "show_results": False,
     }
+
+    if request.method == 'POST':
+        keywords = request.POST.get("keywords").strip('"').strip("'").strip()
+
+        found, results = search(keywords)
+        context['keywords'] = keywords
+        context['found'] = found
+        context['results'] = results
+        context['show_results'] = True
+
     return render(request, "core/search.html", context)
 
 

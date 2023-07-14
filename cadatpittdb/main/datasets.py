@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.http import HttpRequest
+from django.db.models import Q
 from oaipmh.client import Client
 from oaipmh.metadata import MetadataRegistry, oai_dc_reader
 from eldar import Query
@@ -590,3 +591,49 @@ def update_dataset(user=User, dataset=Dataset, title=str, description=str,
         return True
     except:
         return False
+
+
+def search(keywords):
+    found = False
+
+    # Search Collections
+    collections = Collection.objects.filter(Q(title__icontains=keywords)).distinct()
+    if collections: found = True
+
+    # Search Datasets
+    datasets = Dataset.objects.filter(Q(title__icontains=keywords) |
+                                      Q(description__icontains=keywords)).distinct()
+    if datasets: found = True
+
+    # Search Items
+    items = Item.objects.filter(Q(title__icontains=keywords) |
+                                Q(creator__icontains=keywords)).distinct()
+    if items: found = True
+
+    # Search Pages
+    pages = Page.objects.filter(Q(title__icontains=keywords) |
+                                Q(content__icontains=keywords)).distinct()
+    if pages: found = True
+
+    # Search Tags
+    tags = Tag.objects.filter(Q(title__icontains=keywords)).distinct()
+    if tags: found = True
+
+    # Search Users
+    users = User.objects.filter(Q(first_name__icontains=keywords) | 
+                                Q(last_name__icontains=keywords) |
+                                Q(title__icontains=keywords) |
+                                Q(bio__icontains=keywords)).distinct()
+    if users: found = True
+    
+    # Add results to dict
+    results = {
+        'collections': collections,
+        'datasets': datasets,
+        'items': items,
+        'pages': pages,
+        'tags': tags,
+        'users': users
+    }
+
+    return found, results

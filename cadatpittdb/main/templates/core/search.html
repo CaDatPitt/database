@@ -6,35 +6,187 @@
 {% endblock%}
 {% block navbar_browse %}class="nav-link active"{% endblock %}
 {% block content %}
+
+{% if found and show_results %}
 <h2>Search results for:</h2>
-<p>"search text input"</p>
+<p>"{{ keywords }}"</p>
 <hr class="mt-4"/>
-<ul class="list-group">
-    <li class="list-group-item bg-light-gray ">
-        <div class="row">
-        <div class="col-auto">
-            August Wilson plays
+<div class="accordion" id="resultsAccordion">
+    {% if results.datasets %}
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button 
+            class="accordion-button collapsed bg-light-gray" 
+            type="button" data-bs-toggle="collapse" 
+            data-bs-target="#datasetsCollapse" aria-expanded="true" 
+            aria-controls="datasetsCollapse">
+            <h5>Datasets</h5>
+        </button>
+      </h2>
+      <div id="datasetsCollapse" class="accordion-collapse collapse" 
+        data-bs-parent="#resultsAccordion">
+        <div class="accordion-body list-group-item">
+            <ul class="list-group">
+                {% for dataset in results.datasets %}
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-auto">
+                            <a href="/dataset?id={{ dataset.public_id }}">
+                                {{ dataset.title }}</a>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+         </div>
+      </div>
+    </div>
+    {% endif %}
+    {% if results.items %}
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button 
+            class="accordion-button collapsed bg-light-gray" type="button" 
+            data-bs-toggle="collapse" data-bs-target="#itemsCollapse" 
+            aria-expanded="false" aria-controls="itemsCollapse">
+            <h5>Items</h5>
+        </button>
+      </h2>
+      <div id="itemsCollapse" class="accordion-collapse collapse" 
+        data-bs-parent="#resultsAccordion">
+        <div class="accordion-body list-group-item">
+            <ul class="list-group">
+                {% for item in results.items %}
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-auto">
+                            <a href="/item?id={{ item.item_id }}">
+                                {{ item.title }}</a>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
+      </div>
+    </div>
+    {% endif %}
+    {% if results.collections %}
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button 
+            class="accordion-button collapsed bg-light-gray" type="button" 
+            data-bs-toggle="collapse" data-bs-target="#collectionsCollapse" 
+            aria-expanded="false" aria-controls="collectionsCollapse">
+            <h5>Collections</h5>
+        </button>
+      </h2>
+      <div id="collectionsCollapse" class="accordion-collapse collapse" 
+        data-bs-parent="#resultsAccordion">
+        <div class="accordion-body list-group-item">
+            <ul class="list-group">
+                {% for collection in results.collections %}
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-auto">
+                            <a href="/collection?id={{ collection.collection_id }}">
+                                {{ collection.title }}</a>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
-    </li>
-    <li class="list-group-item bg-light-gray">
-        <div class="row">
-        <div class="col-auto">
-        <div class="col-auto">
-            Pittsburgh major league sports
+      </div>
+    </div>
+    {% endif %}
+    {% if results.tags %}
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed bg-light-gray" type="button" 
+            data-bs-toggle="collapse" data-bs-target="#tagCollapse" 
+            aria-expanded="false" aria-controls="tagCollapse">
+            <h5>Tags</h5>
+          </button>
+        </h2>
+        <div id="tagCollapse" class="accordion-collapse collapse" 
+        data-bs-parent="#resultsAccordion">
+          <div class="accordion-body list-group-item">
+            <ul class="list-group">
+                {% for tag in results.tags %}
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-auto">
+                            <a href="/tag/?id={{ tag.tag_id }}">
+                                {{ tag }}</a>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+          </div>
         </div>
+      </div>
+      {% endif %}
+      {% if results.pages %}
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed bg-light-gray" type="button" 
+            data-bs-toggle="collapse" data-bs-target="#pagesCollapse" 
+            aria-expanded="false" aria-controls="pagesCollapse">
+            <h5>Pages</h5>
+          </button>
+        </h2>
+        <div id="pagesCollapse" class="accordion-collapse collapse" 
+            data-bs-parent="#resultsAccordion">
+          <div class="accordion-body list-group-item">
+            <ul class="list-group">
+                {% for page in results.pages %}
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-auto">
+                            <a href="{{ page.url }}">
+                                {{ page.title }}</a>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+          </div>
         </div>
-    </li>
-    <li class="list-group-item bg-light-gray">
-        <div class="row">
-        <div class="col-auto">
-            Pittsburgh Northside 1990s
+      </div>
+      {% endif %}
+      {% if results.users %}
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed bg-light-gray" type="button" 
+            data-bs-toggle="collapse" data-bs-target="#usersCollapse" 
+            aria-expanded="false" aria-controls="usersCollapse">
+            <h5>Users</h5>
+          </button>
+        </h2>
+        <div id="usersCollapse" class="accordion-collapse collapse" 
+            data-bs-parent="#resultsAccordion">
+          <div class="accordion-body list-group-item">
+            <ul class="list-group">
+                {% for user in results.users %}
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-auto">
+                            <a href="/profile?user={{ user.username }}">
+                                {{ user }}</a>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+          </div>
+          </div>
         </div>
-        </div>
-    </li>
-  </ul>
-{% endblock %}
-{% block scripts %}
-{% endblock %}
-{% block bootstrapjs %}
+      </div>
+      {% endif %}
+  </div>
+{% elif show_results %}
+<p> No results were found.</p>
+{% endif %}
 {% endblock %}

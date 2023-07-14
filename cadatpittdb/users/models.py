@@ -221,3 +221,19 @@ class Message(models.Model):
     class Meta:
         verbose_name = 'message'
         verbose_name_plural = 'messages'
+
+
+
+class Page(models.Model):
+    page_id = models.CharField(_('page ID'), max_length=200, primary_key=True)
+    title = models.CharField(_('title'), max_length=200)
+    url = models.CharField(_('url'), max_length=300, blank=True, default='')
+    content = models.CharField(_('content'), max_length=8000, blank=True, default='')
+
+    class Meta:
+        verbose_name = 'page'
+        verbose_name_plural = 'pages'
+
+    def __str__(self):
+        return self.title
+    
