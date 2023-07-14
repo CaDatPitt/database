@@ -114,7 +114,8 @@
                 </div>
                 <br/>
                 <div class="col-md-12 text-center">
-                  <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal">
+                  <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal"
+                   data-bs-toggle="modal" data-bs-target="#loadingModal">
                   Retrieve
                   </button>
                 </div>
@@ -143,7 +144,9 @@
                 <div class="col-md-12 text-center">
                   <button 
                     type="submit" 
-                    class="btn btn-primary bg-pitt-royal border-pitt-royal">
+                    class="btn btn-primary bg-pitt-royal border-pitt-royal"
+                    data-bs-toggle="modal" data-bs-target="#loadingModal"
+                    >
                   Retrieve
                   </button>
                 </div>
@@ -262,7 +265,7 @@
             </div>
         </div>
     </div>
-</div>
+  </div>
 
 <!-- Add/Tag Item Modals -->
 {% for index, item in dataset.iterrows %}

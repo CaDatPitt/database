@@ -6,4 +6,8 @@
 {% endblock%}
 {% block navbar_retrieve %}class="nav-link active"{% endblock %}
 {% block content %}
+<p><strong>The following items were not found in the database:</strong></p>
+{% for item in request.session.exceptions %}
+{{ item }}<br/>
+{% endfor %}
 {% endblock %}

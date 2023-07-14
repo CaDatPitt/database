@@ -16,6 +16,7 @@ urlpatterns = [
     path("documentation/", views.documentation_vw),
     path("download/", views.download_vw),
     path("edit/", views.edit_vw),
+    path("exceptions/", views.exceptions_vw),
     path("faq/", views.faq_vw),
     path("help/", views.help_vw),
     path("item/", views.item_vw),

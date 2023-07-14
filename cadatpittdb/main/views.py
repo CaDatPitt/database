@@ -482,6 +482,17 @@ def edit_vw(request):
     return render(request, "core/edit.html", context)
 
 
+def exceptions_vw(request):
+    if request.method == "GET":
+        context = {
+            "title": "Exceptions",
+            "vocab": vocab,
+        }
+        return render(request, "core/exceptions.html", context)
+    else:
+        return HttpResponseNotAllowed(["POST"])
+
+
 def item_vw(request):
     context = {
         "title": "View Item",
@@ -559,6 +570,15 @@ def retrieve_vw(request):
             if retrieval_method == 'identifiers':
                 item_ids = iter(item_ids.splitlines())
                 dataset, dataset_df, exceptions = get_dataset(item_ids=item_ids)
+
+                if exceptions:
+                    request.session['exceptions'] = exceptions
+                    # Do something with them
+                    messages.error(request, "Some items were not found in\
+                                   the database. Click <a href='/exceptions/' \
+                                   target='_blank'>here</a> to view a list of \
+                                   item ids that were not processed.", 
+                                   extra_tags='safe')
             elif retrieval_method == 'file':
                 if not csv_file.name.endswith('.csv'):
                     messages.error(request,'File is not CSV type.')
@@ -569,6 +589,7 @@ def retrieve_vw(request):
                         dataset, dataset_df, exceptions = get_dataset(item_ids=item_ids)
 
                         if exceptions:
+                            request.session['exceptions'] = exceptions
                             # Do something with them
                             messages.error(request, "Values in the first column\
                                             of the input file were not found in\
@@ -581,6 +602,7 @@ def retrieve_vw(request):
                                        us to report the issue.')
             elif retrieval_method == 'collections':
                 dataset, dataset_df, exceptions = get_dataset(collections=collections)
+
             else:
                 messages.error(request, "You must either paste a list of \
                                 item identifiers (each on a separate line) \
