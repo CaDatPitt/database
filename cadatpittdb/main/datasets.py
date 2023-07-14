@@ -190,13 +190,13 @@ def create_dataset(dataset=dict, title=str, description=str, tags=list,
             # Create item if it doesn't already exist
             cur_item = Item.objects.filter(item_id=item['item_id']).first()
             if not cur_item:
-                cur_item = create_item(item_id=item['item_id'], 
-                                        title=item['title'],
-                                        creator=item['creator'],
-                                        date=item['date'],
-                                        item_type=item['type'], 
-                                        thumbnail=item['thumbnail'],
-                                        collections=item['collection'])
+                cur_item = create_item(item_id=item['item_id'],
+                                       title=item['title'],
+                                       creator=item['creator'],
+                                       date=item['date'],
+                                       item_type=item['type'],
+                                       thumbnail=item['thumbnail'],
+                                       collections=item['collection'])
                 
             # Save items to dataset
             add_item(new_dataset, cur_item)
@@ -213,6 +213,7 @@ def create_dataset(dataset=dict, title=str, description=str, tags=list,
             collection.has_dataset = 1
         else:
             collection.has_dataset = 0
+        collection.save()
 
     return new_dataset
 

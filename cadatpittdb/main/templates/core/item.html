@@ -35,8 +35,13 @@
   <a role="button" class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
     href="https://digital.library.pitt.edu/islandora/object/{{ item.item_id}} " 
     target="_blank">View Full Item Info</a>
+  {% if item.item_id in user.get_pinned_item_ids  %}
   <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
-    href="" role="button">Pin Item</a>
+    href="/unpin-item/?id={{ item.item_id }}">Pin Item</a>
+  {% else %}
+  <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
+    href="/pin-item/?id={{ item.item_id }}">Unpin</a>
+  {% endif %}
   <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
     data-bs-toggle="modal" data-bs-target="#tagItemModal"
     href="" role="button">Tag Item</a>
