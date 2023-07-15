@@ -1,0 +1,39 @@
+<div class="modal fade" id="downloadDatasetModal" name="downloadDatasetModal" 
+  tabindex="-1" aria-labelledby="downloadDatasetModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="downloadDatasetModalLabel">Download Dataset</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" 
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Create Dataset Form -->
+        <div id="create_dataset_form">
+          <form method="POST" action="/download/?id={{ dataset.public_id }}">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="file_type" class="bold">File Type
+              <span class="required-field">*</span>
+              </label>
+              <select 
+                  class="form-select form-select-md" aria-label=".form-select-md"
+                  id="file_type"
+                  name="file_type"
+                  reqired>
+                  <option value="">Select a file type</option>
+                  <option value="csv">CSV (Comma Delimited) (*.csv)</option>
+                  <option value="xlsx">Excel Workbook (*.xlsx)</option>
+              </select>
+          </div>
+            <br/>
+            <div class="col-md-12 text-center">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-warning pitt-gold">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

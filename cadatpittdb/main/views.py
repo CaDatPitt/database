@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 from django.contrib import messages
+import xlsxwriter
 import mimetypes
 from .auth import *
 from .controlled_vocab import vocab
@@ -749,6 +750,7 @@ def delete_dataset_vw(request):
 def download_vw(request):
     #
     dataset_id = request.GET.get('id')
+    extension = request.POST.get('file_type')
 
     # Get dataset from db
     dataset = Dataset.objects.filter(public_id=dataset_id).first()
@@ -761,13 +763,23 @@ def download_vw(request):
 
     with NamedTemporaryFile() as csv_file:
         # Write data to file
-        dataset_df.to_csv(csv_file.name, index=False)
-    
+        if extension == 'csv':
+            dataset_df.to_csv(csv_file.name, index=False, encoding='utf-8')
+        else:
+            # Create a Pandas Excel writer using XlsxWriter as the engine.
+            writer = pd.ExcelWriter(csv_file.name, engine='xlsxwriter')
+            dataset_df.to_excel(writer, index=False, encoding='utf-8', 
+                                sheet_name='dataset')
+            writer.close()
+
+        # Generate filename
+        filename = f"{dataset.title.replace(' ', '_')}.{extension}" 
+
         # Prepare and send file
-        response = FileResponse(open(csv_file.name, "rb"), 
-                                filename=dataset.title.replace(" ", "_") + ".csv")
+        response = FileResponse(open(csv_file.name, "rb"), filename=filename)
 
     return response
+
 
 @login_required
 def pin_dataset_vw(request):

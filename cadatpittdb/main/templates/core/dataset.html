@@ -46,7 +46,7 @@
     </div>
   {% else %}
   <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
-   data-bs-toggle="modal" data-bs-target="#editDatasetModal"
+    data-bs-toggle="modal" data-bs-target="#editDatasetModal"
     href="" role="button">Edit Dataset</a>
   {% endif %}
   {% if user in dataset.pinned_by.all %}
@@ -57,7 +57,8 @@
     href="/pin-dataset/?id={{ dataset.public_id }}" role="button">Pin Dataset</a>
   {% endif %}
   <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
-    href="/download/?id={{ dataset.public_id }}" type="button">Download Dataset</a>
+    data-bs-toggle="modal" data-bs-target="#downloadDatasetModal"
+    href="" type="button">Download Dataset</a>
 </div>
 
 <hr class="mt-4"/>
@@ -113,8 +114,11 @@
   {% endfor %}
 </div>
 
-<!-- Edit Dataset Form Modal -->
+<!-- Edit Dataset Modal -->
 {% include 'snippets/edit-dataset-modal.html' %}
+
+<!-- Download Dataset Modal -->
+{% include 'snippets/download-dataset-modal.html' %}
 
 <!-- Item Modals -->
 {% for item in dataset.items.all %}
