@@ -15,7 +15,9 @@
     {{ dataset.creator }}
   </a>
 </p>
-<p class="contact"><strong>Description:</strong> {{ dataset.description }}</p>
+<p class="contact"><strong>Description:</strong> 
+  {% autoescape off %}{{ dataset.get_description }}{% endautoescape %}
+</p>
 <p class="contact"><strong>Last modified</strong>: 
   {{ dataset.last_modified|truncate_date }}</p>
 <p class="contact"><strong>Tags:</strong> 
@@ -57,7 +59,7 @@
     href="/pin-dataset/?id={{ dataset.public_id }}" role="button">Pin Dataset</a>
   {% endif %}
   <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
-    data-bs-toggle="modal" data-bs-target="#downloadDatasetModal"
+    data-bs-toggle="modal" data-bs-target="#download{{ dataset.public_id }}"
     href="" type="button">Download Dataset</a>
 </div>
 
@@ -75,7 +77,7 @@
             {% include 'snippets/pin-item-icon.html' %}
             {% include 'snippets/tag-item-icon.html' %}
             {% include 'snippets/add-item-icon.html' %}
-            {% include 'snippets/remove-item-icon.html' %}
+            <!-- {% include 'snippets/remove-item-icon.html' %} -->
           </div>
         </div>
       </div>

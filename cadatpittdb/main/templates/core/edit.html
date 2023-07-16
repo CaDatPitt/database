@@ -47,7 +47,7 @@
               name="description"
               rows="3"
               placeholder="Markdown-enabled field"
-              >{{ dataset.description }}</textarea>
+              >{% autoescape off %}{{ dataset.get_description }}{% endautoescape %}</textarea>
           </div>
         </div>
         <div class="col-12">
@@ -81,72 +81,55 @@
 </div>
 <hr style="margin-top: 1.75em;"/>
 
-<!-- Second Section -->
+<!-- Items -->
+<h4 class="mb-4">Items</h4>
 <div class="row gy-4">
-  <!-- Filters -->
-  <div class="col-md col-lg-4">
-    {% include 'snippets/browse-filter-form.html' %}
-  </div>
-
-  <!-- Item Cards -->
-  <div class="col-md col-lg-8">
-    <h5 align="left">Items</h5>
-    <p><em>{{ dataset.items.all|length }} item(s)</em></p>
-    <div class="row gy-4">
-      {% for item in dataset.items.all %}
-      <div class="col-12">
-        <div class="card shadow-sm bg-light-gray">
-          <div class="card-header">
-            <div class="row">
-              <!-- <div class="col text-start">
-                  <input 
-                    type="checkbox" 
-                    class="item-checkbox mt-1" 
-                    id="include{{ item.item_id }}"
-                    name="include"
-                    value="">
-                  <label class="form-check-label" for="public">
-                    Include in dataset
-                  </label>
-              </div> -->
-              <div class="col text-end">
-                {% include 'snippets/pin-item-icon.html' %}
-                {% include 'snippets/tag-item-icon.html' %}
-                {% include 'snippets/add-item-icon.html' %}
-                {% include 'snippets/remove-item-icon.html' %}
-              </div>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-2 d-none d-md-block">
-                <img src="{{ item.thumbnail }}" class="card-img-top item-thumbnail" />
-              </div>
-              <div class="col-12 col-md-10">
-                <a href="/item/?id={{ item.item_id }}">
-                  <h5 class="card-title">{{ item.title }}</h5>
-                </a>
-                <p class="mb-0">
-                  <strong>Creator</strong>: {{ item.creator }}<br/>
-                  <strong>Date</strong>: {{ item.date }}<br/>
-                  <strong>Type</strong>:
-                  {% for type in item.get_types %}
-                    {{ type|title }}{% if type != item.get_types|last %},{% endif %}
-                  {% endfor %} <br/>
-                  <strong>Collections</strong>:
-                  {% for collection in item.collections.all %}
-                  <br/>    
-                  <a href="{{ collection.get_urls.0 }}" target="_blank">{{ collection }}</a>
-                  {% endfor %}
-                </p>
-              </div>
-            </div>
+  {% for item in dataset.items.all %}
+  <div class="col-lg-6">
+    <div class="card h-100 shadow-sm bg-light-gray">
+      <div class="card-header">
+        <div class="row">
+          <div class="col text-end">
+            {% include 'snippets/pin-item-icon.html' %}
+            {% include 'snippets/tag-item-icon.html' %}
+            {% include 'snippets/add-item-icon.html' %}
+            {% include 'snippets/remove-item-icon.html' %}
           </div>
         </div>
       </div>
-      {% endfor %}   
+      <div class="card-body">
+        <div class="row">
+          <div class="col-4 col-md-3">
+            <img src="{{ item.thumbnail }}" class="card-img-top item-thumbnail" />
+          </div>
+          <div class="col-8 col-md-9">
+            <a href="/item/?id={{ item.item_id }}">
+              <h5 class="card-title">{{ item.title }}</h5>
+            </a>
+            <p>
+              <strong>Date:</strong> {{ item.date }}<br/>
+              <strong>Type:</strong> 
+              {% for type in item.get_types %}
+              {{ type|title }}{% if type != item.get_types|last %},{% endif %}
+              {% endfor %}
+              <br/>
+              <strong>Collections:</strong> 
+              {% for collection in item.collections.all %}
+              <br/>    
+              <a href="{{ collection.get_urls.0 }}" target="_blank">{{ collection }}</a>
+              {% endfor %}
+            </p>
+            <a role="button" class="btn btn-warning pitt-gold"
+              href="https://digital.library.pitt.edu/islandora/object/{{ item.item_id}} " 
+              target="_blank">
+              View Full Item Info
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+  {% endfor %}
 </div>
 
 <!-- Delete Dataset Modal -->
