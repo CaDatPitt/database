@@ -218,10 +218,11 @@ def copy_dataset(user=User, dataset=Dataset, title=str):
 
 
 def create_dataset(dataset=dict, title=str, description=str, tags=list,
-                   filters=dict, creator=User, public=bool):
+                   filters=dict, creator=User, public=bool, saved_results=bool):
     try:
         new_dataset = Dataset(title=title, description=description, 
-                              filters=filters, creator=creator, public=public)
+                                filters=filters, creator=creator, public=public,
+                                saved_results=saved_results)
         new_dataset.save()
     except:
         return None
@@ -249,7 +250,8 @@ def create_dataset(dataset=dict, title=str, description=str, tags=list,
             exceptions.append(item)
 
     # Add tags
-    add_tags(user=creator, tags=tags, dataset=new_dataset)
+    if tags:
+        add_tags(user=creator, tags=tags, dataset=new_dataset)
 
     # Update collections
     for collection in Collection.objects.all():
@@ -268,109 +270,173 @@ def dataset_to_df(dataset=Dataset):
     return pd.DataFrame.from_dict(dataset)
 
 
-def filter_dataset(request=HttpRequest, dataset=pd.DataFrame, keywords=str, title=str, 
+def filter_field(x, keywords='', other_field='', start_year='', end_year=''):
+    if keywords:
+        eldar = Query(keywords, match_word=False)
+        for field in x:
+            if field:
+                result = []
+                if isinstance(field[0], list):
+                    result = eldar.filter(field[0])
+                else:
+                    result = eldar.filter(field)
+                if len(result) > 0:
+                    return True
+        return False
+    if other_field:
+        if x:
+            eldar = Query(other_field, match_word=False)
+            result = eldar.filter(x)
+            if len(result) > 0:
+                return True
+        return False
+    if start_year:
+        for date in x: 
+            if int(date[:4]) < int(start_year): # change this to look for years in value using regex
+                return False
+        return True
+    if end_year:
+        for date in x:
+            if int(date[:4]) > int(end_year):
+                return False
+        return True
+
+
+def filter_dataset(request=HttpRequest, dataset=list, keywords=str, title=str, 
                    creator=str, contributor=str, publisher=str, depositor=str, 
                    start_year=str, end_year=str, language=str, description=str, 
                    item_type=str, subject=str, coverage=str, rights=list):
-    filtered_dataset = dataset
+    filtered_dataset_df = pd.DataFrame.from_dict(dataset)
     filters = {}
 
     if title:
         try:
-            query = Query(title)
-            filtered_dataset = filtered_dataset[filtered_dataset.title.apply(query)]
+            filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
+                filtered_dataset_df['title'].apply(filter_field, 
+                                                   other_field=title)
+                ]
+            )
             filters['title'] = title
         except:
             messages.error(request, "'Title' filter could not be applied. \
                            Make sure that your expression is correct.")
     if creator:
         try:
-            query = Query(creator)
-            filtered_dataset = filtered_dataset[filtered_dataset.creator.apply(query)]
+            filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
+                filtered_dataset_df['creator'].apply(filter_field, 
+                                                     other_field=creator)
+                ]
+            )
             filters['creator'] = creator
         except:
             messages.error(request, "'Creator' filter could not be applied. \
                            Make sure that your expression is correct.")
     if contributor:
         try:
-            query = Query(contributor)
-            filtered_dataset = filtered_dataset[filtered_dataset.contributor.apply(query)]
+            filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
+                filtered_dataset_df['contributor'].apply(filter_field, 
+                                                         other_field=contributor)
+                ]
+            )
             filters['contributor'] = contributor
         except:
             messages.error(request, "'Contributor' filter could not be applied. \
                            Make sure that your expression is correct.")
     if publisher:
         try:
-            query = Query(publisher)
-            filtered_dataset = filtered_dataset[filtered_dataset.publisher.apply(query)]
+            filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
+                filtered_dataset_df['publisher'].apply(filter_field, 
+                                                       other_field=publisher)
+                ]
+            )
             filters['publisher'] = publisher
         except:
             messages.error(request, "'Publisher' filter could not be applied. \
                            Make sure that your expression is correct.")
     if depositor:
         try:
-            query = Query(depositor)
-            filtered_dataset = filtered_dataset[filtered_dataset.depositor.apply(query)]
+            filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
+                filtered_dataset_df['depositor'].apply(filter_field,
+                                                       other_field=depositor)
+                ]
+            )
             filters['depositor'] = depositor
         except:
             messages.error(request, "'Depositor' filter could not be applied. \
                            Make sure that your expression is correct.")
     if start_year:
-        # TO DO: Update to use lamba expression and name function for try/except
         try:
-            filtered_dataset = filtered_dataset[
-                filtered_dataset['date'][:4].astype(int) >= start_year
+            filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
+                filtered_dataset_df['date'].apply(filter_field, 
+                                                  start_year=start_year)
                 ]
-            filters['start_year'] = start_year
+            )
+            filters['start_year'] = int(start_year)
         except:
             messages.error(request, "'Start Date' filter could not be applied.\
                            This is likely an issue with the data.")
     if end_year:
-        # TO DO: Update to use lamba expression and name function for try/except
         try:
-            filtered_dataset = filtered_dataset[
-                filtered_dataset['date'][:4].astype(int) <= end_year
+            filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
+                filtered_dataset_df['date'].apply(filter_field, 
+                                                end_year=end_year)
                 ]
-            filters['end_year'] = end_year
+            )
+            filters['end_year'] = int(end_year)
         except:
             messages.error(request, "'End Date' filter could not be applied.\
                            This is likely an issue with the data.")
     if language:
         try:
-            query = Query(language)
-            filtered_dataset = filtered_dataset[filtered_dataset.language.apply(query)]
+            filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
+                filtered_dataset_df['language'].apply(filter_field,
+                                                      other_field=language)
+                ]
+            )
             filters['language'] = language
         except:
             messages.error(request, "'Language' filter could not be applied. \
                            Make sure that your expression is correct.")
     if description:
         try:
-            query = Query(description)
-            filtered_dataset = filtered_dataset[filtered_dataset.description.apply(query)]
+            filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
+                filtered_dataset_df['description'].apply(filter_field, 
+                                                         other_field=description)
+                ]
+            )
             filters['description'] = description
         except:
             messages.error(request, "'Description' filter could not be applied.\
                             Make sure that your expression is correct.")
     if item_type:
         try:
-            query = Query(item_type)
-            filtered_dataset = filtered_dataset[filtered_dataset.type.apply(query)]
+            filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
+                filtered_dataset_df['item_type'].apply(filter_field,
+                                                       other_field=item_type)
+                ]
+            )
             filters['item_type'] = item_type
         except:
             messages.error(request, "'Type' filter could not be applied.\
                             Make sure that your expression is correct.")
     if subject:
         try:
-            query = Query(subject)
-            filtered_dataset = filtered_dataset[filtered_dataset.subject.apply(query)]
+            filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
+                filtered_dataset_df['subject'].apply(filter_field,
+                                                     other_field=subject)
+                ]
+            )
             filters['subject'] = subject
         except:
             messages.error(request, "'Subject' filter could not be applied. \
                            Make sure that your expression is correct.")
     if coverage:
         try:
-            query = Query(coverage)
-            filtered_dataset = filtered_dataset[filtered_dataset.coverage.apply(query)]
+            filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
+                filtered_dataset_df['coverage'].apply(filter_field,
+                                                      other_field=coverage)
+                ]
+            )
             filters['coverage'] = coverage
         except:
             messages.error(request, "'Coverage' filter could not be applied. \
@@ -378,22 +444,24 @@ def filter_dataset(request=HttpRequest, dataset=pd.DataFrame, keywords=str, titl
     if rights:
         rights_urls = get_rights(rights)
         # Might need to update to search for URL using regex
-        filtered_dataset = filtered_dataset[
-            filtered_dataset.rights.apply(lambda x: x.split('|||')[-1]).\
+        filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
+            filtered_dataset_df.rights.apply(lambda x: x.split('|||')[-1]).\
                 isin(rights_urls)
-            ]
+            ])
         filters['rights'] = rights
     if keywords:
-        try:
-            query = Query(keywords)
-            keyword_dataset = filtered_dataset[filtered_dataset.apply(query).any(1)]
-            filtered_dataset = pd.concat([keyword_dataset, filtered_dataset])
-            filters['keywords'] = keywords
-        except:
-            messages.error(request, "'Keywords' filter could not be applied.\
-                            Make sure that your expression is correct.")
+        # try:
+        filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
+            filtered_dataset_df.apply(filter_field, keywords=keywords, axis=1)
+            ])
+        filters['keywords'] = keywords
+        # except:
+        #     messages.error(request, "'Keywords' filter could not be applied.\
+        #                     Make sure that your expression is correct.")
+            
+    filtered_dataset = filtered_dataset_df.to_dict('records')
 
-    return filtered_dataset
+    return filtered_dataset, filtered_dataset_df
 
 
 def filter_datasets(request, keywords=str, title=str, creator=str, 

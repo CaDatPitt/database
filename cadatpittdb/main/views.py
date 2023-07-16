@@ -389,6 +389,10 @@ def collection_vw(request):
 @login_required
 def create_vw(request):
     if request.method == "POST":
+        # Get data from session
+        dataset = request.session.get('dataset')
+        filters = request.session.get('filters')
+        
         # Get data from form
         title = request.POST.get("title")
         description = request.POST.get("description")
@@ -399,16 +403,12 @@ def create_vw(request):
         else:
             public = False
 
-        # 
+        # Check if request is to save results
         saved_results = request.GET.get("saved_results")
         if saved_results:
             saved_results = True
         else:
             saved_results = False
-
-        # Get data from session
-        dataset = request.session.get('dataset')
-        filters = request.session.get('filters')
         
         if not dataset:
             messages.error(request, "No dataset was given. You must first \

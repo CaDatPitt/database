@@ -10,16 +10,21 @@
 
 <!-- First Section-->
 <h2>Retrieve Data</h2>
-<p>Collect data for custom datasets through available retrieval methods, by choosing specific collections and filtering based on your data needs.</p>
+<p>Collect data for custom datasets through available retrieval methods, 
+  by choosing specific collections and filtering based on your data needs. <br/>
+  <strong>
+    Please note that larger quantities of items will take longer to retrieve.
+  </strong>
+</p>
 
 <!-- Dataset Action Buttons -->
 {% if show_results %}
 <div class="d-grid gap-2 d-md-flex justify-content-center justify-content-lg-start">
     <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal" role="button"
       href="/retrieve/">Start Over</a>
-    <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal" role="button"
-    data-bs-toggle="modal" data-bs-target="#createDatasetModal"
-    href="">Save Results</a>
+    <!-- <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal" role="button"
+    data-bs-toggle="modal" data-bs-target="#saveResultsModal"
+    href="">Save Results</a> -->
     <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal" role="button"
     data-bs-toggle="modal" data-bs-target="#createDatasetModal"
    >Create Dataset</a>
@@ -116,7 +121,7 @@
                 <div class="col-md-12 text-center">
                   <button type="submit" class="btn btn-primary bg-pitt-royal border-pitt-royal"
                    data-bs-toggle="modal" data-bs-target="#loadingModal">
-                  Retrieve
+                    Retrieve
                   </button>
                 </div>
               </form>
@@ -192,7 +197,7 @@
         <div class="card shadow-sm bg-light-gray">
           <div class="card-header">
             <div class="row">
-              <div class="col text-start">
+              <!-- <div class="col text-start">
                   <input 
                     type="checkbox" 
                     class="item-checkbox mt-1" 
@@ -202,7 +207,7 @@
                   <label class="form-check-label" for="public">
                     Include in dataset
                   </label>
-              </div>
+              </div> -->
               <div class="col text-end">
                 {% include 'snippets/pin-item-icon.html' %}
                 {% include 'snippets/tag-item-icon.html' %}
@@ -213,7 +218,15 @@
           <div class="card-body">
             <div class="row">
               <div class="col-2 d-none d-md-block">
+                {% if 'Finding aids.' in item.type %}
+                <img src="https://digital.library.pitt.edu/sites/all/modules/upitt_islandora_solr_search_extras/images/findingaids4_lt_big_text.png" 
+                  class="card-img-top item-thumbnail" />
+                {% elif item.thumbnail %}
                 <img src="{{ item.thumbnail.0 }}" class="card-img-top item-thumbnail" />
+                {% else %}
+                <img src="https://publicdomainvectors.org/photos/A_Filing_Cabinet.png" 
+                  class="card-img-top item-thumbnail" />
+                {% endif %}
               </div>
               <div class="col-12 col-md-10">
                 <a target="_blank" 
@@ -245,27 +258,10 @@
   </div>
 </div>
 
-<!-- Create Dataset Form Modal -->
-<div class="modal fade" id="createDatasetModal" name="createDatasetModal" 
-    tabindex="-1" aria-labelledby="createDatasetModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="createDatasetModalLabel">Create Dataset</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" 
-                aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Create Dataset Form -->
-                <div id="create_dataset_form">
-                    <form method="POST" action="/create/?user={{ user.username }}">
-                        {% include 'snippets/create-form.html' %}
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-  </div>
+<!-- Dataset Modals -->
+{% include 'snippets/create-form-modal.html' %}
+{% include 'snippets/save-form-modal.html' %}
+
 
 <!-- Add/Tag Item Modals -->
 {% for index, item in dataset.iterrows %}
