@@ -218,13 +218,11 @@ def profile_vw(request):
             
     # Get formatted user affiliaitions
     affiliations, other_affiliations = user.get_affiliations()
-    bio = get_markdown(user.bio)
 
     # Add user information to context
     context['person'] = user
     context['affiliations'] = affiliations
     context['other_affiliations'] = other_affiliations
-    context['bio'] = bio
     context['datasets'] = get_user_datasets(user)
     
     return render(request, "auth/profile.html", context)
@@ -401,6 +399,13 @@ def create_vw(request):
         else:
             public = False
 
+        # 
+        saved_results = request.GET.get("saved_results")
+        if saved_results:
+            saved_results = True
+        else:
+            saved_results = False
+
         # Get data from session
         dataset = request.session.get('dataset')
         filters = request.session.get('filters')
@@ -415,7 +420,7 @@ def create_vw(request):
         new_dataset = create_dataset(dataset=dataset, title=title, 
                                      description=description, tags=tags, 
                                      filters=filters, creator=request.user, 
-                                     public=public)
+                                     public=public, saved_results=saved_results)
         
         # Check if dataset was created
         if new_dataset:
@@ -536,31 +541,45 @@ def retrieve_vw(request):
         "rights": vocab['rights']
     }
 
-    if request.method == "POST":      
-        if request.POST.get("filter"):
+    if request.method == "POST":  
+        dataset = None
+        dataset_df = None
+
+        if request.GET.get("filter"):
+            dataset = request.session.get('dataset')
             keywords = request.POST.get("keywords")
             title = request.POST.get("title")
             creator = request.POST.get("creator")
             contributor = request.POST.get("contributor")
             publisher = request.POST.get("publisher")
             depositor = request.POST.get("depositor")
-            start_year = request.POST.get("start_year") # type="number" min="1900" max="2099" step="1" value="2016"
+            start_year = request.POST.get("start_year")
             end_year = request.POST.get("end_year")
             language = request.POST.get("language")
             description = request.POST.get("description")
             item_type = request.POST.getlist("item_type")
             subject = request.POST.get("subject")
             coverage = request.POST.get("coverage")
-            copyright = request.POST.getlist("copyright")
+            rights = request.POST.getlist("copyright")
 
             # Filter dataset
-            dataset, dataset_df = filter_dataset(keywords=keywords, title=title, 
-                                     creator=creator, contributor=contributor,
-                                     publisher=publisher, depositor=depositor,
-                                     start_year=start_year, end_year=end_year, 
-                                     language=language, description=description,
-                                     item_type=item_type, subject=subject, 
-                                     coverage=coverage, copyright=copyright)
+            if isinstance(dataset, list) and len(dataset) > 0:
+                dataset, dataset_df = filter_dataset(request=request, 
+                                                    dataset=dataset,
+                                                    keywords=keywords,
+                                                    title=title, 
+                                                    creator=creator, 
+                                                    contributor=contributor,
+                                                    publisher=publisher, 
+                                                    depositor=depositor,
+                                                    start_year=start_year, 
+                                                    end_year=end_year, 
+                                                    language=language, 
+                                                    description=description,
+                                                    item_type=item_type, 
+                                                    subject=subject, 
+                                                    coverage=coverage, 
+                                                    rights=rights)
             
             # Add filters to session
             request.session['filters'] = {
@@ -569,7 +588,7 @@ def retrieve_vw(request):
                 'depositor': depositor,  'start_year': start_year, 
                 'end_year': end_year, 'language': language, 
                 'description': description, 'item_type': item_type, 
-                'subject': subject, 'coverage': coverage, 'copyright': copyright
+                'subject': subject, 'coverage': coverage, 'copyright': rights
             }
 
         else:
@@ -581,6 +600,7 @@ def retrieve_vw(request):
             dataset = None
 
             # Get dataset
+            # List of Identifiers
             if retrieval_method == 'identifiers':
                 item_ids = iter(item_ids.splitlines())
                 dataset, dataset_df, exceptions = get_dataset(item_ids=item_ids)
@@ -593,6 +613,7 @@ def retrieve_vw(request):
                                    target='_blank'>here</a> to view a list of \
                                    item ids that were not processed.", 
                                    extra_tags='safe')
+            # File Upload
             elif retrieval_method == 'file':
                 if not csv_file.name.endswith('.csv'):
                     messages.error(request,'File is not CSV type.')
@@ -614,6 +635,7 @@ def retrieve_vw(request):
                         messages.error(request, f'The file could not be \
                                        uploaded. Please try again or contact \
                                        us to report the issue.')
+            # By Collections
             elif retrieval_method == 'collections':
                 dataset, dataset_df, exceptions = get_dataset(collections=collections)
 
@@ -623,16 +645,15 @@ def retrieve_vw(request):
                                 or upload a CSV file with a list of item \
                                 identifiers.")
                 
-            if dataset:
-                # Add dataset to session and context
-                request.session['dataset'] = dataset
-                context['dataset'] = dataset_df
+        # Add dataset to session and context
+        request.session['dataset'] = dataset
+        context['dataset'] = dataset_df
 
-                # Add dataset info to context
-                context['num_results'] = dataset_df.shape[0]
+        # Add dataset info to context
+        context['num_results'] = dataset_df.shape[0]
 
-                # Toggle to display results
-                context['show_results'] = True
+        # Toggle to display results
+        context['show_results'] = True
 
     return render(request, "core/retrieve.html", context)
 

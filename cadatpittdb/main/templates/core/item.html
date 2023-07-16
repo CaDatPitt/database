@@ -77,10 +77,11 @@
             {{ dataset.items.all|length }}<br/>
         <strong>Last modified</strong>: {{ dataset.last_modified }}
         </p>
-        <!-- <a class="btn btn-warning bg-pitt-gold border-pitt-gold" role="button"
-            href="/dataset?id={{ dataset.public_id }}">View</a> -->
-        <a class="btn btn-warning bg-pitt-gold border-pitt-gold" role="button"
-            href="">Download</a>
+      </div>
+      <div class="card-footer bg-light-gray border-top-0 mb-2">
+        <a class="btn btn-warning bg-pitt-gold border-pitt-gold"
+          data-bs-toggle="modal" data-bs-target="#download{{ dataset.public_id }}"
+           role="button"href="">Download</a>
       </div>
     </div>
   </div>

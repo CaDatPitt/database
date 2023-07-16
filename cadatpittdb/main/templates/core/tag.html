@@ -37,7 +37,9 @@
         <h5 class="card-title">
           <a href="/dataset?id={{ dataset.public_id }}">{{ dataset.title }}</a>
         </h5>
-        <h* class="card-subtitle">{{ dataset.description }}</h*>
+        <h* class="card-subtitle">
+          {% autoescape off %}{{ dataset.get_description }}{% endautoescape %}
+        </h*>
         <p class="card-text mt-2"><strong># of items</strong>: 
             {{ dataset.items.all|length }}<br/>
         <strong>Last modified</strong>: {{ dataset.last_modified }}

@@ -28,6 +28,7 @@ urlpatterns = [
     path("remove-item/", views.remove_item_vw),
     path("remove-tag/", views.remove_tag_vw),
     path("retrieve/", views.retrieve_vw),
+    path("save-results/", views.create_vw),
     path("search/", views.search_vw),
     path("signup/", views.signup_vw),
     path("tag/", views.tag_vw),

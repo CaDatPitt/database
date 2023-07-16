@@ -44,9 +44,9 @@
           <li class="nav-item">
             <a class="nav-link active text-pitt-dark-blue" href="#mydatasets" role="tab" aria-controls="mydatasets" aria-selected="true">My Datasets</a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link text-pitt-dark-blue" href="#savedsearches" role="tab" aria-controls="savedsearches" aria-selected="false">Saved Results</a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a class="nav-link text-pitt-dark-blue"  href="#pinned-datasets" role="tab" aria-controls="pinned-datasets" aria-selected="false">Pinned Datasets</a>
           </li>
@@ -77,7 +77,7 @@
               </li>
               {% endfor %}
               <!--pagination with django-->
-              <nav aria-label="page navigation">
+              <!-- <nav aria-label="page navigation">
                 <ul class="pagination">
                   {% if items.has_previous %}
                     <li class="page-item>"><a class="page-link" href="?page=1">&laquo First</a></li>
@@ -93,10 +93,10 @@
                     <li class="page-item>"><a class="page-link" href="?page={{ items.paginator.num_pages }}">Last &raquo</a></li>
                 </ul>
                 {% endif %}
-              </nav>
+              </nav> -->
             </ul>
             {% else %}
-            <p><em>You don't have any datasets yet.</em></p>
+            <p class="text-center"><em>You don't have any datasets yet.</em></p>
             {% endif %}
             <!-- Create New Dataset Button -->
             <!-- <div class="col-md-12 text-center mt-3">
@@ -125,7 +125,7 @@
               {% endfor %}
             </ul>
             {% else%}
-            <p><em>You don't have any saved results yet.</em></p>
+            <p class="text-center"><em>You don't have any saved results yet.</em></p>
             {% endif %}
             <!-- Pagination -->
             <!-- {% include 'snippets/pagination.html' %} -->
@@ -156,13 +156,13 @@
               {% endfor %}
             </ul>
             {% else%}
-            <p><em>You don't have any pinned datasets yet.</em></p>
+            <p class="text-center"><em>You don't have any pinned datasets yet.</em></p>
             {% endif %}
             <!-- Pagination -->
             <!-- {% include 'snippets/pagination.html' %} -->
           </div>
 
-            <!-- Pinned Items -->
+          <!-- Pinned Items -->
           <div class="tab-pane" id="pinned-items" role="tabpanel" aria-labelledby="pinned-items-tab">
             {% if user.get_pinned_items %}
             <ul class="list-group">
@@ -182,7 +182,7 @@
               {% endfor %}
             </ul>
             {% else%}
-            <p><em>You don't have any pinned items yet.</em></p>
+            <p class="text-center"><em>You don't have any pinned items yet.</em></p>
             {% endif %}
             <!-- Pagination -->
             <!-- {% include 'snippets/pagination.html' %} -->

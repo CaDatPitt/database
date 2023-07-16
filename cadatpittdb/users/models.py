@@ -5,6 +5,8 @@ from .managers import CustomUserManager
 from django.utils.translation import gettext_lazy as _
 import uuid
 from main.controlled_vocab import vocab
+from markdown import markdown
+import re
 
     
 class CustomUser(AbstractBaseUser, PermissionsMixin):
@@ -58,13 +60,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
                 other_affiliations.append(affiliation)
         
         return affiliations, other_affiliations
-
+    
+    def get_bio(self):
+        return get_markdown(self.bio)
     
     def get_datasets(self):
         return Dataset.objects.filter(creator=self).all()
     
     def get_saved_results(self):
-        return Dataset.objects.filter(creator=self, title='').all()
+        return Dataset.objects.filter(creator=self, saved_results=True).all()
     
     def get_pinned_datasets(self):
         return Dataset.objects.filter(pinned_by=self).all()
@@ -194,6 +198,9 @@ class Dataset(models.Model):
     def get_id(self):
         return self.dataset_id
     
+    def get_description(self):
+        return get_markdown(self.description)
+    
     def get_tags(self):
         tags = []
         for tag in self.tags.values_list('title', flat=True):
@@ -236,4 +243,30 @@ class Page(models.Model):
 
     def __str__(self):
         return self.title
+
     
+def get_markdown(input=str) -> str:
+    if input:
+        text = input
+        # Ensure hyperlink prefix
+        # pattern for Markdown hyperlink
+        pattern = r'\[[^!?\s]*\]\([^!?\s]*\)'
+        
+        for match in re.finditer(pattern, text):
+            hyperlink = match[0]
+            # Check if hyperlink is not prefixed
+            if re.match(r'\[[^!?\s]*\]\([^http][^!?\s]*', hyperlink) or \
+                re.match(r'\[[^!?\s]*\]\([^www.][^!?\s]*', hyperlink) or \
+                re.match(r'\[[^!?\s]*\]\([^\\][^!?\s]*', hyperlink):
+                prefixed_hyperlink = hyperlink.replace("(", "(//")
+                text = text.replace(hyperlink, prefixed_hyperlink)
+
+        # Strip enclosing paragraph marks, <p> ... </p>, which markdown() forces
+        text = re.sub("(^<P>|</P>$)", "", markdown(text), flags=re.IGNORECASE)
+
+        # Add target
+        text = text.replace("<a href", "<a target='_blank' href")
+
+        return text
+    return input
+

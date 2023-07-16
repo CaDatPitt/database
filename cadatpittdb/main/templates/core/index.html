@@ -65,15 +65,18 @@
             <h5 class="card-title">
               <a href="/dataset?id={{ dataset.public_id }}">{{ dataset.title }}</a>
             </h5>
-            <h* class="card-subtitle">{{ dataset.description }}</h*>
+            <h* class="card-subtitle">
+              {% autoescape off %}{{ dataset.get_description }}{% endautoescape %}
+            </h*>
             <p class="card-text mt-2"><strong># of items</strong>: 
                 {{ dataset.items.all|length }}<br/>
             <strong>Last modified</strong>: {{ dataset.last_modified|truncate_date }}
             </p>
-            <!-- <a class="btn btn-warning bg-pitt-gold border-pitt-gold" role="button"
-                href="/dataset?id={{ dataset.public_id }}">View</a> -->
-            <a class="btn btn-warning bg-pitt-gold border-pitt-gold" role="button"
-                href="">Download</a>
+          </div>
+          <div class="card-footer bg-light-gray border-top-0 mb-2">
+            <a class="btn btn-warning bg-pitt-gold border-pitt-gold"
+              data-bs-toggle="modal" data-bs-target="#download{{ dataset.public_id }}"
+               role="button"href="">Download</a>
           </div>
         </div>
       </div>
@@ -86,6 +89,7 @@
 {% for dataset in datasets %}
   {% include 'snippets/tag-dataset-modal.html' %}
   {% include 'snippets/edit-dataset-modal.html' %}
+  {% include 'snippets/download-dataset-modal.html' %}
 {% endfor %}
 
 <!-- Scripts -->
