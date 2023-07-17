@@ -10,7 +10,7 @@
 
 <!-- Contact Information -->
 <h2>{{ person.first_name }} {{ person.last_name }}</h2>
-{% if user.profile_photo_url %}
+{% if person.profile_photo_url %}
 <img style="margin: 10px 0 10px 0; max-width: 25%;" 
     src="{{ person.profile_photo_url }}">
 {% else %}
@@ -30,29 +30,28 @@
     {% endfor %}
 </p>
 <p class="contact"><strong>Email:</strong> <a href="mailto:{{ person.email }}">{{ person.email }}</a></p>
-{% if user.website %}
+{% if person.website %}
 <p class="contact"><strong>Website:</strong> 
     <a href="{{ person.website }}" target="_blank">{{ person.website }}</a></p>
 {% endif %}
-{% if user.bio %}
-<p class="contact"><strong>Bio:</strong> {% autoescape off %}{{ user.get_bio }}{% endautoescape %}</p>
+{% if person.bio %}
+<p class="contact"><strong>Bio:</strong> {% autoescape off %}{{ person.get_bio }}{% endautoescape %}</p>
 {% endif %}
-<br/>
 {% if person == user %}
-<div class="d-grid gap-2 d-md-flex justify-content-center justify-content-md-start">
+<div class="d-grid gap-2 d-md-flex justify-content-center justify-content-md-start mt-4">
   <button type="button" class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
     data-bs-toggle="modal" data-bs-target="#updateProfileModal">
     Update Profile
   </button>
-{% endif %}
 </div>
+{% endif %}
 
 <!-- Datasets -->
 {% if datasets %}
 <hr class="mt-4"/>
-<h3 class="mb-4">Datasets</h3>
+<h4 class="mb-4">Datasets</h4>
 <div class="row gy-4">
-  {% for dataset in user.get_datasets %}
+  {% for dataset in person.get_datasets %}
   <div class="col-md-6 col-xl-4">
     <div class="card h-100 shadow-sm bg-light-gray">
       <div class="card-header">
@@ -115,7 +114,7 @@
 </div>
 
 <!-- Dataset Modals -->
-{% for dataset in user.get_datasets %}
+{% for dataset in person.get_datasets %}
   {% include 'snippets/tag-dataset-modal.html' %}
   {% include 'snippets/edit-dataset-modal.html' %}
   {% include 'snippets/delete-dataset-modal.html' %}
