@@ -148,7 +148,7 @@ LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
 # STATICFILES_DIRS = path.join(BASE_DIR, 'main', 'static'),
-STATICFILES_DIRS = path.join(BASE_DIR, 'static'),
+STATICFILES_DIRS = path.join(BASE_DIR, 'main', 'static'),
 STATIC_ROOT = path.join(BASE_DIR, 'staticfiles_build', 'static')
 
 """ MESSAGE CONSTANTS """
