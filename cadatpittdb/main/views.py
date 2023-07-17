@@ -56,8 +56,8 @@ def contact_vw(request):
         message = request.POST.get('message')
 
         # Create message
-        message = Message(full_name=full_name, email=email, 
-                          inquiry_type=inquiry_type, 
+        message = Message(full_name=full_name, email=email,
+                          inquiry_type=inquiry_type,
                           subject=subject, message=message)
         message.save()
 
@@ -65,7 +65,7 @@ def contact_vw(request):
         messages.success(request, "Thank you for contacting us! We've received\
                          your message and will respond as soon as we can.")
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-    
+
     return render(request, "core/contact.html", context)
 
 
@@ -100,7 +100,7 @@ def help_vw(request):
         return render(request, "core/help.html", context)
     else:
         return HttpResponseNotAllowed(["POST"])
-    
+
 
 def search_vw(request):
     context = {
@@ -144,14 +144,14 @@ def login_vw(request):
         "vocab": vocab,
         'use_email': False
     }
-    
+
     if request.user.is_authenticated:
         messages.error(request, "You're already logged in!")
-        return redirect("/dashboard/") 
-    
+        return redirect("/dashboard/")
+
     if request.GET.get('email'):
         context['use_email'] = True
-    
+
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -164,9 +164,9 @@ def login_vw(request):
             user = User.objects.filter(email=email).first()
             username = user.username
 
-        # Try to authenticate user    
+        # Try to authenticate user
         user = authenticate(request, username=username, password=password)
-       
+
         if user is not None:
             # Log in user
             login(request, user)
@@ -197,7 +197,7 @@ def profile_vw(request):
     if not user:
         messages.error(request, "That user does not exist!")
         return redirect("/")
-        
+
     if request.method == "POST":
         pronouns = request.POST.get('pronouns')
         title = request.POST.get('title')
@@ -208,15 +208,15 @@ def profile_vw(request):
         photo_url = request.POST.get('photo_url')
 
         # Update profile data
-        updated = update_profile(user=request.user, pronouns=pronouns, 
-                                 title=title, affiliation=affiliation, 
+        updated = update_profile(user=request.user, pronouns=pronouns,
+                                 title=title, affiliation=affiliation,
                                  other_affiliation=other_affiliation,
                                  website=website, bio=bio, photo_url=photo_url)
 
         if not updated:
             messages.error(request, "Your profile could not be updated. Please \
                            try again or contact us to report the issue.")
-            
+
     # Get formatted user affiliaitions
     affiliations, other_affiliations = user.get_affiliations()
 
@@ -225,7 +225,7 @@ def profile_vw(request):
     context['affiliations'] = affiliations
     context['other_affiliations'] = other_affiliations
     context['datasets'] = get_user_datasets(user)
-    
+
     return render(request, "auth/profile.html", context)
 
 
@@ -237,7 +237,7 @@ def signup_vw(request):
 
     if request.user.is_authenticated:
         messages.error(request, "You are already registered!")
-        return redirect("/dashboard/") 
+        return redirect("/dashboard/")
 
     if request.method == "POST":
         first_name = request.POST.get('first_name')
@@ -269,34 +269,34 @@ def signup_vw(request):
             try:
                 user = User.objects.create_user(first_name=first_name,
                                                 last_name=last_name,
-                                                username=username, email=email, 
-                                                pronouns=pronouns, title=title, 
-                                                affiliation=affiliation, 
-                                                website=website, bio=bio, 
-                                                profile_photo_url=photo_url, 
+                                                username=username, email=email,
+                                                pronouns=pronouns, title=title,
+                                                affiliation=affiliation,
+                                                website=website, bio=bio,
+                                                profile_photo_url=photo_url,
                                                 password=password)
             except:
                 messages.error(request, "User could not be created. Please try \
                                again or contact us to report the issue.")
-            
+
             # Authenticate user
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
                 messages.success(request, "Account created! Thanks for joining!")
                 return redirect("/dashboard/")
-        
+
         # Sign up was unsuccessful
         # Save given form input and return to sign up page
         if user_exists or user is None or not password_valid:
             context['form'] = {'first_name': first_name, 'last_name': last_name,
-                               'username': username, 'email': email, 
-                               'pronouns': pronouns, 'title': title, 
-                               'affiliations': affiliation, 
+                               'username': username, 'email': email,
+                               'pronouns': pronouns, 'title': title,
+                               'affiliations': affiliation,
                                'other_affiliation': other_affiliation,
-                               'website': website, 'bio': bio, 
-                               'photo_url': photo_url, 'password': password}            
-        
+                               'website': website, 'bio': bio,
+                               'photo_url': photo_url, 'password': password}
+
     return render(request, "auth/signup.html", context)
 
 
@@ -315,17 +315,17 @@ def update_account(request):
 
         if password_valid:
             # Update account information
-            updated = update_account(user=request.user, first_name=first_name, 
-                                  last_name=last_name, username=username, 
+            updated = update_account(user=request.user, first_name=first_name,
+                                  last_name=last_name, username=username,
                                   email=email, password=password)
-            
+
             # Check if account was updated and flash appropriate message
             if updated:
                 messages.success(request, "Account updated successfully!")
             else:
                 messages.error(request, "Account could not be updated. Please \
                                try again or contact us to report the issue.")
-            
+
             return redirect("/dashboard/")
 
     else:
@@ -350,7 +350,7 @@ def browse_vw(request):
         creator = request.POST.get("creator")
         description = request.POST.get("description")
         tags = request.POST.get("tags")
-        min_num_items = request.POST.get("min_num_items")   
+        min_num_items = request.POST.get("min_num_items")
         max_num_items = request.POST.get("max_num_items")
         start_date = request.POST.get("start_date")
         end_date = request.POST.get("end_date")
@@ -375,7 +375,7 @@ def collection_vw(request):
         if not collection:
             messages.error(request, "That collection does not exist!")
             return redirect("/")
-        
+
         # Get datasets associated with collection
         datasets = Dataset.objects.filter(public=True,
                                           items__collections=collection).distinct()
@@ -393,7 +393,7 @@ def create_vw(request):
         # Get data from session
         dataset = request.session.get('dataset')
         filters = request.session.get('filters')
-        
+
         # Get data from form
         title = request.POST.get("title")
         description = request.POST.get("description")
@@ -410,7 +410,7 @@ def create_vw(request):
             saved_results = True
         else:
             saved_results = False
-        
+
         if not dataset:
             messages.error(request, "No dataset was given. You must first \
                            retrieve data before attempting to create a dataset.")
@@ -418,11 +418,11 @@ def create_vw(request):
             filters = {}
 
         # Create dataset
-        new_dataset = create_dataset(dataset=dataset, title=title, 
-                                     description=description, tags=tags, 
-                                     filters=filters, creator=request.user, 
+        new_dataset = create_dataset(dataset=dataset, title=title,
+                                     description=description, tags=tags,
+                                     filters=filters, creator=request.user,
                                      public=public, saved_results=saved_results)
-        
+
         # Check if dataset was created
         if new_dataset:
             # Remove session variables
@@ -437,7 +437,7 @@ def create_vw(request):
             messages.error(request, "Dataset could not be created. Please try \
                                again or contact us to report the issue.")
             return redirect("/retrieve/")
-        
+
 
 def dataset_vw(request):
     context = {
@@ -479,7 +479,7 @@ def edit_vw(request):
     if not dataset:
         messages.error(request, "That dataset does not exist!")
         return redirect("/browse/")
-    
+
     # Add dataset to context
     context['dataset'] = dataset
 
@@ -491,24 +491,24 @@ def edit_vw(request):
         if public == "on":
             public = True
         else:
-            public = False 
-        
+            public = False
+
         # Verify user can modify dataset
         if not verify_user(request, dataset.creator):
             messages.error(request, 'You do not have permission to directly edit \
                            this dataset. Click the "Edit Dataset" button to \
                            edit a copy of this dataset.')
             return redirect(f"/dataset/?id={ dataset_id }")
-        
+
         # Update dataset
-        updated = update_dataset(user=request.user, dataset=dataset, title=title, 
+        updated = update_dataset(user=request.user, dataset=dataset, title=title,
                                  description=description, tags=tags, public=public)
-        
+
         # Check if dataset
         if not updated:
             messages.error(request, "Dataset could not be updated. Please try \
                            again or contact us to report the issue.")
-        
+
     return render(request, "core/edit.html", context)
 
 
@@ -535,7 +535,7 @@ def item_vw(request):
         if not item:
             messages.error(request, "That item does not exist!")
             return redirect("/")
-            
+
         context['item'] = item
         context['datasets'] = item.get_public_datasets()
 
@@ -558,7 +558,7 @@ def retrieve_vw(request):
         ('filter' not in request.META['HTTP_REFERER'] and request.session.get('filters')):
         if request.session.get('filters'):
             del request.session['filters']
-        
+
 
     if request.GET.get("filters") == 'False' or \
         request.session.get('redirect') and request.session.get('dataset'):
@@ -578,7 +578,7 @@ def retrieve_vw(request):
         # Toggle to display results
         context['show_results'] = True
 
-    if request.method == "POST":  
+    if request.method == "POST":
         dataset_df = None
 
         if request.GET.get("filter"):
@@ -601,30 +601,30 @@ def retrieve_vw(request):
             # Filter dataset
             if isinstance(dataset, list) and len(dataset) > 0:
                 dataset_df = filter_dataset(
-                    request=request, 
+                    request=request,
                     dataset=dataset,
                     keywords=keywords,
-                    title=title, 
-                    creator=creator, 
+                    title=title,
+                    creator=creator,
                     contributor=contributor,
-                    publisher=publisher, 
+                    publisher=publisher,
                     depositor=depositor,
-                    start_year=start_year, 
-                    end_year=end_year, 
-                    language=language, 
+                    start_year=start_year,
+                    end_year=end_year,
+                    language=language,
                     description=description,
-                    item_type=item_type, 
-                    subject=subject, 
-                    coverage=coverage, 
+                    item_type=item_type,
+                    subject=subject,
+                    coverage=coverage,
                     rights=rights)
-            
+
             # Add filters to session
             request.session['filters'] = {
-                'keywords': keywords, 'title': title, 'creator': creator,  
-                'contributor':contributor, 'publisher': publisher, 
-                'depositor': depositor,  'start_year': start_year, 
-                'end_year': end_year, 'language': language, 
-                'description': description, 'item_type': item_type, 
+                'keywords': keywords, 'title': title, 'creator': creator,
+                'contributor':contributor, 'publisher': publisher,
+                'depositor': depositor,  'start_year': start_year,
+                'end_year': end_year, 'language': language,
+                'description': description, 'item_type': item_type,
                 'subject': subject, 'coverage': coverage, 'rights': rights
             }
 
@@ -647,7 +647,7 @@ def retrieve_vw(request):
                     messages.error(request, "Some items were not found in\
                                    the database. Click <a href='/exceptions/' \
                                    target='_blank'>here</a> to view a list of \
-                                   item ids that were not processed.", 
+                                   item ids that were not processed.",
                                    extra_tags='safe')
             # File Upload
             elif retrieval_method == 'file':
@@ -680,7 +680,7 @@ def retrieve_vw(request):
                                 item identifiers (each on a separate line) \
                                 or upload a CSV file with a list of item \
                                 identifiers.")
-    if dataset:          
+    if dataset:
         # Add dataset to session and context
         request.session['dataset'] = dataset
         # context['dataset'] = dataset_df
@@ -718,10 +718,10 @@ def tag_vw(request):
         if not tag:
             messages.error(request, "That tag does not exist!")
             return redirect("/")
-        
-        context['tag'] = tag  
+
+        context['tag'] = tag
         context['items'] = Item.objects.filter(tags=tag.tag_id).all()
-        context['datasets'] = Dataset.objects.filter(public=True, 
+        context['datasets'] = Dataset.objects.filter(public=True,
                                                      tags=tag.tag_id).all()
 
     return render(request, "core/tag.html", context)
@@ -749,14 +749,14 @@ def add_item_vw(request):
                            this dataset. Click the "Edit Dataset" button to \
                            edit a copy of this dataset.')
             return redirect(f"/dataset/?id={ dataset_id }")
-        
+
         # Create item if it's not created
         if not item:
             item = create_item_from_id(item_id=item_id)
             if not item:
                 messages.error(request, "Item could not be added. Please try \
                                again or contact us to report the issue.")
-                
+
         # Add item to dataset
         add_item(dataset=dataset, item=item)
     else:
@@ -773,10 +773,10 @@ def copy_vw(request):
     dataset_id = request.GET.get('id')
     dataset = Dataset.objects.filter(public_id=dataset_id).first()
     title = request.POST.get('title')
-    
+
     if not dataset:
         messages.error(request, "That dataset does not exist!")
-    
+
     elif title == dataset.title: # check for all names?
         messages.error(request, "You must give your copy of this dataset a unique name.")
 
@@ -788,14 +788,14 @@ def copy_vw(request):
         else:
             messages.error(request, "The dataset could not be copied. \
                         Please try again or contact us to report the issue.")
-            
+
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
 def delete_dataset_vw(request):
     dataset_id = request.GET.get('id')
-    dataset = Dataset.objects.filter(public_id=dataset_id).first()  
+    dataset = Dataset.objects.filter(public_id=dataset_id).first()
 
     if dataset:
         # Verify user has permission to delete dataset
@@ -804,7 +804,7 @@ def delete_dataset_vw(request):
                            this dataset. Click the "Edit Dataset" button to \
                            edit a copy of this dataset.')
             return redirect(f"/dataset/?id={ dataset_id }")
-        
+
         # Delete dataset
         deleted = delete_dataset(dataset.public_id)
 
@@ -840,12 +840,12 @@ def download_vw(request):
         else:
             # Create a Pandas Excel writer using XlsxWriter as the engine.
             writer = pd.ExcelWriter(csv_file.name, engine='xlsxwriter')
-            dataset_df.to_excel(writer, index=False, encoding='utf-8', 
+            dataset_df.to_excel(writer, index=False, encoding='utf-8',
                                 sheet_name='dataset')
             writer.close()
 
         # Generate filename
-        filename = f"{dataset.title.replace(' ', '_')}.{extension}" 
+        filename = f"{dataset.title.replace(' ', '_')}.{extension}"
 
         # Prepare and send file
         response = FileResponse(open(csv_file.name, "rb"), filename=filename)
@@ -860,7 +860,7 @@ def pin_dataset_vw(request):
 
     if dataset:
         pinned = pin_dataset(user=request.user, dataset=dataset)
-        
+
         if not pinned:
             messages.error(request, "The dataset could not be pinned. \
                            Please try again or contact us to report the issue.")
@@ -878,24 +878,24 @@ def pin_item_vw(request):
 
     if not item:
         item = create_item_from_id(item_id=item_id)
-        
+
     pinned = pin_item(user=request.user, item=item)
 
     if not pinned:
         messages.error(request, "The item could not be pinned. \
                         Please try again or contact us to report the issue.")
-        
+
     if 'retrieve' in request.META.get('HTTP_REFERER'):
         request.session['redirect'] = True
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-    
+
 
 @login_required
 def remove_item_vw(request):
     item_id = request.GET.get('item')
-    item = Item.objects.filter(item_id=item_id).first() 
-    dataset_id = request.GET.get('dataset') 
+    item = Item.objects.filter(item_id=item_id).first()
+    dataset_id = request.GET.get('dataset')
     dataset = Dataset.objects.filter(public_id=dataset_id).first()
 
     if item:
@@ -905,7 +905,7 @@ def remove_item_vw(request):
                                edit this dataset. Click the "Edit Dataset" \
                                button to edit a copy of this dataset.')
                 return redirect(f"/dataset/?id={ dataset_id }")
-            
+
             # Remove item from dataset
             remove_item(dataset=dataset, item=item)
         else:
@@ -923,7 +923,7 @@ def remove_item_vw(request):
 def remove_tag_vw(request):
     tag_id = request.GET.get('id')
     item_id = request.GET.get('item')
-    dataset_id = request.GET.get('dataset') 
+    dataset_id = request.GET.get('dataset')
     item = dataset = None
 
     tag = Tag.objects.filter(tag_id=tag_id).first()
@@ -936,15 +936,15 @@ def remove_tag_vw(request):
             if not removed:
                 messages.error(request, "The tag could not be removed. \
                         Please try again or contact us to report the issue.")
-        
+
         elif item_id:
-            item = Item.objects.filter(item_id=item_id).first() 
+            item = Item.objects.filter(item_id=item_id).first()
             removed = remove_tag(tag=tag, dataset=None, item=item)
-            
+
             if not removed:
                 messages.error(request, "The tag could not be removed. \
                         Please try again or contact us to report the issue.")
-        
+
         else:
           messages.error(request, "A dataset ID or item ID must be provided.")
     else:
@@ -958,7 +958,7 @@ def tag_dataset_vw(request):
     tag = request.POST.get("tags").strip()
     dataset_id = request.GET.get('id')
     dataset = Dataset.objects.filter(public_id=dataset_id).first()
-    
+
     if tag:
         if dataset:
             # Tag dataset
@@ -971,7 +971,7 @@ def tag_dataset_vw(request):
             messages.error(request, "That dataset does not exist!")
     else:
         messages.error(request, "You entered an empty tag!")
-    
+
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -986,7 +986,7 @@ def tag_item_vw(request):
         # Create item if it doesn't exist in the database
         if not item:
             item = create_item_from_id(item_id=item_id)
-        
+
         # Tag item
         tagged = add_tags(user=request.user, tags=tag, dataset=None, item=item)
 
@@ -1026,7 +1026,7 @@ def unpin_item_vw(request):
     else:
         messages.error(request, "That item does not exist!")
         return redirect("/")
-    
+
     if 'retrieve' in request.META.get('HTTP_REFERER'):
         request.session['redirect'] = True
 

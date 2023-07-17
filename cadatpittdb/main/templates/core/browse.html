@@ -10,8 +10,8 @@
 
 <!-- First Section-->
 <h2>Browse Datasets</h2>
-<p>Discover datasets and narrow your browsing by tag, collection, and filters.<br/> 
-  You can browse without an account. If you would like to pin, tag, or edit a 
+<p>Discover datasets and narrow your browsing by tag, collection, and filters.<br/>
+  You can browse without an account. If you would like to pin, tag, or edit a
   dataset, please <a href="/login/">log in</a> or <a href="/signup/">sign up</a>.
 </p>
 
@@ -20,11 +20,11 @@
     <!-- <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
       href="" role="button">Browse All</a> -->
     <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
-      data-bs-toggle="collapse" data-bs-target="#browseByTagCollapse" 
+      data-bs-toggle="collapse" data-bs-target="#browseByTagCollapse"
       aria-expanded="false" aria-controls="browseByTagButton"
       href="" role="button">Browse by Tag</a>
     <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
-      data-bs-toggle="collapse" data-bs-target="#browseByCollectionCollapse" 
+      data-bs-toggle="collapse" data-bs-target="#browseByCollectionCollapse"
       aria-expanded="false" aria-controls="browseByCollectionButton"
       href="" role="button">Browse by Collection</a>
   </div>
@@ -32,15 +32,15 @@
   <!-- Browse Methods -->
   <div class="accordion-group">
     <!-- Browse by Tag  -->
-    <div 
-      class="accordion-collapse collapse accordionCollapse" 
+    <div
+      class="accordion-collapse collapse accordionCollapse"
       data-bs-parent="#browseMethod"
       id="browseByTagCollapse">
       {% for tag in tags %}
       {% if tag.get_num_datasets > 0 %}
-      <a role="button" href="/tag/?title={{ tag }}" 
+      <a role="button" href="/tag/?title={{ tag }}"
         class="btn btn-warning bg-pitt-gold badge-tag text-pitt-dark-blue mb-2">
-      {{ tag }} 
+      {{ tag }}
       <span class="badge bg-pitt-royal">{{ tag.get_num_datasets }}</span>
       </a>
       {% endif %}
@@ -48,15 +48,15 @@
     </div>
 
     <!-- Browse by Collection -->
-    <div 
-      class="accordion-collapse collapse accordionCollapse" 
+    <div
+      class="accordion-collapse collapse accordionCollapse"
       data-bs-parent="#browseMethod"
       id="browseByCollectionCollapse">
       {% for collection in collections %}
       {% if collection.get_num_datasets > 0%}
-      <a role="button" href="/collection/?id={{ collection.collection_id }}" 
+      <a role="button" href="/collection/?id={{ collection.collection_id }}"
         class="btn btn-warning bg-pitt-gold badge-tag text-pitt-dark-blue mb-2">
-      {{ collection }} 
+      {{ collection }}
       <span class="badge bg-pitt-royal">{{ collection.get_num_datasets }}</span>
       </a>
       {% endif %}
@@ -85,7 +85,7 @@
           <div class="card-header">
             <div class="row">
               <div class="col-9 col-md-8 col-lg-9">
-                <strong>Created by:</strong> 
+                <strong>Created by:</strong>
                 <a href="/profile/?user={{ dataset.creator.username }}"
                   >{{ dataset.creator }}</a>
               </div>
@@ -99,12 +99,12 @@
           <div class="card-body">
             <!-- <h6 class="card-title"> -->
             <h5 class="card-title">
-              <a 
+              <a
                 href="/dataset?id={{ dataset.public_id }}">{{ dataset.title }}</a>
             <!-- </h6> -->
             </h5>
             <h* class="card-subtitle"> {% autoescape off %}{{ dataset.get_description }}{% endautoescape %}</h*>
-            <p class="card-text mt-2"><strong># of items:</strong> 
+            <p class="card-text mt-2"><strong># of items:</strong>
               {{ dataset.items.all|length }}<br/>
               <strong>Last modified:</strong> {{ dataset.last_modified|truncate_date }}
             </p>
