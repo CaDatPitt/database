@@ -109,11 +109,9 @@
               <strong>Last modified:</strong> {{ dataset.last_modified|truncate_date }}
             </p>
           </div>
-          <div class="card-footer bg-light-gray border-top-0 mb-2">
-            <a class="btn btn-warning bg-pitt-gold border-pitt-gold"
-              data-bs-toggle="modal" data-bs-target="#download{{ dataset.public_id }}"
-               role="button"href="">Download</a>
-          </div>
+          {% if user.is_authenticated %}
+          {% include 'snippets/download-dataset-card-button.html' %}
+          {% endif %}
         </div>
       </div>
       {% endfor %}
@@ -121,12 +119,14 @@
   <!-- </div>
 </div> -->
 
+{% if user.is_authenticated %}
 <!-- Dataset Modals -->
 {% for dataset in datasets %}
   {% include 'snippets/tag-dataset-modal.html' %}
   {% include 'snippets/edit-dataset-modal.html' %}
   {% include 'snippets/download-dataset-modal.html' %}
 {% endfor %}
+{% endif %}
 
 {% endblock %}
 

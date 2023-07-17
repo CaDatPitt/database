@@ -25,10 +25,10 @@
     {% include 'snippets/tag-badge.html' %}
   {% endfor %}
 </p>
-<br/>
 
 <!-- Dataset Action Buttons -->
-<div class="d-grid gap-2 d-sm-flex justify-content-center justify-content-lg-start">
+{% if user.is_authenticated %}
+<div class="d-grid gap-2 d-sm-flex justify-content-center justify-content-lg-start mt-4">
   {% if user == dataset.creator %}
     <div class="btn-group">
       <button type="button" data-bs-toggle="dropdown" aria-expanded="false"
@@ -62,6 +62,7 @@
     data-bs-toggle="modal" data-bs-target="#download{{ dataset.public_id }}"
     href="" type="button">Download Dataset</a>
 </div>
+{% endif %}
 
 <hr class="mt-4"/>
 
@@ -71,6 +72,7 @@
   {% for item in dataset.items.all %}
   <div class="col-lg-6">
     <div class="card h-100 shadow-sm bg-light-gray">
+      {% if user.is_authenticated %}
       <div class="card-header">
         <div class="row">
           <div class="col text-end">
@@ -81,10 +83,19 @@
           </div>
         </div>
       </div>
+      {% endif %}
       <div class="card-body">
         <div class="row">
           <div class="col-4 col-md-3">
+            {% if 'Finding aid' in item.type or 'Collection' in item.type %}
+            <img src="https://digital.library.pitt.edu/sites/all/modules/upitt_islandora_solr_search_extras/images/findingaids4_lt_big_text.png" 
+              class="card-img-top item-thumbnail" />
+            {% elif item.thumbnail %}
             <img src="{{ item.thumbnail }}" class="card-img-top item-thumbnail" />
+            {% else %}
+            <img src="https://publicdomainvectors.org/photos/A_Filing_Cabinet.png" 
+              class="card-img-top item-thumbnail" />
+            {% endif %}
           </div>
           <div class="col-8 col-md-9">
             <a href="/item/?id={{ item.item_id }}">
@@ -120,6 +131,7 @@
   {% endfor %}
 </div>
 
+{% if user.is_authenticated %}
 <!-- Edit Dataset Modal -->
 {% include 'snippets/edit-dataset-modal.html' %}
 
@@ -137,6 +149,7 @@
 {% for tag in dataset.tags.all %}
   {% include 'snippets/remove-tag-modal.html' %}
 {% endfor %}
+{% endif %}
 
 {% endblock %}
 
