@@ -14,7 +14,11 @@
             type="text" 
             class="form-control" 
             id="keywords" 
-            name="keywords">
+            name="keywords"
+            {% if request.session.filters.keywords %}
+            value="{{ request.session.filters.keywords }}"
+            {% endif %}
+            >
         </div>
         <br />
         <div class="form-group">
@@ -28,7 +32,10 @@
             type="text" 
             class="form-control" 
             id="title" 
-            name="title">
+            name="title"
+            {% if request.session.filters.title %}
+            value="{{ request.session.filters.title }}"
+            {% endif %}>
         </div>
         <br />
         <div class="form-group">
@@ -42,7 +49,10 @@
             type="text" 
             class="form-control" 
             id="creator" 
-            name="creator">
+            name="creator"
+            {% if request.session.filters.creator %}
+            value="{{ request.session.filters.creator }}"
+            {% endif %}>
         </div>
         <br />
         <div class="form-group">
@@ -56,7 +66,10 @@
             type="text" 
             class="form-control" 
             id="contributor" 
-            name="contributor">
+            name="contributor"
+            {% if request.session.filters.contributor %}
+            value="{{ request.session.filters.contributor }}"
+            {% endif %}>
         </div>
         <br />
         <div class="form-group">
@@ -70,7 +83,10 @@
             type="text" 
             class="form-control" 
             id="publisher" 
-            name="publisher">
+            name="publisher"
+            {% if request.session.filters.publisher %}
+            value="{{ request.session.filters.publisher }}"
+            {% endif %}>
         </div>
         <br />
         <div class="form-group">
@@ -84,7 +100,10 @@
             type="text" 
             class="form-control" 
             id="depositor" 
-            name="depositor">
+            name="depositor"
+            {% if request.session.filters.depositor %}
+            value="{{ request.session.filters.depositor }}"
+            {% endif %}>
         </div>
         <br />
         <div class="row">
@@ -101,7 +120,10 @@
                 class="form-control" 
                 id="start_year" 
                 name="start_year"
-                min="1900" max="2099" step="1">
+                min="1900" max="2099" step="1"
+                {% if request.session.filters.start_year %}
+                value="{{ request.session.filters.start_year }}"
+                {% endif %}>
             </div>
         </div>
         <div class="col">
@@ -117,7 +139,10 @@
                 class="form-control" 
                 id="end_year" 
                 name="end_year"
-                min="1900" max="2099" step="1">
+                min="1900" max="2099" step="1"
+                {% if request.session.filters.end_year %}
+                value="{{ request.session.filters.end_year }}"
+                {% endif %}>
             </div>
         </div>
         </div>
@@ -133,7 +158,10 @@
             type="text" 
             class="form-control" 
             id="language" 
-            name="language">
+            name="language"
+            {% if request.session.filters.language %}
+            value="{{ request.session.filters.language }}"
+            {% endif %}>
         </div>
         <br/>
         <div class="form-group">
@@ -147,11 +175,14 @@
             type="text" 
             class="form-control" 
             id="description" 
-            name="description">
+            name="description"
+            {% if request.session.filters.description %}
+            value="{{ request.session.filters.description }}"
+            {% endif %}>
         </div>
         <br/>
         <div class="form-group">
-        <label for="language" class="bold">Item Type
+        <label for="item_type" class="bold">Item Type
             <span 
                 data-bs-toggle="tooltip" data-bs-placement="bottom"
                 data-bs-title='Enter help text here'>&#x1F6C8;
@@ -160,8 +191,11 @@
         <input 
             type="text" 
             class="form-control" 
-            id="language" 
-            name="language">
+            id="item_type" 
+            name="item_type"
+            {% if request.session.filters.item_type %}
+            value="{{ request.session.filters.item_type }}"
+            {% endif %}>
         </div>
         <br/>
         <div class="form-group">
@@ -175,7 +209,10 @@
             type="text" 
             class="form-control" 
             id="subject" 
-            name="subject">
+            name="subject"
+            {% if request.session.filters.subject %}
+            value="{{ request.session.filters.subject }}"
+            {% endif %}>
         </div>
         <br/>
         <div class="form-group">
@@ -189,11 +226,14 @@
             type="text" 
             class="form-control" 
             id="coverage" 
-            name="coverage">
+            name="coverage"
+            {% if request.session.filters.coverage %}
+            value="{{ request.session.filters.coverage }}"
+            {% endif %}>
         </div>
         <br/>
         <div class="form-group">
-        <label for="copyright" class="bold">Copyright Status
+        <label for="rights" class="bold">Copyright Status
             <span 
                 data-bs-toggle="tooltip" data-bs-placement="bottom"
                 data-bs-title='Enter help text here'>&#x1F6C8;
@@ -201,12 +241,16 @@
         </label>
         {% for statement in rights %}
         <div class="form-check">
-            <label class="form-check-label">
             <input 
-            type="checkbox" 
-            class="form-check-input" 
-            value="{{ statement }}">{{ statement }}
-            </label>
+                type="checkbox" 
+                class="form-check-input"
+                name="rights"
+                id="rights"
+                value="{{ statement }}"
+                {% if request.session.filters.rights and statement in request.session.filters.rights %}
+                checked
+                {% endif %}>
+            <label class="form-check-label">{{ statement }}</label>
         </div>
         {% endfor %}
         </div>

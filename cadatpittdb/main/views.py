@@ -540,6 +540,22 @@ def retrieve_vw(request):
         "rights": vocab['rights']
     }
 
+    if request.session.get('redirect') and request.session.get('dataset'):
+        # Remove variable
+        del request.session['redirect']
+
+        # Get dataset_df
+        dataset_df = pd.DataFrame.from_dict(request.session.get('dataset'))
+
+        # Add dataset to context
+        context['dataset'] = dataset_df
+
+        # Add dataset info to context
+        context['num_results'] = dataset_df.shape[0]
+
+        # Toggle to display results
+        context['show_results'] = True
+
     if request.method == "POST":  
         dataset = None
         dataset_df = None
@@ -556,10 +572,10 @@ def retrieve_vw(request):
             end_year = request.POST.get("end_year")
             language = request.POST.get("language")
             description = request.POST.get("description")
-            item_type = request.POST.getlist("item_type")
+            item_type = request.POST.get("item_type")
             subject = request.POST.get("subject")
             coverage = request.POST.get("coverage")
-            rights = request.POST.getlist("copyright")
+            rights = request.POST.getlist("rights")
 
             # Filter dataset
             if isinstance(dataset, list) and len(dataset) > 0:
@@ -587,7 +603,7 @@ def retrieve_vw(request):
                 'depositor': depositor,  'start_year': start_year, 
                 'end_year': end_year, 'language': language, 
                 'description': description, 'item_type': item_type, 
-                'subject': subject, 'coverage': coverage, 'copyright': rights
+                'subject': subject, 'coverage': coverage, 'rights': rights
             }
 
         else:
@@ -713,6 +729,9 @@ def add_item_vw(request):
     else:
         messages.error(request, "That dataset does not exist!")
 
+    if 'retrieve' in request.META.get('HTTP_REFERER'):
+        request.session['redirect'] = True
+
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -825,15 +844,16 @@ def pin_item_vw(request):
     item = Item.objects.filter(item_id=item_id).first()
 
     if not item:
-        item = create_item(item_id=item_id, title=None, creator=None,
-                           date=None, item_type=None, thumbnail=None,
-                           collection_ids=None)
+        item = create_item_from_id(item_id=item_id)
         
     pinned = pin_item(user=request.user, item=item)
 
     if not pinned:
         messages.error(request, "The item could not be pinned. \
                         Please try again or contact us to report the issue.")
+        
+    if 'retrieve' in request.META.get('HTTP_REFERER'):
+        request.session['redirect'] = True
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     
@@ -859,6 +879,9 @@ def remove_item_vw(request):
             messages.error(request, "That dataset does not exist!")
     else:
         messages.error(request, "That item does not exist!")
+
+    if 'retrieve' in request.META.get('HTTP_REFERER'):
+        request.session['redirect'] = True
 
     return redirect(f"/dataset/?id={ dataset_id }")
 
@@ -929,9 +952,7 @@ def tag_item_vw(request):
     if tag:
         # Create item if it doesn't exist in the database
         if not item:
-            item = create_item(item_id=item_id, title=None, creator=None,
-                            date=None, item_type=None, thumbnail=None,
-                                collection_ids=None)
+            item = create_item_from_id(item_id=item_id)
         
         # Tag item
         tagged = add_tags(user=request.user, tags=tag, dataset=None, item=item)
@@ -941,6 +962,9 @@ def tag_item_vw(request):
                         Please try again or contact us to report the issue.")
     else:
         messages.error(request, "You entered an empty tag!")
+
+    if 'retrieve' in request.META.get('HTTP_REFERER'):
+        request.session['redirect'] = True
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -969,5 +993,8 @@ def unpin_item_vw(request):
     else:
         messages.error(request, "That item does not exist!")
         return redirect("/")
+    
+    if 'retrieve' in request.META.get('HTTP_REFERER'):
+        request.session['redirect'] = True
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

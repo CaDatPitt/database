@@ -35,14 +35,14 @@ def get_user_datasets(user=User):
     return datasets
 
 
-def get_rights(rights_input=list) -> list:
-    rights = []
+def get_rights_urls(rights_input=list) -> list:
+    rights_urls = []
 
     for statement, url in vocab['rights'].items():
         if statement in rights_input:
-            rights.append(url)
+            rights_urls.append(url)
 
-    return rights
+    return rights_urls
 
 
 def get_creators():
