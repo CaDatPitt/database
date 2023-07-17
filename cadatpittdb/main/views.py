@@ -698,8 +698,7 @@ def tag_vw(request):
             return redirect("/")
         
         context['tag'] = tag  
-        context['items'] = Item.objects.filter(public=True,
-                                               tags=tag.tag_id).all()
+        context['items'] = Item.objects.filter(tags=tag.tag_id).all()
         context['datasets'] = Dataset.objects.filter(public=True, 
                                                      tags=tag.tag_id).all()
 
