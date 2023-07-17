@@ -451,18 +451,16 @@ def filter_dataset(request=HttpRequest, dataset=list, keywords=str, title=str,
             ])
         filters['rights'] = rights
     if keywords:
-        # try:
-        filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
-            filtered_dataset_df.apply(filter_field, keywords=keywords, axis=1)
-            ])
-        filters['keywords'] = keywords
-        # except:
-        #     messages.error(request, "'Keywords' filter could not be applied.\
-        #                     Make sure that your expression is correct.")
-            
-    filtered_dataset = filtered_dataset_df.to_dict('records')
+        try:
+            filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
+                filtered_dataset_df.apply(filter_field, keywords=keywords, axis=1)
+                ])
+            filters['keywords'] = keywords
+        except:
+            messages.error(request, "'Keywords' filter could not be applied.\
+                            Make sure that your expression is correct.")
 
-    return filtered_dataset, filtered_dataset_df
+    return filtered_dataset_df
 
 
 def filter_datasets(request, keywords=str, title=str, creator=str, 
