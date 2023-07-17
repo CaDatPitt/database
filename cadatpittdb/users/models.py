@@ -110,7 +110,8 @@ class Collection(models.Model):
         return Dataset.objects.filter(collections=self).all()
     
     def get_num_datasets(self):
-        return Dataset.objects.filter(items__collections=self).distinct().count()
+        return Dataset.objects.filter(public=True, 
+                                      items__collections=self).distinct().count()
     
 
 class Tag(models.Model):
@@ -133,7 +134,7 @@ class Tag(models.Model):
         return Dataset.objects.filter(tags=self).all()
     
     def get_num_datasets(self):
-        return Dataset.objects.filter(tags=self).count()
+        return Dataset.objects.filter(public=True, tags=self).count()
 
 
 class Item(models.Model):

@@ -15,7 +15,7 @@
   dataset, please <a href="/login/">log in</a> or <a href="/signup/">sign up</a>.
 </p>
 
-<div id="retrievalMethod">
+<div id="browseMethod">
   <div class="d-grid gap-2 d-sm-flex justify-content-center justify-content-lg-start my-4">
     <!-- <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
       href="" role="button">Browse All</a> -->
@@ -33,7 +33,7 @@
   <div class="accordion-group">
     <!-- Browse by Tag  -->
     <div 
-      class="accordion-collapse collapse" 
+      class="accordion-collapse collapse accordionCollapse" 
       data-bs-parent="#browseMethod"
       id="browseByTagCollapse">
       {% for tag in tags %}
@@ -49,7 +49,7 @@
 
     <!-- Browse by Collection -->
     <div 
-      class="accordion-collapse collapse" 
+      class="accordion-collapse collapse accordionCollapse" 
       data-bs-parent="#browseMethod"
       id="browseByCollectionCollapse">
       {% for collection in collections %}
