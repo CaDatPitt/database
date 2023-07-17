@@ -10,10 +10,11 @@
 
 <!-- First Section-->
 <h2>Retrieve Data</h2>
-<p>Collect data for custom datasets through available retrieval methods, 
-  by choosing specific collections and filtering based on your data needs. <br/>
+<p>Collect data about items in <a href="https://digital.library.pitt.edu/" 
+  target="_blank">ULS Digital Collections</a> by selecting one or more 
+  collections or by listing specific items of interest.<br/>
   <strong>
-    Please note that larger quantities of items will take longer to retrieve.
+    Please note that larger sets of items will take longer to retrieve.
   </strong>
 </p>
 
@@ -29,7 +30,6 @@
     data-bs-toggle="modal" data-bs-target="#createDatasetModal"
    >Create Dataset</a>
 </div>
-{% endif %}
 
 <!-- Second Section -->
 <hr class="mt-4"/>
@@ -38,9 +38,12 @@
   <div class="col-lg-4">
     {% include 'snippets/retrieve-filters-form.html' %}
   </div>
+  <div class="col-lg-8">
+{% else %}
+<hr class="mt-4"/>
+{% endif %}
 
   <!-- Data Retrieval Forms -->
-  <div class="col-lg-8">
     {% if not show_results %}
     <!-- Option Toggles -->
     <h5 align="left">Retrieval Method</h5>

@@ -7,7 +7,11 @@
         <label for="keywords" class="bold">Keywords
             <span 
                 data-bs-toggle="tooltip" data-bs-placement="bottom"
-                data-bs-title='Enter help text here'>&#x1F6C8;
+                data-bs-title='Find collection items related to your 
+                keyword(s) or keyphrase(s). To filter on multiple words or
+                phrases, place quotes around each and separate them with an 
+                AND or an OR operator. Example: "August Wilson" OR 
+                "Errol Garner"'>&#x1F6C8;
             </span>
         </label>
         <input 
@@ -25,7 +29,11 @@
         <label for="title" class="bold">Title
             <span 
                 data-bs-toggle="tooltip" data-bs-placement="bottom"
-                data-bs-title='Enter help text here'>&#x1F6C8;
+                data-bs-title='Find collection items with titles that contain 
+                your keyword(s) or keyphrase(s). To filter on multiple words or
+                phrases, place quotes around each and separate them with an 
+                AND or an OR operator. Example: "The Phantom of the Movies’ 
+                VIDEOSCOPE" AND "Night of the Living Dead"'>&#x1F6C8;
             </span>
         </label>
         <input 
@@ -42,7 +50,10 @@
         <label for="creator" class="bold">Creator
             <span 
                 data-bs-toggle="tooltip" data-bs-placement="bottom"
-                data-bs-title='Enter help text here'>&#x1F6C8;
+                data-bs-title='Find collection items by creator name(s). 
+                To filter on multiple names, place quotes around each and 
+                separate them with an AND or an OR operator. 
+                Example: "August Wilson" OR "Errol Garner"'>&#x1F6C8;
             </span>
         </label>
         <input 
@@ -59,7 +70,10 @@
         <label for="contributor" class="bold">Contributor
             <span 
                 data-bs-toggle="tooltip" data-bs-placement="bottom"
-                data-bs-title='Enter help text here'>&#x1F6C8;
+                data-bs-title='Find collection items by contributor name(s). 
+                To filter on multiple names, place quotes around each and 
+                separate them with an AND or an OR operator. Example: 
+                "Detre Library & Archives" AND "Heinz History Center"'>&#x1F6C8;
             </span>
         </label>
         <input 
@@ -256,15 +270,15 @@
         </div>
         <br />
         <div class="col-md-12 text-center">
-        <button 
-        type="submit" 
-        class="btn btn-primary bg-pitt-royal border-pitt-royal"
-        {% if not dataset %} 
-        disabled
-        {% endif %}
-        >
-        Apply Filters
-        </button>
+            <a href="/retrieve/?filters=False" 
+                role="button" class="btn btn-outline-danger">
+                Clear Filters
+            </a>
+            <button 
+                type="submit" 
+                class="btn btn-primary bg-pitt-royal border-pitt-royal">
+                Apply Filters
+            </button>
         </div>
     </form>
     </div>

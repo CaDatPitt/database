@@ -541,13 +541,17 @@ def retrieve_vw(request):
         "rights": vocab['rights']
     }
 
-    if 'filter' not in request.META['HTTP_REFERER'] and request.session.get('filters'):
-        del request.session['filters']
+    if request.GET.get("filters") == 'False' or \
+        ('filter' not in request.META['HTTP_REFERER'] and request.session.get('filters')):
+        if request.session.get('filters'):
+            del request.session['filters']
         
 
-    if request.session.get('redirect') and request.session.get('dataset'):
-        # Remove variable
-        del request.session['redirect']
+    if request.GET.get("filters") == 'False' or \
+        request.session.get('redirect') and request.session.get('dataset'):
+        # Remove any pre-existing session variable
+        if request.session.get('redirect'):
+            del request.session['redirect']
 
         # Get dataset_df
         dataset_df = pd.DataFrame.from_dict(request.session.get('dataset'))
@@ -584,22 +588,23 @@ def retrieve_vw(request):
 
             # Filter dataset
             if isinstance(dataset, list) and len(dataset) > 0:
-                dataset, dataset_df = filter_dataset(request=request, 
-                                                    dataset=dataset,
-                                                    keywords=keywords,
-                                                    title=title, 
-                                                    creator=creator, 
-                                                    contributor=contributor,
-                                                    publisher=publisher, 
-                                                    depositor=depositor,
-                                                    start_year=start_year, 
-                                                    end_year=end_year, 
-                                                    language=language, 
-                                                    description=description,
-                                                    item_type=item_type, 
-                                                    subject=subject, 
-                                                    coverage=coverage, 
-                                                    rights=rights)
+                dataset_df = filter_dataset(
+                    request=request, 
+                    dataset=dataset,
+                    keywords=keywords,
+                    title=title, 
+                    creator=creator, 
+                    contributor=contributor,
+                    publisher=publisher, 
+                    depositor=depositor,
+                    start_year=start_year, 
+                    end_year=end_year, 
+                    language=language, 
+                    description=description,
+                    item_type=item_type, 
+                    subject=subject, 
+                    coverage=coverage, 
+                    rights=rights)
             
             # Add filters to session
             request.session['filters'] = {
