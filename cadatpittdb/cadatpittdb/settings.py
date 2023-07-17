@@ -31,7 +31,7 @@ SECRET_KEY = "django-insecure-#azrhv#f@3e-*=hh+rvb=m^nu$@l*_i97@5jb1l^a7f!+y(m_a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 if 'CODESPACE_NAME' in environ:
     codespace_name = getenv("CODESPACE_NAME")
