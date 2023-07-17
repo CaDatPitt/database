@@ -53,11 +53,13 @@
       data-bs-parent="#browseMethod"
       id="browseByCollectionCollapse">
       {% for collection in collections %}
+      {% if collection.get_num_datasets > 0%}
       <a role="button" href="/collection/?id={{ collection.collection_id }}" 
         class="btn btn-warning bg-pitt-gold badge-tag text-pitt-dark-blue mb-2">
       {{ collection }} 
       <span class="badge bg-pitt-royal">{{ collection.get_num_datasets }}</span>
       </a>
+      {% endif %}
       {% endfor %}
     </div>
   </div>
