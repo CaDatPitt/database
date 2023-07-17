@@ -13,7 +13,7 @@ import os
 import tempfile
 from .decode import decode_values
 from .controlled_vocab import vocab
-from .utilities import get_rights, now
+from .utilities import get_rights_urls, now
 from users.models import *
 from .metadata_reader import *
 
@@ -442,11 +442,11 @@ def filter_dataset(request=HttpRequest, dataset=list, keywords=str, title=str,
             messages.error(request, "'Coverage' filter could not be applied. \
                            Make sure that your expression is correct.")
     if rights:
-        rights_urls = get_rights(rights)
+        rights_str = " OR ".join(rights)
         # Might need to update to search for URL using regex
         filtered_dataset_df = pd.DataFrame(filtered_dataset_df[
-            filtered_dataset_df.rights.apply(lambda x: x.split('|||')[-1]).\
-                isin(rights_urls)
+            filtered_dataset_df.rights.apply(filter_field,
+                                                      other_field=rights_str)
             ])
         filters['rights'] = rights
     if keywords:

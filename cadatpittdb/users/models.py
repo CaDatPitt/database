@@ -16,7 +16,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(_('last name'), max_length=150)
     username = models.CharField(_('username'), max_length=25, unique=True)
     pronouns = models.CharField(_('pronouns'), max_length=25, blank=True, default='')
-    title = models.CharField(_('title'), max_length=100, blank=True, default='')
+    title = models.CharField(_('title'), max_length=200, blank=True, default='')
     affiliation = models.CharField(_('affiliation'), max_length=100, blank=True, default='')
     bio = models.CharField(_('bio'), max_length=5000, blank=True, default='')
     website = models.URLField(_('website'), max_length=500, blank=True, default='')
@@ -87,7 +87,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class Collection(models.Model):
     collection_id = models.CharField(_('collection ID'), max_length=200, primary_key=True)
-    title = models.CharField(_('title'), max_length=200)
+    title = models.CharField(_('title'), max_length=500)
     url = models.CharField(_('url'), max_length=500, blank=True, default='')
     sites = models.CharField(_('sites'), max_length=100, blank=True, default='')
     has_dataset = models.BooleanField(_('has dataset'), default=False)
@@ -110,12 +110,13 @@ class Collection(models.Model):
         return Dataset.objects.filter(collections=self).all()
     
     def get_num_datasets(self):
-        return Dataset.objects.filter(items__collections=self).distinct().count()
+        return Dataset.objects.filter(public=True, 
+                                      items__collections=self).distinct().count()
     
 
 class Tag(models.Model):
     tag_id = models.BigAutoField(_('tag ID'), auto_created=True, primary_key=True)
-    title = models.CharField(_('tag'), max_length=50, blank=True, default='')
+    title = models.CharField(_('tag'), max_length=100, blank=True, default='')
     creator = models.ManyToManyField(CustomUser)
     date_created = models.DateTimeField(_('date created'), default=timezone.now)
 
@@ -133,12 +134,12 @@ class Tag(models.Model):
         return Dataset.objects.filter(tags=self).all()
     
     def get_num_datasets(self):
-        return Dataset.objects.filter(tags=self).count()
+        return Dataset.objects.filter(public=True, tags=self).count()
 
 
 class Item(models.Model):
     item_id = models.CharField(_('item ID'), max_length=200, primary_key=True)
-    title = models.CharField(_('title'), max_length=200)
+    title = models.CharField(_('title'), max_length=500)
     creator = models.CharField(_('creator'), max_length=200, blank=True, default='')
     date = models.CharField(_('date'), max_length=50, blank=True, default='')
     type = models.CharField(_('type'), max_length=25, blank=True, default='')
@@ -174,7 +175,7 @@ class Item(models.Model):
 class Dataset(models.Model):
     dataset_id = models.BigAutoField(_('dataset ID'), auto_created=True, primary_key=True)
     public_id = models.UUIDField(default=uuid.uuid4, editable=False)
-    title = models.CharField(_('title'), max_length=200, blank=True, default='')
+    title = models.CharField(_('title'), max_length=500, blank=True, default='')
     items = models.ManyToManyField(Item)
     removed_items = models.ManyToManyField(Item, related_name='removed_items')
     description = models.CharField(_('description'), max_length=5000, blank=True, default='')
