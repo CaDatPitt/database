@@ -376,7 +376,8 @@ def collection_vw(request):
             return redirect("/")
         
         # Get datasets associated with collection
-        datasets = Dataset.objects.filter(items__collections=collection).distinct()
+        datasets = Dataset.objects.filter(public=True,
+                                          items__collections=collection).distinct()
 
         # Add objects to context
         context['collection'] = collection
@@ -525,7 +526,7 @@ def item_vw(request):
             return redirect("/")
             
         context['item'] = item
-        context['datasets'] = get_item_datasets(item=item)
+        context['datasets'] = item.get_public_datasets()
 
     return render(request, "core/item.html", context)
 
@@ -692,8 +693,10 @@ def tag_vw(request):
             return redirect("/")
         
         context['tag'] = tag  
-        context['items'] = Item.objects.filter(tags=tag.tag_id).all()
-        context['datasets'] = Dataset.objects.filter(tags=tag.tag_id).all()
+        context['items'] = Item.objects.filter(public=True,
+                                               tags=tag.tag_id).all()
+        context['datasets'] = Dataset.objects.filter(public=True, 
+                                                     tags=tag.tag_id).all()
 
     return render(request, "core/tag.html", context)
 
