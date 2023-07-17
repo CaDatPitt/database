@@ -37,7 +37,7 @@
       </button>
       <ul class="dropdown-menu">
         <li>
-          <a data-bs-toggle="modal" data-bs-target="#editDatasetModal"
+          <a data-bs-toggle="modal" data-bs-target="#edit{{ dataset.public_id }}"
             class="dropdown-item" href="">Edit copy</a>
         </li>
         <li>
@@ -48,7 +48,7 @@
     </div>
   {% else %}
   <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal"
-    data-bs-toggle="modal" data-bs-target="#editDatasetModal"
+    data-bs-toggle="modal" data-bs-target="#edit{{ dataset.public_id }}"
     href="" role="button">Edit Dataset</a>
   {% endif %}
   {% if user in dataset.pinned_by.all %}
@@ -91,6 +91,8 @@
               <h5 class="card-title">{{ item.title }}</h5>
             </a>
             <p>
+              <strong>Identifier:</strong> {{ item.item_id }}<br/>
+              <strong>Creator:</strong> {{ item.creator }}<br/>
               <strong>Date:</strong> {{ item.date }}<br/>
               <strong>Type:</strong> 
               {% for type in item.get_types %}

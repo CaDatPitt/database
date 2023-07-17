@@ -540,6 +540,10 @@ def retrieve_vw(request):
         "rights": vocab['rights']
     }
 
+    if 'filter' not in request.META['HTTP_REFERER'] and request.session.get('filters'):
+        del request.session['filters']
+        
+
     if request.session.get('redirect') and request.session.get('dataset'):
         # Remove variable
         del request.session['redirect']

@@ -112,7 +112,8 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[],
 
     # Build dataset from list of item IDs
     if item_ids:
-        for id in item_ids:
+        for item_id in item_ids:
+            id = item_id.replace("pitt:", "pitt_")
             # Try to get item record from OAI-PMH
             try:
                 # Get record object

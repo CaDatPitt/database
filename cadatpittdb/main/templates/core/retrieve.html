@@ -142,8 +142,8 @@
                     rows="10"
                     placeholder="Enter one identifier per line"
                     ></textarea>
-                  <small>Not sure how to enter your list of identifiers? 
-                  <a href="#">Check out the FAQ!</a></small>
+                  <!-- <small>Not sure how to enter your list of identifiers? 
+                  <a href="/faq/">Check out the FAQ!</a></small> -->
                 </div>
                 <br/>
                 <div class="col-md-12 text-center">
@@ -234,6 +234,7 @@
                   <h5 class="card-title">{{ item.title|join:", " }}</h5>
                 </a>
                 <p class="mb-0">
+                  <strong>Identifier:</strong> {{ item.item_id }}<br/>
                   <strong>Creator:</strong> {{ item.creator|join:", " }}<br/>
                   <strong>Date:</strong> {{ item.date|join:", " }}<br/>
                   <strong>Type:</strong> {{ item.type|join:", " }}<br/>
