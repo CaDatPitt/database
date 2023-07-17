@@ -26,12 +26,12 @@ load_dotenv(path.join(basedir, '.env'))
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-#azrhv#f@3e-*=hh+rvb=m^nu$@l*_i97@5jb1l^a7f!+y(m_a"
+SECRET_KEY = getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.vercel.app']
 
 if 'CODESPACE_NAME' in environ:
     codespace_name = getenv("CODESPACE_NAME")
@@ -85,6 +85,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "cadatpittdb.wsgi.application"
+
 
 
 """ Database """
