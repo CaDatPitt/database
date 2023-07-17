@@ -22,11 +22,15 @@
                   name="dataset"
                   reqired>
                   <option value="">Select a dataset</option>
+                  {% if user.get_datasets|length > 0%}
                   {% for dataset in user.get_datasets %}
                   <option value="{{ dataset }}"
                   {% if item.item_id in dataset.get_item_ids %}disabled{% endif %}
                   >{{ dataset }}</option>
                   {% endfor %}
+                  {% else %}
+                  <option value="" disabled>You don't have any datasets yet.</option>
+                  {% endif %}
               </select>
             </div>
             <br/>

@@ -10,7 +10,7 @@
 
 <!-- Dataset Information -->
 <h1>{{ dataset.title }}</h1>
-<p class="contact"><strong>Created By:</strong> 
+<p class="contact"><strong>Created by:</strong> 
   <a href="/profile/?user={{ dataset.creator.username }}">
     {{ dataset.creator }}
   </a>
@@ -97,9 +97,11 @@
               {{ type|title }}{% if type != item.get_types|last %},{% endif %}
               {% endfor %}
               <br/>
-              <strong>Collections:</strong> 
+              <strong>Collection:</strong> 
               {% for collection in item.collections.all %}
-              <br/>    
+              {% if item.collections.all|length > 1 %}
+              <br/>
+              {% endif %}
               <a href="{{ collection.get_urls.0 }}" target="_blank">{{ collection }}</a>
               {% endfor %}
             </p>

@@ -82,7 +82,7 @@
           <div class="card-header">
             <div class="row">
               <div class="col-9">
-                <strong>Created by</strong>: 
+                <strong>Created by:</strong> 
                 <a href="/profile/?user={{ dataset.creator.username }}"
                   >{{ dataset.creator }}</a>
               </div>
@@ -99,9 +99,9 @@
                 href="/dataset?id={{ dataset.public_id }}">{{ dataset.title }}</a>
             </h6>
             <h* class="card-subtitle"> {% autoescape off %}{{ dataset.get_description }}{% endautoescape %}</h*>
-            <p class="card-text mt-2"><strong># of items</strong>: 
+            <p class="card-text mt-2"><strong># of items:</strong> 
               {{ dataset.items.all|length }}<br/>
-              <strong>Last modified</strong>: {{ dataset.last_modified|truncate_date }}
+              <strong>Last modified:</strong> {{ dataset.last_modified|truncate_date }}
             </p>
           </div>
         </div>

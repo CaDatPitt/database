@@ -20,7 +20,7 @@
         </ul>
       </div>
     {% else %}
-    <a data-bs-toggle="modal" data-bs-target="#editDatasetModal"
+    <a data-bs-toggle="modal" data-bs-target="#edit{{ dataset.public_id }}"
       href="" role="button"><img class="card-header-icons"
       src="{% static 'images/edit_FILL0_wght400_GRAD0_opsz48.svg' %}"></a>
     {% endif %}

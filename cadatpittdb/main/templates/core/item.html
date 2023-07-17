@@ -18,9 +18,11 @@
         {{ type|title }}{% if type != item.get_types|last %},{% endif %}
     {% endfor %}
 </p>
-<p class="contact"><strong>Collections:</strong> 
+<p class="contact"><strong>Collection:</strong> 
     {% for collection in item.collections.all %}
-    <br/>    
+    {% if item.collection|length > 1 %}
+    <br/>
+    {% endif %}  
     <a href="{{ collection.get_urls.0 }}" target="_blank">{{ collection }}</a>
     {% endfor %}
 </p>
@@ -58,7 +60,7 @@
       <div class="card-header">
         <div class="row">
             <div class="col-9">
-                <strong>Created by</strong>: 
+                <strong>Created by:</strong> 
                 <a href="/profile/?user={{ dataset.creator.username }}"
                 >{{ dataset.creator }}</a>
             </div>
@@ -74,9 +76,9 @@
           <a href="/dataset?id={{ dataset.public_id }}">{{ dataset.title }}</a>
         </h5>
         <h* class="card-subtitle">{{ dataset.description }}</h*>
-        <p class="card-text mt-2"><strong># of items</strong>: 
+        <p class="card-text mt-2"><strong># of items:</strong> 
             {{ dataset.items.all|length }}<br/>
-        <strong>Last modified</strong>: {{ dataset.last_modified|truncate_date }}
+        <strong>Last modified:</strong> {{ dataset.last_modified|truncate_date }}
         </p>
       </div>
       <div class="card-footer bg-light-gray border-top-0 mb-2">
