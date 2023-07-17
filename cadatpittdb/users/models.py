@@ -162,6 +162,9 @@ class Item(models.Model):
     def get_datasets(self):
         return Dataset.objects.filter(items=self).all()
     
+    def get_public_datasets(self):
+        return Dataset.objects.filter(public=True, items=self).all()
+    
     def get_types(self):
         return self.type.split('|||')
     
