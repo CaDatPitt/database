@@ -360,7 +360,6 @@ def browse_vw(request):
     return render(request, "core/browse.html", context)
 
 
-@login_required
 def collection_vw(request):
     context = {
         "title": "View Datasets by Collection",
