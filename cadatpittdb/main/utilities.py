@@ -10,8 +10,8 @@ User = get_user_model()
 
 """ Functions """
 
-def format_affiliation(affiliations=[], other_affiliation=''):
-    affiliation = affiliations.append(other_affiliation)
+def format_affiliation(affiliations=[], other_affiliations=''):
+    affiliations += other_affiliations.split('|||')
     affiliation_str = '|||'.join(affiliations)
     return affiliation_str
 

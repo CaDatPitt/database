@@ -71,7 +71,7 @@ def update_profile(user=User, pronouns=str, title=str, affiliation=list,
                    other_affiliation=str, website=str, bio=str, photo_url=str):
     
     affiliation = format_affiliation(affiliations=affiliation, 
-                                     other_affiliation=other_affiliation)
+                                     other_affiliation=other_affiliations)
 
     try:
         user.pronouns = pronouns
