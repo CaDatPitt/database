@@ -537,7 +537,7 @@ def retrieve_vw(request):
         "title": "Retrieve Data",
         "vocab": vocab,
         "show_results": False,
-        "collections": Collection.objects.all(),
+        "collections": Collection.objects.all().order_by('title'),
         "rights": vocab['rights']
     }
 
