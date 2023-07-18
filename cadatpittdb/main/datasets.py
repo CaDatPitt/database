@@ -252,7 +252,7 @@ def create_dataset(dataset=dict, title=str, description=str, tags=list,
 
     # Add tags
     if tags:
-        add_tags(user=creator, tags=tags, dataset=new_dataset)
+        add_tags(user=creator, tags=tags, dataset=new_dataset, item=None)
 
     # Update collections
     for collection in Collection.objects.all():
