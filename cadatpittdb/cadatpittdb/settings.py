@@ -144,6 +144,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "main" / "static",
 ]
 
+STATIC_ROOT = path.join(BASE_DIR, "main", "static")
 STATIC_URL = "cadatpittdb/main/static/"
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/dashboard/"
