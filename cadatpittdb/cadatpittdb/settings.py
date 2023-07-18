@@ -14,7 +14,6 @@ from os import environ, getenv, path
 from pathlib import Path
 from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
-from .config import *
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,9 +28,11 @@ load_dotenv(path.join(basedir, '.env'))
 SECRET_KEY = getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.vercel.app']
+DEVELOPMENT_MODE = getenv("DEVELOPMENT_MODE", "False") == "True"
+
+ALLOWED_HOSTS = getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 if 'CODESPACE_NAME' in environ:
     codespace_name = getenv("CODESPACE_NAME")
