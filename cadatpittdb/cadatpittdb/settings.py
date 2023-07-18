@@ -28,11 +28,11 @@ load_dotenv(path.join(basedir, '.env'))
 SECRET_KEY = getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = getenv("DEBUG", "False") == "True"
+DEBUG = "False"
 
-DEVELOPMENT_MODE = getenv("DEVELOPMENT_MODE", "False") == "True"
+DEVELOPMENT_MODE = "False"
 
-ALLOWED_HOSTS = getenv("cadatpitt.pythonanywhere.com", "127.0.0.1,localhost").split(",")
+ALLOWED_HOSTS = ["cadatpitt.pythonanywhere.com", "127.0.0.1,localhost"]
 
 if 'CODESPACE_NAME' in environ:
     codespace_name = getenv("CODESPACE_NAME")
@@ -148,9 +148,7 @@ STATIC_URL = "cadatpittdb/main/static/"
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
-# STATICFILES_DIRS = path.join(BASE_DIR, 'main', 'static'),
-# STATICFILES_DIRS = path.join(BASE_DIR, 'main', 'static'),
-# STATIC_ROOT = path.join(BASE_DIR, 'staticfiles_build', 'static')
+
 
 """ MESSAGE CONSTANTS """
 MESSAGE_TAGS = {
