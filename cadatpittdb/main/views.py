@@ -390,7 +390,11 @@ def collection_vw(request):
 def create_vw(request):
     if request.method == "POST":
         # Get data from session
-        dataset = request.session.get('dataset')
+        dataset = None
+        if request.session.get('filtered_dataset'):
+            dataset = request.session.get('filtered_dataset')
+        else:
+            dataset = request.session.get('dataset')
         filters = request.session.get('filters')
         
         # Get data from form
@@ -545,6 +549,8 @@ def retrieve_vw(request):
         ('filter' not in request.META['HTTP_REFERER'] and request.session.get('filters')):
         if request.session.get('filters'):
             del request.session['filters']
+        if request.session.get('filtered_dataset'):
+            del request.session['filtered_dataset']
         
 
     if request.GET.get("filters") == 'False' or \
@@ -568,6 +574,8 @@ def retrieve_vw(request):
     if request.method == "POST":  
         dataset = None
         dataset_df = None
+        if request.session.get('filtered_dataset'):
+            del request.session['filtered_dataset']
 
         if request.GET.get("filter"):
             dataset = request.session.get('dataset')
@@ -588,7 +596,7 @@ def retrieve_vw(request):
 
             # Filter dataset
             if isinstance(dataset, list) and len(dataset) > 0:
-                dataset_df = filter_dataset(
+                dataset_df, filtered_dataset = filter_dataset(
                     request=request, 
                     dataset=dataset,
                     keywords=keywords,
@@ -615,6 +623,8 @@ def retrieve_vw(request):
                 'description': description, 'item_type': item_type, 
                 'subject': subject, 'coverage': coverage, 'rights': rights
             }
+
+            request.session['filtered_dataset'] = filtered_dataset
 
         else:
             # Get retrieval method from form

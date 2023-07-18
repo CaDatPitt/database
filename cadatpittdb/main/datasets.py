@@ -460,7 +460,7 @@ def filter_dataset(request=HttpRequest, dataset=list, keywords=str, title=str,
             messages.error(request, "'Keywords' filter could not be applied.\
                             Make sure that your expression is correct.")
 
-    return filtered_dataset_df
+    return filtered_dataset_df, filtered_dataset_df.to_dict('records')
 
 
 def filter_datasets(request, keywords=str, title=str, creator=str, 
