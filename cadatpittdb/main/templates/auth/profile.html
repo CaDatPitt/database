@@ -47,9 +47,9 @@
 {% endif %}
 
 <!-- Datasets -->
-{% if datasets %}
 <hr class="mt-4"/>
 <h4 class="mb-4">Datasets</h4>
+{% if datasets %}
 <div class="row gy-4">
   {% for dataset in person.get_datasets %}
   <div class="col-md-6 col-xl-4">
@@ -85,6 +85,12 @@
   </div>
   {% endfor %}
 </div>
+{% else %}
+  {% if person == user %}
+  <p><em>You don't have any datasets yet.</em></p>
+  {% else %}
+  <p><em>{{ person.first_name }} doesn't have any datasets yet.</em></p>
+  {% endif %}
 {% endif %}
 
 <!-- Update Profile Form Modal -->
