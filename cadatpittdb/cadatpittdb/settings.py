@@ -28,9 +28,9 @@ load_dotenv(path.join(basedir, '.env'))
 SECRET_KEY = getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = "False"
+DEBUG = False
 
-DEVELOPMENT_MODE = "False"
+DEVELOPMENT_MODE = False
 
 ALLOWED_HOSTS = ["cadatpitt.pythonanywhere.com", "127.0.0.1", "localhost"]
 
@@ -142,11 +142,10 @@ USE_TZ = True
 
 
 
-
-# STATICFILES_DIRS = [
-#         BASE_DIR / "static",
-#     ]
-STATIC_ROOT = path.join(BASE_DIR, "static")
+STATIC_ROOT = path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [
+        BASE_DIR / "static",
+    ]
 STATIC_URL = "static/"
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/dashboard/"
