@@ -144,9 +144,9 @@ USE_TZ = True
 
 STATIC_ROOT = path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = [
-        BASE_DIR / "main" / "static",
+        BASE_DIR / "static",
     ]
-STATIC_URL = "cadatpittdb/main/static/"
+STATIC_URL = "static/"
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
