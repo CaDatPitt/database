@@ -32,7 +32,7 @@ DEBUG = getenv("DEBUG", "False") == "True"
 
 DEVELOPMENT_MODE = getenv("DEVELOPMENT_MODE", "False") == "True"
 
-ALLOWED_HOSTS = getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+ALLOWED_HOSTS = getenv("cadatpitt.pythonanywhere.com", "127.0.0.1,localhost").split(",")
 
 if 'CODESPACE_NAME' in environ:
     codespace_name = getenv("CODESPACE_NAME")
