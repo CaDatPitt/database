@@ -142,12 +142,11 @@ USE_TZ = True
 
 
 
-if DEBUG:
-    STATICFILES_DIRS = [
-            BASE_DIR / "static",
-        ]
-else:
-    STATIC_ROOT = path.join(BASE_DIR, "static")
+
+# STATICFILES_DIRS = [
+#         BASE_DIR / "static",
+#     ]
+STATIC_ROOT = path.join(BASE_DIR, "static")
 STATIC_URL = "static/"
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/dashboard/"
