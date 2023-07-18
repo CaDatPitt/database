@@ -140,11 +140,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATICFILES_DIRS = [
-    BASE_DIR / "main" / "static",
-]
 
-STATIC_ROOT = path.join(BASE_DIR, "main", "static")
+
+if DEBUG:
+    STATICFILES_DIRS = [
+            BASE_DIR / "main" / "static",
+        ]
+else:
+    STATIC_ROOT = path.join(BASE_DIR, "main", "static")
 STATIC_URL = "cadatpittdb/main/static/"
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/dashboard/"
