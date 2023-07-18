@@ -644,6 +644,7 @@ def unpin_item(user=User, item=Item):
 
 def add_tags(user=User, tags=str, dataset=Dataset, item=Item):
     tag_list = tags.split("|||")
+    exceptions = []
 
     for tag in tag_list:
         cur_tag = Tag.objects.filter(title=tag).first()
@@ -654,8 +655,9 @@ def add_tags(user=User, tags=str, dataset=Dataset, item=Item):
                 cur_tag = Tag(title=tag)
                 cur_tag.save()
             except:
-                return False
-            
+                exceptions.append(tag)
+                continue
+
         try:
             # Associate tag with user
             cur_tag.creator.add(user.user_id)
@@ -667,10 +669,11 @@ def add_tags(user=User, tags=str, dataset=Dataset, item=Item):
             if item:
                 item.tags.add(cur_tag)
                 item.save()
-
-            return True
         except:
-            return False
+            exceptions.append(tag)
+    if len(tag_list) == len(exceptions):
+        return False
+    return True
 
 
 def remove_tag(tag=str, dataset=Dataset, item=Item):
