@@ -694,7 +694,7 @@ def update_dataset(user=User, dataset=Dataset, title=str, description=str,
         dataset.description = description
         dataset.public = public
         dataset.save()
-        add_tags(user=user, dataset=dataset, tags=tags)
+        add_tags(user=user, tags=tags, dataset=dataset, item=None)
         return True
     except:
         return False
