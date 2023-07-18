@@ -67,10 +67,11 @@ def update_account(user=User, first_name=str, last_name=str, username=str,
         return False
 
 
-def update_profile(user=User, pronouns=str, title=str, affiliation=str, 
+def update_profile(user=User, pronouns=str, title=str, affiliation=list, 
                    other_affiliation=str, website=str, bio=str, photo_url=str):
     
-    affiliation = format_affiliation(affiliation, other_affiliation)
+    affiliation = format_affiliation(affiliations=affiliation, 
+                                     other_affiliation=other_affiliation)
 
     try:
         user.pronouns = pronouns

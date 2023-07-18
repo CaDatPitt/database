@@ -11,8 +11,8 @@ User = get_user_model()
 """ Functions """
 
 def format_affiliation(affiliations=[], other_affiliation=''):
+    affiliation = affiliations.append(other_affiliation)
     affiliation_str = '|||'.join(affiliations)
-    affiliation_str += other_affiliation
     return affiliation_str
 
 
