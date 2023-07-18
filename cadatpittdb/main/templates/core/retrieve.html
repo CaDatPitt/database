@@ -295,6 +295,19 @@
   placeholder: 'Type tag name and press Enter/Return to add'
   })
 </script>
+<script>
+  /* always keep at least 1 open by preventing the current to close itself */
+$('[data-bs-toggle="collapse"]').on('click',function(e){
+  if ( $(this).parents('.accordion').find('.collapse.show') ){
+      var idx = $(this).index('[data-bs-toggle="collapse"]');
+      if (idx == $('.collapse.show').index('.collapse')) {
+          // prevent collapse
+          e.stopPropagation();
+      }
+  }
+});
+
+</script>
 {% endblock %}
 {% block bootstrapjs %}
 {% endblock %}
