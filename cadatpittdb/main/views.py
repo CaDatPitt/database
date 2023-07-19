@@ -559,13 +559,19 @@ def retrieve_vw(request):
     dataset = None
     filtered_dataset = None
 
+    # Clear filters has been activated OR 
+    # A new retrieval request has been made
     if request.GET.get("filters") == 'False' or \
         (not request.GET.get("filters") and request.session.get('filters')):
+        # Remove filters from session
         if request.session.get('filters'):
             del request.session['filters']
+        # Remove filtered dataset from sessions
         if request.session.get('filtered_dataset'):
             del request.session['filtered_dataset']
-        
+
+    # Clear filters has been activated OR
+    # There is a redirect after an item has been pinned or tagged    
     if request.GET.get("filters") == 'False' or \
         request.session.get('redirect') and request.session.get('dataset'):
         # Remove any pre-existing session variable
@@ -651,7 +657,7 @@ def retrieve_vw(request):
             # List of Identifiers
             if retrieval_method == 'identifiers':
                 item_ids = iter(item_ids.splitlines())
-                dataset, dataset_df, exceptions = get_dataset(item_ids=item_ids)
+                dataset, dataset_df, exceptions, flag = get_dataset(item_ids=item_ids)
 
                 if exceptions:
                     request.session['exceptions'] = exceptions
@@ -669,7 +675,7 @@ def retrieve_vw(request):
                     try:
                         df = pd.read_csv(csv_file)
                         item_ids = df.iloc[:, 0].values.tolist()
-                        dataset, dataset_df, exceptions = get_dataset(item_ids=item_ids)
+                        dataset, dataset_df, exceptions, flag = get_dataset(item_ids=item_ids)
 
                         if exceptions:
                             request.session['exceptions'] = exceptions
@@ -685,10 +691,16 @@ def retrieve_vw(request):
                                        us to report the issue.')
             # By Collections
             elif retrieval_method == 'collections':
-                dataset, dataset_df, exceptions = get_dataset(collections=collections)
+                dataset, dataset_df, exceptions, flag = get_dataset(collections=collections)
 
                 request.session['dataset'] = dataset
                 request.GET.get("filters")
+
+                if flag:
+                    messages.error(request, "We're sorry! Your selected \
+                                   collection(s) are not available at this time.\
+                                   Please try again later or contact us to \
+                                   report the issue.")
 
             else:
                 messages.error(request, "You must either paste a list of \
