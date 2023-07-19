@@ -572,6 +572,8 @@ def retrieve_vw(request):
         if request.session.get('redirect'):
             del request.session['redirect']
 
+        dataset = request.session['dataset']
+
         # Get dataset_df
         dataset_df = pd.DataFrame.from_dict(request.session.get('dataset'))
 
