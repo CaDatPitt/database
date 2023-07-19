@@ -64,7 +64,7 @@
               {% for dataset in user.get_datasets %}
               <li class="list-group-item bg-light-gray ">
                 <div class="row">
-                  <div class="col-4 col-md-3 col-xxl-2">
+                  <div class="col-md-3 col-xxl-2 d-none d-md-block">
                     {% include 'snippets/pin-dataset-icon.html' %}
                     {% include 'snippets/tag-dataset-icon.html' %}
                     {% include 'snippets/edit-dataset-icon.html' %}
@@ -112,7 +112,7 @@
               {% for dataset in user.get_saved_results %}
               <li class="list-group-item bg-light-gray ">
                 <div class="row">
-                  <div class="col-3 col-md-2">
+                  <div class="col-3 col-md-2 d-none d-md-block">
                     {% include 'snippets/pin-dataset-icon.html' %}
                     {% include 'snippets/edit-dataset-icon.html' %}
                     {% include 'snippets/delete-dataset-icon.html' %}
@@ -143,7 +143,7 @@
               {% for dataset in user.get_pinned_datasets %}
               <li class="list-group-item bg-light-gray ">
                 <div class="row">
-                  <div class="col-3 col-md-2">
+                  <div class="col-3 col-md-2 d-none d-md-block">
                     {% include 'snippets/pin-dataset-icon.html' %}
                     {% include 'snippets/edit-dataset-icon.html' %}
                     {% include 'snippets/delete-dataset-icon.html' %}
@@ -169,7 +169,7 @@
               {% for item in user.get_pinned_items %}
               <li class="list-group-item bg-light-gray ">
                   <div class="row">
-                    <div class="col-3 col-md-2">
+                    <div class="col-3 col-md-2 d-none d-md-block">
                       {% include 'snippets/pin-item-icon.html' %}
                       {% include 'snippets/tag-item-icon.html' %}
                       {% include 'snippets/add-item-icon.html' %}
