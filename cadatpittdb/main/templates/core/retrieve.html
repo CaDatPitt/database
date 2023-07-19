@@ -143,6 +143,13 @@
                 {% csrf_token %}
                 <div class="form-group">
                   <label for="item_ids" class="bold">Identifiers</label>
+                  <br/>
+                  <small>An "identifier" is a unique ID associated with a 
+                    collection item. You can find these on item cards on this 
+                    site or on <a href="https://digital.library.pitt.edu/" 
+                    target="_blank">ULS Digital Collections</a>.<br/>
+                    <strong>Example</strong>: pitt:31735068222714
+                  </small>
                   <textarea class="form-control"
                     id="item_ids"
                     name="item_ids"
