@@ -659,6 +659,8 @@ def retrieve_vw(request):
                 item_ids = iter(item_ids.splitlines())
                 dataset, dataset_df, exceptions, flag = get_dataset(item_ids=item_ids)
 
+                request.session['dataset'] = dataset
+
                 if exceptions:
                     request.session['exceptions'] = exceptions
                     # Do something with them
