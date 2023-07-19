@@ -552,21 +552,20 @@ def retrieve_vw(request):
         "title": "Retrieve Data",
         "vocab": vocab,
         "show_results": False,
-        "collections": Collection.objects.all().order_by('title'),
+        "collections": Collection.objects.filter(collection_id__in=vocab['collections']).all().order_by('title'),
         "rights": vocab['rights']
     }
 
-    dataset = request.session.get('dataset')
+    dataset = None
     filtered_dataset = None
 
     if request.GET.get("filters") == 'False' or \
-        ('filter' not in request.META['HTTP_REFERER'] and request.session.get('filters')):
+        (not request.GET.get("filters") and request.session.get('filters')):
         if request.session.get('filters'):
             del request.session['filters']
         if request.session.get('filtered_dataset'):
             del request.session['filtered_dataset']
         
-
     if request.GET.get("filters") == 'False' or \
         request.session.get('redirect') and request.session.get('dataset'):
         # Remove any pre-existing session variable
@@ -686,15 +685,16 @@ def retrieve_vw(request):
             elif retrieval_method == 'collections':
                 dataset, dataset_df, exceptions = get_dataset(collections=collections)
 
+                request.session['dataset'] = dataset
+                request.GET.get("filters")
+
             else:
                 messages.error(request, "You must either paste a list of \
                                 item identifiers (each on a separate line) \
                                 or upload a CSV file with a list of item \
                                 identifiers.")
-    if dataset:          
-        # Add dataset to session and context
-        request.session['dataset'] = dataset
-        # context['dataset'] = dataset_df
+    if dataset or request.GET.get('page'):          
+        # context['dataset'] = dataset_df\
         # Toggle to display results
         context['show_results'] = True
         # Add dataset to context
@@ -705,6 +705,7 @@ def retrieve_vw(request):
             context['dataset'] = filtered_dataset
             p = Paginator(filtered_dataset, 10)
         else:
+            dataset = request.session['dataset']
             context['num_results'] = len(dataset)
             context['dataset'] = dataset
             p = Paginator(dataset, 10)
