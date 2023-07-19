@@ -131,8 +131,7 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[],
 
             # Add exception message to list
             except:
-                exceptions.append("item %s was not processed successfully" 
-                                  % data['item_id'][0])
+                exceptions.append("'%s'" % item_id)
     
     # Get item records by collection/set(s)
     else:
