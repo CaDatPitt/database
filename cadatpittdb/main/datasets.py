@@ -137,15 +137,17 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[],
     else:
         # Reformat and combine list of collection IDs
         sets = ":".join(collections).replace("pitt:", "pitt_")
+        flag = False
         
         # Try to get item records from OAI-PMH
-        records = None
+        records = []
         try:
             records = client.listRecords(metadataPrefix=metadata_prefix,
                                 set=sets)
         # If retrieval not succesful, set records to empty list
         except:
-            records = []
+            flag = True
+            
         
         # Get data from record objects
         for record in records:
@@ -156,8 +158,7 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[],
                 # Append data to dataset lit
                 dataset.append(data)
             except:
-                exceptions.append("item %s was not processed successfully" 
-                                  % data['item_id'][0])
+                exceptions.append("'%s'" % record['item_id'][0])
 
     # Create DataFrame from list of dictionaries (dataset)
     dataset_df = pd.DataFrame.from_dict(dataset)
@@ -168,7 +169,7 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[],
         # Decode encoded columns
         dataset_df = decode_values(dataset_df)
 
-        return dataset, dataset_df, exceptions
+        return dataset, dataset_df, exceptions, flag
 
 
 def get_item(metadata_prefix="oai_dc", item_id=str):
