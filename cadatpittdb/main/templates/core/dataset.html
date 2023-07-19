@@ -10,17 +10,17 @@
 
 <!-- Dataset Information -->
 <h1>{{ dataset.title }}</h1>
-<p class="contact"><strong>Created by:</strong> 
+<p class="contact"><strong>Created by:</strong>
   <a href="/profile/?user={{ dataset.creator.username }}">
     {{ dataset.creator }}
   </a>
 </p>
-<p class="contact"><strong>Description:</strong> 
+<p class="contact"><strong>Description:</strong>
   {% autoescape off %}{{ dataset.get_description }}{% endautoescape %}
 </p>
-<p class="contact"><strong>Last modified</strong>: 
+<p class="contact"><strong>Last modified</strong>:
   {{ dataset.last_modified|truncate_date }}</p>
-<p class="contact"><strong>Tags:</strong> 
+<p class="contact"><strong>Tags:</strong>
   {% for tag in dataset.tags.all %}
     {% include 'snippets/tag-badge.html' %}
   {% endfor %}
@@ -41,7 +41,7 @@
             class="dropdown-item" href="">Edit copy</a>
         </li>
         <li>
-          <a class="dropdown-item" 
+          <a class="dropdown-item"
             href="/edit/?id={{ dataset.public_id }}">Edit original</a>
         </li>
       </ul>
@@ -68,9 +68,9 @@
 
 <!-- Items -->
 <h4 class="mb-4">Items</h4>
-<p><em>{{ dataset.items.all|length }} item(s)</em></p>
+<p><em>Showing {{ items.start_index }}-{{ items.end_index }} out of {{ num_items }} item(s)</em></p>
 <div class="row gy-4">
-  {% for item in dataset.items.all %}
+  {% for item in items %}
   <div class="col-lg-6">
     <div class="card h-100 shadow-sm bg-light-gray">
       {% if user.is_authenticated %}
@@ -89,12 +89,12 @@
         <div class="row">
           <div class="col-md-3 d-none d-md-block ">
             {% if 'Finding aid' in item.type or 'Collection' in item.type %}
-            <img src="https://digital.library.pitt.edu/sites/all/modules/upitt_islandora_solr_search_extras/images/findingaids4_lt_big_text.png" 
+            <img src="https://digital.library.pitt.edu/sites/all/modules/upitt_islandora_solr_search_extras/images/findingaids4_lt_big_text.png"
               class="card-img-top item-thumbnail" />
             {% elif item.thumbnail %}
             <img src="{{ item.thumbnail }}" class="card-img-top item-thumbnail" />
             {% else %}
-            <img src="https://publicdomainvectors.org/photos/A_Filing_Cabinet.png" 
+            <img src="https://publicdomainvectors.org/photos/A_Filing_Cabinet.png"
               class="card-img-top item-thumbnail" />
             {% endif %}
           </div>
@@ -106,12 +106,12 @@
               <strong>Identifier:</strong> {{ item.item_id }}<br/>
               <strong>Creator:</strong> {{ item.creator }}<br/>
               <strong>Date:</strong> {{ item.date }}<br/>
-              <strong>Type:</strong> 
+              <strong>Type:</strong>
               {% for type in item.get_types %}
               {{ type|title }}{% if type != item.get_types|last %},{% endif %}
               {% endfor %}
               <br/>
-              <strong>Collection:</strong> 
+              <strong>Collection:</strong>
               {% for collection in item.collections.all %}
               {% if item.collections.all|length > 1 %}
               <br/>
@@ -120,7 +120,7 @@
               {% endfor %}
             </p>
             <a role="button" class="btn btn-warning pitt-gold"
-              href="https://digital.library.pitt.edu/islandora/object/{{ item.item_id}} " 
+              href="https://digital.library.pitt.edu/islandora/object/{{ item.item_id}} "
               target="_blank">
               View Full Item Info
             </a>
@@ -131,6 +131,40 @@
   </div>
   {% endfor %}
 </div>
+{% if items.paginator.num_pages > 1 %}
+<div class="d-flex justify-content-center mt-4">
+  <nav aria-label="page navigation">
+    <ul class="pagination">
+      {% if items.has_previous %}
+        <li class="page-item>">
+          <a class="page-link"
+          href="/dataset/?id={{ dataset.public_id }}&page=1">&laquo First</a>
+        </li>
+        <li class="page-item>">
+          <a class="page-link"
+            href="/dataset/?id={{ dataset.public_id }}&page={{ items.previous_page_number }}">Previous</a>
+        </li>
+      {% endif %}
+
+      <li class="page-item active">
+        <a class="page-link"
+        href="#">Page {{ items.number }} of {{ items.paginator.num_pages }} </span></a>
+      </li>
+
+      {% if items.has_next %}
+        <li class="page-item>">
+          <a class="page-link"
+          href="/dataset/?id={{ dataset.public_id }}&page={{ items.next_page_number }}">Next</a>
+        </li>
+        <li class="page-item>">
+          <a class="page-link"
+          href="/dataset/?id={{ dataset.public_id }}&page={{ items.paginator.num_pages }}">Last &raquo</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+{% endif %}
 
 {% if user.is_authenticated %}
 <!-- Edit Dataset Modal -->
@@ -140,7 +174,7 @@
 {% include 'snippets/download-dataset-modal.html' %}
 
 <!-- Item Modals -->
-{% for item in dataset.items.all %}
+{% for item in items %}
   {% include 'snippets/tag-item-modal.html' %}
   {% include 'snippets/add-item-modal.html' %}
   {% include 'snippets/remove-item-modal.html' %}
