@@ -557,6 +557,7 @@ def retrieve_vw(request):
     }
 
     dataset = request.session.get('dataset')
+    filtered_dataset = None
 
     if request.GET.get("filters") == 'False' or \
         ('filter' not in request.META['HTTP_REFERER'] and request.session.get('filters')):
@@ -694,18 +695,20 @@ def retrieve_vw(request):
         # Add dataset to session and context
         request.session['dataset'] = dataset
         # context['dataset'] = dataset_df
-
-        # Add dataset info to context
-        context['num_results'] = len(dataset)
-
         # Toggle to display results
         context['show_results'] = True
-
         # Add dataset to context
-        context['dataset'] = dataset
-
+        p = None
+        if filtered_dataset:
+            # Add dataset info to context
+            context['num_results'] = len(filtered_dataset)
+            context['dataset'] = filtered_dataset
+            p = Paginator(filtered_dataset, 10)
+        else:
+            context['num_results'] = len(dataset)
+            context['dataset'] = dataset
+            p = Paginator(dataset, 10)
         # Generate pagination for items
-        p = Paginator(dataset, 10)
         page = request.GET.get('page')
         items = p.get_page(page)
 
