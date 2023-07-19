@@ -90,7 +90,10 @@
         <label for="publisher" class="bold">Publisher
             <span 
                 data-bs-toggle="tooltip" data-bs-placement="bottom"
-                data-bs-title='Enter help text here'>&#x1F6C8;
+                data-bs-title='Find collection items by publisher name(s). 
+                To filter on multiple names, place quotes around each and 
+                separate them with an AND or an OR operator. 
+                Example: "Beadle and Company" OR "American Book Company"'>&#x1F6C8;
             </span>
         </label>
         <input 
@@ -103,7 +106,7 @@
             {% endif %}>
         </div>
         <br />
-        <div class="form-group">
+        <!-- <div class="form-group">
         <label for="depositor" class="bold">Depositor
             <span 
                 data-bs-toggle="tooltip" data-bs-placement="bottom"
@@ -119,14 +122,17 @@
             value="{{ request.session.filters.depositor }}"
             {% endif %}>
         </div>
-        <br />
+        <br /> -->
         <div class="row">
         <div class="col">
             <div class="form-group">
             <label for="start_year" class="bold">Start Year
                 <span 
                     data-bs-toggle="tooltip" data-bs-placement="bottom"
-                    data-bs-title='Enter help text here'>&#x1F6C8;
+                    data-bs-title='Find collection items that were created or 
+                    published during or after the start year. Note that the date 
+                    fields are not all standardized, so the accuracy of your 
+                    results may vary.'>&#x1F6C8;
                 </span>
             </label>
             <input 
@@ -145,7 +151,10 @@
             <label for="end_year" class="bold">End Year
                 <span 
                     data-bs-toggle="tooltip" data-bs-placement="bottom"
-                    data-bs-title='Enter help text here'>&#x1F6C8;
+                    data-bs-title='Find collection items that were created or 
+                    published before or during the end year. Note that the date 
+                    fields are not all standardized, so the accuracy of your 
+                    results may vary.'>&#x1F6C8;
                 </span>
             </label>
             <input 
@@ -165,7 +174,11 @@
         <label for="language" class="bold">Language
             <span 
                 data-bs-toggle="tooltip" data-bs-placement="bottom"
-                data-bs-title='Enter help text here'>&#x1F6C8;
+                data-bs-title='Limit your results to content in a specific 
+                language. Note that some items may be assigned 
+                multiple languages or no languages. To filter on multiple 
+                languages, place quotes around each and separate them with an 
+                AND or an OR operator. Example: "Spanish" OR "Portuguese"'>&#x1F6C8;
             </span>
         </label>
         <input 
@@ -182,7 +195,11 @@
         <label for="description" class="bold">Description
             <span 
                 data-bs-toggle="tooltip" data-bs-placement="bottom"
-                data-bs-title='Enter help text here'>&#x1F6C8;
+                data-bs-title='Find collection items with descriptions that 
+                contain your keyword(s) or keyphrase(s). To filter on multiple 
+                words or phrases, place quotes around each and separate them 
+                with an AND or an OR operator. Example: "social justice" OR
+                "activism"'>&#x1F6C8;
             </span>
         </label>
         <input 
@@ -199,7 +216,10 @@
         <label for="item_type" class="bold">Item Type
             <span 
                 data-bs-toggle="tooltip" data-bs-placement="bottom"
-                data-bs-title='Enter help text here'>&#x1F6C8;
+                data-bs-title='Limit your results to items of a specific type. 
+                To filter on multiple types, place quotes around each and 
+                separate them with an AND or an OR operator. Example: 
+                "newsletter" AND "bulletin"'>&#x1F6C8;
             </span>
         </label>
         <input 
@@ -216,7 +236,11 @@
         <label for="subject" class="bold">Subject
             <span 
                 data-bs-toggle="tooltip" data-bs-placement="bottom"
-                data-bs-title='Enter help text here'>&#x1F6C8;
+                data-bs-title='Find collection items with subject headings that 
+                contain your keyword(s) or keyphrase(s). To filter on multiple 
+                words or phrases, place quotes around each and separate them 
+                with an AND or an OR operator. Example: "readers" OR "spellers"'
+                >&#x1F6C8;
             </span>
         </label>
         <input 
@@ -233,7 +257,11 @@
         <label for="coverage" class="bold">Coverage
             <span 
                 data-bs-toggle="tooltip" data-bs-placement="bottom"
-                data-bs-title='Enter help text here'>&#x1F6C8;
+                data-bs-title='Limit your results to collection items with 
+                spatial or temporal topic related to your keyword(s) or 
+                keyphrase(s). To filter on multiple words or phrases, place 
+                quotes around each and separate them with an AND or an OR 
+                operator. Example: "Central America" OR "Latin America"'>&#x1F6C8;
             </span>
         </label>
         <input 
@@ -250,7 +278,8 @@
         <label for="rights" class="bold">Copyright Status
             <span 
                 data-bs-toggle="tooltip" data-bs-placement="bottom"
-                data-bs-title='Enter help text here'>&#x1F6C8;
+                data-bs-title='Limit your results to collection items with a 
+                specific copyright status.'>&#x1F6C8;
             </span>
         </label>
         {% for statement in rights %}

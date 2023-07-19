@@ -105,7 +105,7 @@
                 action="/retrieve/?retrieval_method=collections">
                 {% csrf_token %}
                 <div class="form-group">
-                  <label for="parent_unit" class="bold">Collection(s)</label>
+                  <label for="collections" class="bold">Collection(s)</label>
                   <select 
                     class="form-control" 
                     name="collections" 
@@ -298,7 +298,7 @@
 <script>
   /* always keep at least 1 open by preventing the current to close itself */
 $('[data-bs-toggle="collapse"]').on('click',function(e){
-  if ( $(this).parents('.accordion').find('.collapse.show') ){
+  if ( $(this).parents('.accordion-group').find('.collapse.show') ){
       var idx = $(this).index('[data-bs-toggle="collapse"]');
       if (idx == $('.collapse.show').index('.collapse')) {
           // prevent collapse
@@ -306,7 +306,6 @@ $('[data-bs-toggle="collapse"]').on('click',function(e){
       }
   }
 });
-
 </script>
 {% endblock %}
 {% block bootstrapjs %}
