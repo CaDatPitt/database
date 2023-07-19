@@ -86,7 +86,7 @@
       {% endif %}
       <div class="card-body">
         <div class="row">
-          <div class="col-4 col-md-3">
+          <div class="col-md-3 d-none d-md-block ">
             {% if 'Finding aid' in item.type or 'Collection' in item.type %}
             <img src="https://digital.library.pitt.edu/sites/all/modules/upitt_islandora_solr_search_extras/images/findingaids4_lt_big_text.png" 
               class="card-img-top item-thumbnail" />
@@ -97,7 +97,7 @@
               class="card-img-top item-thumbnail" />
             {% endif %}
           </div>
-          <div class="col-8 col-md-9">
+          <div class="col-12 col-md-9">
             <a href="/item/?id={{ item.item_id }}">
               <h5 class="card-title">{{ item.title }}</h5>
             </a>
