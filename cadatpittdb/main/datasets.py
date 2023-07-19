@@ -109,6 +109,7 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[],
     client = Client(URL, registry)
     dataset = []
     exceptions = []
+    flag = False
 
     # Build dataset from list of item IDs
     if item_ids:
@@ -137,7 +138,6 @@ def get_dataset(metadata_prefix='oai_dc', item_ids=[], collections=[],
     else:
         # Reformat and combine list of collection IDs
         sets = ":".join(collections).replace("pitt:", "pitt_")
-        flag = False
         
         # Try to get item records from OAI-PMH
         records = []
