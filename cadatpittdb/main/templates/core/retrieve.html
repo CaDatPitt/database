@@ -193,9 +193,9 @@
     <!-- Results -->
     <h5 align="left">Results</h5>
     {% if num_results > 0 %}
-    <p><em>{{ num_results }} results</em></p>
+    <p><em>Showing {{ items.start_index }}-{{ items.end_index }} out of {{ num_results }} results(s)</em></p>
     <div class="row gy-4">
-      {% for index, item in dataset.iterrows %}
+      {% for item in items %}
       <div class="col-12">
         <div class="card shadow-sm bg-light-gray">
           <div class="card-header">
@@ -257,6 +257,52 @@
       </div>
       {% endfor %}   
     </div>
+    {% if items.paginator.num_pages > 1 %}
+    <div class="d-flex justify-content-center mt-4">
+      <nav aria-label="page navigation">
+        <ul class="pagination">
+          {% if items.has_previous %}
+            <li class="page-item>">
+              <a class="page-link" 
+              href="/retrieve/?page=1">&laquo First</a>
+            </li>
+            <li class="page-item>">
+              <a class="page-link" 
+              {% if request.session.filters %}
+                href="/retrieve/?filters=True&page={{ items.previous_page_number }}">Previous</a>
+              {% else %}
+                href="/retrieve/?page={{ items.previous_page_number }}">Previous</a>
+              {% endif %}
+            </li>
+          {% endif %}
+
+          <li class="page-item active">
+            <a class="page-link" 
+            href="#">Page {{ items.number }} of {{ items.paginator.num_pages }} </span></a>
+          </li>
+
+          {% if items.has_next %}
+            <li class="page-item>">
+              <a class="page-link" 
+              {% if request.session.filters %}
+                href="/retrieve/?filters=True&page={{ items.next_page_number }}">Next</a>
+              {% else %}
+                href="/retrieve/?page={{ items.next_page_number }}">Next</a>
+              {% endif %}
+            </li>
+            <li class="page-item>">
+              <a class="page-link" 
+                {% if request.session.filters %}
+                href="/retrieve/?filters=True&page={{ items.paginator.num_pages }}">Last &raquo</a>
+                {% else %}
+                href="/retrieve/?page={{ items.paginator.num_pages }}">Last &raquo</a>
+                {% endif %}
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+    {% endif %}
     {% else %}
     <p>No records were found.</p>
     {% endif %}

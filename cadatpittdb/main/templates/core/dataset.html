@@ -68,8 +68,9 @@
 
 <!-- Items -->
 <h4 class="mb-4">Items</h4>
+<p><em>Showing {{ items.start_index }}-{{ items.end_index }} out of {{ num_items }} item(s)</em></p>
 <div class="row gy-4">
-  {% for item in dataset.items.all %}
+  {% for item in items %}
   <div class="col-lg-6">
     <div class="card h-100 shadow-sm bg-light-gray">
       {% if user.is_authenticated %}
@@ -130,6 +131,40 @@
   </div>
   {% endfor %}
 </div>
+{% if items.paginator.num_pages > 1 %}
+<div class="d-flex justify-content-center mt-4">
+  <nav aria-label="page navigation">
+    <ul class="pagination">
+      {% if items.has_previous %}
+        <li class="page-item>">
+          <a class="page-link" 
+          href="/dataset/?id={{ dataset.public_id }}&page=1">&laquo First</a>
+        </li>
+        <li class="page-item>">
+          <a class="page-link" 
+            href="/dataset/?id={{ dataset.public_id }}&page={{ items.previous_page_number }}">Previous</a>
+        </li>
+      {% endif %}
+
+      <li class="page-item active">
+        <a class="page-link" 
+        href="#">Page {{ items.number }} of {{ items.paginator.num_pages }} </span></a>
+      </li>
+
+      {% if items.has_next %}
+        <li class="page-item>">
+          <a class="page-link" 
+          href="/dataset/?id={{ dataset.public_id }}&page={{ items.next_page_number }}">Next</a>
+        </li>
+        <li class="page-item>">
+          <a class="page-link" 
+          href="/dataset/?id={{ dataset.public_id }}&page={{ items.paginator.num_pages }}">Last &raquo</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+{% endif %}
 
 {% if user.is_authenticated %}
 <!-- Edit Dataset Modal -->
@@ -139,7 +174,7 @@
 {% include 'snippets/download-dataset-modal.html' %}
 
 <!-- Item Modals -->
-{% for item in dataset.items.all %}
+{% for item in items %}
   {% include 'snippets/tag-item-modal.html' %}
   {% include 'snippets/add-item-modal.html' %}
   {% include 'snippets/remove-item-modal.html' %}

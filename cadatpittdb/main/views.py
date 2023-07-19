@@ -2,6 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.core.files.temp import NamedTemporaryFile
+from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed, FileResponse
 from wsgiref.util import FileWrapper
 from django.contrib.auth import authenticate, login, logout
@@ -447,9 +448,19 @@ def dataset_vw(request):
     if request.method == "GET":
         dataset_id = request.GET.get('id')
         dataset = Dataset.objects.filter(public_id=dataset_id).first()
+        items_list = dataset.items.all()
 
         # Add dataset to context
         context['dataset'] = dataset
+
+        # Generate pagination for items
+        p = Paginator(items_list, 10)
+        page = request.GET.get('page')
+        items = p.get_page(page)
+
+        # Add items and items length to context
+        context['items'] = items
+        context['num_items'] = len(items_list)
 
     return render(request, "core/dataset.html", context)
 
@@ -541,6 +552,8 @@ def retrieve_vw(request):
         "rights": vocab['rights']
     }
 
+    dataset = request.session.get('dataset')
+
     if request.GET.get("filters") == 'False' or \
         ('filter' not in request.META['HTTP_REFERER'] and request.session.get('filters')):
         if request.session.get('filters'):
@@ -566,7 +579,6 @@ def retrieve_vw(request):
         context['show_results'] = True
 
     if request.method == "POST":  
-        dataset = None
         dataset_df = None
 
         if request.GET.get("filter"):
@@ -622,7 +634,6 @@ def retrieve_vw(request):
             item_ids = request.POST.get("item_ids")
             csv_file = request.FILES.get('csv_file')
             collections = request.POST.getlist("collections")
-            dataset = None
 
             # Get dataset
             # List of Identifiers
@@ -669,16 +680,27 @@ def retrieve_vw(request):
                                 item identifiers (each on a separate line) \
                                 or upload a CSV file with a list of item \
                                 identifiers.")
-                
+    if dataset:          
         # Add dataset to session and context
         request.session['dataset'] = dataset
-        context['dataset'] = dataset_df
+        # context['dataset'] = dataset_df
 
         # Add dataset info to context
-        context['num_results'] = dataset_df.shape[0]
+        context['num_results'] = len(dataset)
 
         # Toggle to display results
         context['show_results'] = True
+
+        # Add dataset to context
+        context['dataset'] = dataset
+
+        # Generate pagination for items
+        p = Paginator(dataset, 10)
+        page = request.GET.get('page')
+        items = p.get_page(page)
+
+        # Add items and items length to context
+        context['items'] = items
 
     return render(request, "core/retrieve.html", context)
 
