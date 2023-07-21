@@ -80,30 +80,33 @@
             </li>
             {% else %}
             <li class="nav-item">
-              <a {% block navbar_login %}class="nav-link"{% endblock %}
-              href="/login">Log In</span></a>
+              <a class="btn btn-outline-warning btn-nav border-pitt-gold ms-xl-2 mt-2 mb-2 my-xl-0"
+                role="button" href="/login">Log In</a>
             </li>
             <li class="nav-item">
-              <a {% block navbar_signup %}
-                class="btn btn-outline-warning border-pitt-gold ms-xl-2 mt-3 mb-4 my-xl-0"
-                {% endblock %}
-              role="button" href="/signup">Sign Up</a>
+              <a class="btn btn-warning btn-nav border-pitt-gold ms-xl-2 mb-3 my-xl-0"
+                role="button" href="/signup">Sign Up</a>
             </li>
             {% endif %}
           </ul>
           <form method="POST" class="d-flex" role="search" action="/search/">
             {% csrf_token %}
-            <img style="width: 2em;"
-              src="https://upload.wikimedia.org/wikipedia/commons/b/bd/VisualEditor_-_Icon_-_Search-big_-_white.svg">
             <input
               class="form-control me-2"
               type="keywords"
               name="keywords"
               placeholder="Search the site"
               aria-label="Search">
-            <button 
+            <!-- <button 
               class="btn btn-outline-warning border-pitt-gold" type="submit" 
-              data-bs-toggle="modal" data-bs-target="#loadingModal">Search
+              data-bs-toggle="modal" data-bs-target="#loadingModal">
+            </button> -->
+            <button type="button" class="btn btn-outline-warning border-pitt-gold"
+              data-bs-toggle="tooltip" data-bs-placement="bottom"
+              data-bs-title='Search'>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+              </svg>
             </button>
           </form>
         </div>

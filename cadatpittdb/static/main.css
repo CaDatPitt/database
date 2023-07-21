@@ -20,6 +20,10 @@ body {
     width: 12em;
   }
 
+  .btn-nav {
+    width: 5.1em;
+  }
+
   .btn-xs {
     --bs-btn-padding-y: .1em; 
     --bs-btn-padding-x: .5em; 
