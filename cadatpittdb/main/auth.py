@@ -24,12 +24,12 @@ def check_password(request, password, password_conf):
     if (len(password) > 21):
         valid = False
         messages.error(request, "Password must be less than or equal to 20 characters.")
-    if not re.search("[a-z]", password):
-        valid = False
-        messages.error(request, "Password must contain at least 1 lowercase alphabet.")
+    # if not re.search("[a-z]", password):
+    #     valid = False
+    #     messages.error(request, "Password must contain at least 1 lowercase letter.")
     if not re.search("[A-Z]", password):
         valid = False
-        messages.error(request, "Password must contain at least 1 uppercase alphabet.")
+        messages.error(request, "Password must contain at least 1 uppercase letter.")
     if not re.search("[0-9]", password):
         valid = False
         messages.error(request, "Password must contain at least 1 number.")

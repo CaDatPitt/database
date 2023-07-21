@@ -81,6 +81,15 @@
     id="password" 
     name="password" 
     placeholder="">
+    <small>Password must
+      <ul class="mb-0">
+        <li>Contain at least 8 characters</li>
+        <li>Contain no more than 20 characters</li>
+        <li>Contain at least 1 upper case letter</li>
+        <li>Contain at least 1 number</li>
+        <li>Contain at least 1 special character</li>
+      </ul>
+    </small>
 </div>
 <br/>
 {% if user.is_authenticated %}
