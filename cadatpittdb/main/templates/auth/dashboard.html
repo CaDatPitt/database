@@ -96,7 +96,16 @@
               </nav> -->
             </ul>
             {% else %}
-            <p class="text-center"><em>You don't have any datasets yet.</em></p>
+            <p class="text-center"><em>You don't have any datasets yet.</em><br/>
+              You can create datasets by retrieving
+              data about items of interest in <a href="https://digital.library.pitt.edu/" 
+              target="_blank">ULS Digital Collections</a>. From there, you can filter and
+              select which item records you would like to include in your dataset(s).
+            </p>
+            <div class="d-grid gap-2 d-md-flex justify-content-center">
+              <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal" role="button"
+                href="/retrieve/">Retrieve Data</a>
+            </div>
             {% endif %}
             <!-- Create New Dataset Button -->
             <!-- <div class="col-md-12 text-center mt-3">
@@ -125,7 +134,15 @@
               {% endfor %}
             </ul>
             {% else%}
-            <p class="text-center"><em>You don't have any saved results yet.</em></p>
+            <p class="text-center"><em>You don't have any saved results yet.</em><br/>
+              You can create datasets by retrieving
+              data about items of interest in <a href="https://digital.library.pitt.edu/" 
+              target="_blank">ULS Digital Collections</a>. 
+            </p>
+            <div class="d-grid gap-2 d-md-flex justify-content-center">
+              <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal" role="button"
+                href="/retrieve/">Retrieve Data</a>
+            </div>
             {% endif %}
             <!-- Pagination -->
             <!-- {% include 'snippets/pagination.html' %} -->
@@ -157,6 +174,10 @@
             </ul>
             {% else%}
             <p class="text-center"><em>You don't have any pinned datasets yet.</em></p>
+            <div class="d-grid gap-2 d-md-flex justify-content-center">
+              <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal" role="button"
+                href="/browse/">Browse Datasets</a>
+            </div>
             {% endif %}
             <!-- Pagination -->
             <!-- {% include 'snippets/pagination.html' %} -->
@@ -182,7 +203,18 @@
               {% endfor %}
             </ul>
             {% else%}
-            <p class="text-center"><em>You don't have any pinned items yet.</em></p>
+            <p class="text-center"><em>You don't have any pinned items yet.</em><br/>
+              Start by retrieving data about items of interest in
+              <a href="https://digital.library.pitt.edu/" 
+              target="_blank">ULS Digital Collections</a> or by browsing the 
+              items in existing datasets.
+            </p>
+            <div class="d-grid gap-2 d-md-flex justify-content-center">
+              <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal" role="button"
+                href="/retrieve/">Retrieve Data</a>
+              <a class="btn btn-primary btn-action bg-pitt-royal border-pitt-royal" role="button"
+                href="/browse/">Browse Datasets</a>
+            </div>
             {% endif %}
             <!-- Pagination -->
             <!-- {% include 'snippets/pagination.html' %} -->
