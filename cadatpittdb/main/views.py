@@ -866,13 +866,22 @@ def download_vw(request):
     with NamedTemporaryFile() as csv_file:
         # Write data to file
         if extension == 'csv':
-            dataset_df.to_csv(csv_file.name, index=False, encoding='utf-8')
+            try:
+                dataset_df.to_csv(csv_file.name, index=False, encoding='utf-8')
+            except:
+                messages.error(request, "We're sorry! The dataset could not be \
+                               downloaded at this time. Please try again later \
+                               or contact us to report the issue.")
         else:
-            # Create a Pandas Excel writer using XlsxWriter as the engine.
-            writer = pd.ExcelWriter(csv_file.name, engine='xlsxwriter')
-            dataset_df.to_excel(writer, index=False, encoding='utf-8', 
-                                sheet_name='dataset')
-            writer.close()
+            try:
+                # Create a Pandas Excel writer using XlsxWriter as the engine.
+                writer = pd.ExcelWriter(csv_file.name, engine='xlsxwriter')
+                dataset_df.to_excel(writer, index=False, sheet_name='dataset')
+                writer.close()
+            except:
+                messages.error(request, "We're sorry! The dataset could not be \
+                               downloaded at this time. Please try again later \
+                               or contact us to report the issue.")
 
         # Generate filename
         filename = f"{dataset.title.replace(' ', '_')}.{extension}" 
