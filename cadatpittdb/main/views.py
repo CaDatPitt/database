@@ -872,6 +872,7 @@ def download_vw(request):
                 messages.error(request, "We're sorry! The dataset could not be \
                                downloaded at this time. Please try again later \
                                or contact us to report the issue.")
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         else:
             try:
                 # Create a Pandas Excel writer using XlsxWriter as the engine.
@@ -882,6 +883,7 @@ def download_vw(request):
                 messages.error(request, "We're sorry! The dataset could not be \
                                downloaded at this time. Please try again later \
                                or contact us to report the issue.")
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
         # Generate filename
         filename = f"{dataset.title.replace(' ', '_')}.{extension}" 
