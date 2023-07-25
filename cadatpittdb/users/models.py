@@ -67,6 +67,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def get_datasets(self):
         return Dataset.objects.filter(creator=self).all()
     
+    def get_public_datasets(self):
+        return Dataset.objects.filter(creator=self, public=True).all()
+    
     def get_saved_results(self):
         return Dataset.objects.filter(creator=self, saved_results=True).all()
     
@@ -138,17 +141,27 @@ class Tag(models.Model):
 
 
 class Item(models.Model):
-    item_id = models.CharField(_('item ID'), max_length=200, primary_key=True)
+    item_id = models.CharField(_('item ID'), max_length=100, primary_key=True)
     title = models.CharField(_('title'), max_length=500)
     creator = models.CharField(_('creator'), max_length=200, blank=True, default='')
-    date = models.CharField(_('date'), max_length=50, blank=True, default='')
-    type = models.CharField(_('type'), max_length=25, blank=True, default='')
+    date = models.CharField(_('date'), max_length=500, blank=True, default='')
+    type = models.CharField(_('type'), max_length=500, blank=True, default='')
+    format = models.CharField(_('format'), max_length=500, blank=True, default='')
+    subject = models.CharField(_('subject'), max_length=500, blank=True, default='')
+    description = models.CharField(_('description'), max_length=500, blank=True, default='')
+    publisher = models.CharField(_('publisher'), max_length=500, blank=True, default='')
+    contributor = models.CharField(_('contributor'), max_length=500, blank=True, default='')
     thumbnail = models.URLField(_('thumbnail'), max_length=300, blank=True, default='')
+    source =  models.CharField(_('source'), max_length=500, blank=True, default='')
+    language = models.CharField(_('language'), max_length=500, blank=True, default='')
+    relation = models.CharField(_('relation'), max_length=500, blank=True, default='')
+    coverage = models.CharField(_('coverage'), max_length=500, blank=True, default='')
+    rights = models.CharField(_('rights'), max_length=500, blank=True, default='')
     collections = models.ManyToManyField(Collection)
     tags = models.ManyToManyField(Tag)
     date_added = models.DateTimeField(_('date added'), default=timezone.now)
     pinned_by = models.ManyToManyField(CustomUser)
-
+    		
     class Meta:
         verbose_name = 'item'
         verbose_name_plural = 'items'
@@ -170,7 +183,7 @@ class Item(models.Model):
     
     def get_tags(self):
         tags = []
-        for tag in self.tags.get_all.value_list('title', flat=True):
+        for tag in self.tags.get_all.value_list('title', flat=True).distinct():
             tags.append(tag)
         return tags
     
@@ -207,7 +220,7 @@ class Dataset(models.Model):
     
     def get_tags(self):
         tags = []
-        for tag in self.tags.values_list('title', flat=True):
+        for tag in self.tags.values_list('title', flat=True).distinct():
             tags.append(tag)
         return tags
     
