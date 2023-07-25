@@ -293,13 +293,17 @@ def filter_field(x, keywords='', other_field='', start_year='', end_year=''):
         return False
     if start_year:
         for date in x: 
-            if int(date[:4]) < int(start_year): # change this to look for years in value using regex
-                return False
+            year = re.search('(?:(?:1|2)[0-9]{3})', date)
+            if year:
+                if int(year[0]) < int(start_year): # change this to look for years in value using regex
+                    return False
         return True
     if end_year:
         for date in x:
-            if int(date[:4]) > int(end_year):
-                return False
+            year = re.search('(?:(?:1|2)[0-9]{3})', date)
+            if year:
+                if int(year[0]) > int(end_year):
+                    return False
         return True
 
 
