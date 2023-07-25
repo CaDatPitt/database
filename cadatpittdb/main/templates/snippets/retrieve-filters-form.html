@@ -140,7 +140,7 @@
                 class="form-control" 
                 id="start_year" 
                 name="start_year"
-                min="1900" max="2099" step="1"
+                min="1000" max="2099" step="1"
                 {% if request.session.filters.start_year %}
                 value="{{ request.session.filters.start_year }}"
                 {% endif %}>
@@ -162,7 +162,7 @@
                 class="form-control" 
                 id="end_year" 
                 name="end_year"
-                min="1900" max="2099" step="1"
+                min="1000" max="2099" step="1"
                 {% if request.session.filters.end_year %}
                 value="{{ request.session.filters.end_year }}"
                 {% endif %}>
@@ -299,7 +299,7 @@
         </div>
         <br />
         <div class="col-md-12 text-center">
-            <a href="/retrieve/?filters=False" 
+            <a href="/retrieve/?filter=False" 
                 role="button" class="btn btn-outline-danger">
                 Clear Filters
             </a>
