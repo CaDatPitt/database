@@ -224,7 +224,7 @@ def profile_vw(request):
     context['person'] = user
     context['affiliations'] = affiliations
     context['other_affiliations'] = other_affiliations
-    context['datasets'] = get_user_datasets(user)
+    context['datasets'] = user.get_public_datasets()
     
     return render(request, "auth/profile.html", context)
 
