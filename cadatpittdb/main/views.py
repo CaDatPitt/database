@@ -157,12 +157,21 @@ def login_vw(request):
         password = request.POST.get("password")
         email = request.POST.get("email")
         user = None
-
+        User = get_user_model()
+        
         # Get user's username if using email
         if context['use_email']:
-            User = get_user_model()
             user = User.objects.filter(email=email).first()
-            username = user.username
+        else:
+            user = User.objects.filter(username=username).first()
+        
+        if user:
+            if context['use_email']:
+                username = user.username
+        else:
+            messages.error(request, "You don't have an account yet! Sign up \
+                            to create an acccount.")
+            return redirect("/signup/") 
 
         # Try to authenticate user    
         user = authenticate(request, username=username, password=password)
@@ -558,13 +567,11 @@ def retrieve_vw(request):
 
     dataset = None
     filtered_dataset = None
-    print("retrieve")
 
     # Clear filters has been activated OR 
     # A new retrieval request has been made
     if request.GET.get("filter") == 'False' or \
         (not request.GET.get("filter") and request.session.get('filters')):
-        print("clear filters has been activated")
         # Remove filters from session
         if request.session.get('filters'):
             del request.session['filters']
@@ -576,7 +583,6 @@ def retrieve_vw(request):
     # There is a redirect after an item has been pinned or tagged    
     if request.GET.get("filter") == 'False' or \
         request.session.get('redirect') and request.session.get('dataset'):
-        print("clear filters has been activated or there is a redirect")
         # Remove any pre-existing session variable
         if request.session.get('redirect'):
             del request.session['redirect']
@@ -596,13 +602,11 @@ def retrieve_vw(request):
         context['show_results'] = True
 
     if request.method == "POST":  
-        print("post")
         dataset_df = None
         if request.session.get('filtered_dataset'):
             del request.session['filtered_dataset']
 
         if request.GET.get("filter"):
-            print("filters")
             dataset = request.session.get('dataset')
             keywords = request.POST.get("keywords")
             title = request.POST.get("title")
@@ -621,7 +625,6 @@ def retrieve_vw(request):
 
             # Filter dataset
             if isinstance(dataset, list) and len(dataset) > 0:
-                print("filtering")
                 dataset_df, filtered_dataset = filter_dataset(
                     request=request, 
                     dataset=dataset,
@@ -639,8 +642,6 @@ def retrieve_vw(request):
                     subject=subject, 
                     coverage=coverage, 
                     rights=rights)
-            else:
-                print("else")
             
             # Add filters to session
             request.session['filters'] = {
@@ -651,8 +652,6 @@ def retrieve_vw(request):
                 'description': description, 'item_type': item_type, 
                 'subject': subject, 'coverage': coverage, 'rights': rights
             }
-
-            print(request.session['filters'] )
 
             request.session['filtered_dataset'] = filtered_dataset
 
