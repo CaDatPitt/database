@@ -5,3 +5,4 @@ test.py
 transformation-scripts/
 cadatpittdb/cadatpittdb/config.py
 .DS_Store
+cadatpittdb/users/migrations/0043_item_contributor_item_coverage_item_description_and_more.py
