@@ -651,8 +651,9 @@ def add_tags(user=User, tags=str, dataset=Dataset, item=Item):
     exceptions = []
 
     for tag in tag_list:
+        #cur_tag = Tag.objects.filter(title=tag, creator=user).first()
         cur_tag = Tag.objects.filter(title=tag).first()
-        
+
         # Create tag if doesn't already exist
         if not cur_tag:
             try:
