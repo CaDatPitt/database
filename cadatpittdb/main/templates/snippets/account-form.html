@@ -56,15 +56,15 @@
   <span class="required-field">*</span>
   </label>
   <input 
-  type="email" 
-  class="form-control" 
-  id="email" 
-  name="email"
-  {% if user.is_authenticated and user.email %}
-  value="{{ user.email }}"
-  {% elif form %}
-  value="{{ form.email }}"
-  {% endif %}>
+    type="email" 
+    class="form-control" 
+    id="email" 
+    name="email"
+    {% if user.is_authenticated and user.email %}
+    value="{{ user.email }}"
+    {% elif form %}
+    value="{{ form.email }}"
+    {% endif %}>
 </div>
 <br/>
 <div class="form-group">
