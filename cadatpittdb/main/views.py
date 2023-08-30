@@ -26,6 +26,7 @@ def index_vw(request):
             "vocab": vocab,
             "datasets": Dataset.objects.filter(public=True).all().order_by('-last_modified')[:4],
         }
+        tags = list(Tag.objects.values_list('tag_id', flat=True))
         return render(request, "core/index.html", context)
     else:
         return HttpResponseNotAllowed(["POST"])
@@ -201,8 +202,13 @@ def profile_vw(request):
 
     User = get_user_model()
     username = request.GET.get('user')
+    user = None
 
-    user = User.objects.get(username=username)
+    try:
+        user = User.objects.get(username=username)
+    except:
+        pass
+    
     if not user:
         messages.error(request, "That user does not exist!")
         return redirect("/")
