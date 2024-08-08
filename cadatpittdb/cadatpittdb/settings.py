@@ -29,8 +29,10 @@ SECRET_KEY = getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+#DEBUG = bool(int(environ.get('DEBUG', 0)))
 
 DEVELOPMENT_MODE = False
+#DEVELOPMENT_MODE = bool(int(environ.get('DEVELOPMENT_MODE', 0)))
 
 ALLOWED_HOSTS = ["cadatpitt.pythonanywhere.com", "127.0.0.1", "localhost"]
 
